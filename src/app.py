@@ -1,4 +1,6 @@
 # -*- coding: utf-8
+import sys.path
+sys.path.insert(0,'.')
 from bottle import route, run, static_file
 
 import random, json
