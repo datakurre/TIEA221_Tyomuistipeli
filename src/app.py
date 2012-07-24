@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 #print 'adsfa', sys.argv, os.getcwd(), os.listdir(os.getcwd()), os.path.realpath(__file__)
 #print sys.path
 from bottle import route, run, static_file, debug
+import logging
 
 logging.basicConfig(level=logging.DEBUG)
 logging.info('Started')
