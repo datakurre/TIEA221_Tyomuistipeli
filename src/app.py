@@ -188,6 +188,7 @@ def static_js(file):
 
 @route('/img/<file:path>')
 def static_img(file):
+    logging.info('wd: '+os.getcwd())
     return static_file(file, root='./src/img')
 
 @route('/css/<file:path>')
@@ -196,6 +197,7 @@ def static_css(file):
 
 @route('/favicon.ico')
 def icon():
+    
     return static_img('favicon.ico')
 
 
