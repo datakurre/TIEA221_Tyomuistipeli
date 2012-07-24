@@ -3,7 +3,7 @@
 function newGame() {
   $('.carmask').css('opacity', '1.0');
   $('.carmask').hide();
-  $.get('/rest/get/game/0/user/0', function(data){
+  $.get(global.ctx + '/rest/get/game/0/user/0', function(data){
     var jsdata = jQuery.parseJSON(data);
     var level = jsdata.level;
       $('#level span').text(level);

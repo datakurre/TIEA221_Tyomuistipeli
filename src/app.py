@@ -3,7 +3,7 @@ import sys, os,	os.path
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__))) 
 #print 'adsfa', sys.argv, os.getcwd(), os.listdir(os.getcwd()), os.path.realpath(__file__)
 #print sys.path
-from bottle import route, run, static_file, debug
+from bottle import route, run, static_file, debug, request
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -17,19 +17,20 @@ from StringIO import StringIO
 
 @route('/')
 @route('/index.html')
-def index(): 
+def index():
     return '''<!DOCTYPE html>
 <html>
   <head>
     <title>Title of the document</title>
-    <script type="text/javascript" charset="utf-8" src="js/lib/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/browsertest.js"></script>
+    <meta name="context" content="%(ctx)s" />
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/browsertest.js"></script>
   </head>
   <body>
     <h1>Ty&ouml;muistitreenari</h1>
     <noscript>Valitettavasti javascript ei ole selaimestasi päällä.</noscript>
   </body>
-</html>'''
+</html>'''%{'ctx':request.script_name}
 
 @route('/game/<idx:int>')
 def game(idx):
@@ -38,10 +39,11 @@ def game(idx):
 <html>
   <head>
     <title>Autokisa</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css" /> 
-    <script type="text/javascript" charset="utf-8" src="/js/lib/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/game.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/racing.js"></script>
+    <meta name="context" content="%(ctx)s" />
+    <link rel="stylesheet" type="text/css" href="%(ctx)s/css/style.css" /> 
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/game.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/racing.js"></script>
   </head>
   <body>
     <div id="game">
@@ -49,25 +51,26 @@ def game(idx):
         Taso: 
         <span/>
       </div>
-      <img src="/img/race/racing.jpg" alt=""/>
-      <img id="car0" class="carmask" src="/img/race/mask1.png" alt=""/>
-      <img id="car1" class="carmask" src="/img/race/mask2.png" alt=""/>
-      <img id="car2" class="carmask" src="/img/race/mask3.png" alt=""/>
-      <img id="car3" class="carmask" src="/img/race/mask1.png" alt=""/>
-      <img id="car4" class="carmask" src="/img/race/mask3.png" alt=""/>
-      <img id="car5" class="carmask" src="/img/race/mask2.png" alt=""/>
+      <img src="%(ctx)s/img/race/racing.jpg" alt=""/>
+      <img id="car0" class="carmask" src="%(ctx)s/img/race/mask1.png" alt=""/>
+      <img id="car1" class="carmask" src="%(ctx)s/img/race/mask2.png" alt=""/>
+      <img id="car2" class="carmask" src="%(ctx)s/img/race/mask3.png" alt=""/>
+      <img id="car3" class="carmask" src="%(ctx)s/img/race/mask1.png" alt=""/>
+      <img id="car4" class="carmask" src="%(ctx)s/img/race/mask3.png" alt=""/>
+      <img id="car5" class="carmask" src="%(ctx)s/img/race/mask2.png" alt=""/>
     </div>
   </body>
-</html>'''
+</html>''' % {'ctx': request.script_name}
     else:
         return '''<!DOCTYPE html>
 <html>
   <head>
     <title>Koneita</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css" /> 
-    <script type="text/javascript" charset="utf-8" src="/js/lib/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/game.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/machine.js"></script>
+    <meta name="context" content="%(ctx)s" />
+    <link rel="stylesheet" type="text/css" href="%(ctx)s/css/style.css" /> 
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/game.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/machine.js"></script>
   </head>
   <body>
     <div id="game">
@@ -75,28 +78,28 @@ def game(idx):
         Taso: 
         <span/>
       </div>
-      <img src="/img/machine/kone.jpg" alt=""/>
-      <img id="m0" class="machinemask" src="/img/machine/m1.png" alt=""/>
-      <img id="m1" class="machinemask" src="/img/machine/m2.png" alt=""/>
-      <img id="m2" class="machinemask" src="/img/machine/m3.png" alt=""/>
-      <img id="m3" class="machinemask" src="/img/machine/m4.png" alt=""/>
-      <img id="m4" class="machinemask" src="/img/machine/m5.png" alt=""/>
-      <img id="m5" class="machinemask" src="/img/machine/m6.png" alt=""/>
-      <img id="m6" class="machinemask" src="/img/machine/m7.png" alt=""/>
-      <img id="m7" class="machinemask" src="/img/machine/m8.png" alt=""/>
-      <img id="m8" class="machinemask" src="/img/machine/m9.png" alt=""/>
-      <img id="b0" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b1" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b2" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b3" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b4" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b5" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b6" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b7" class="blink" src="/img/machine/blink.png" alt=""/>
-      <img id="b8" class="blink" src="/img/machine/blink.png" alt=""/>
+      <img src="%(ctx)s/img/machine/kone.jpg" alt=""/>
+      <img id="m0" class="machinemask" src="%(ctx)s/img/machine/m1.png" alt=""/>
+      <img id="m1" class="machinemask" src="%(ctx)s/img/machine/m2.png" alt=""/>
+      <img id="m2" class="machinemask" src="%(ctx)s/img/machine/m3.png" alt=""/>
+      <img id="m3" class="machinemask" src="%(ctx)s/img/machine/m4.png" alt=""/>
+      <img id="m4" class="machinemask" src="%(ctx)s/img/machine/m5.png" alt=""/>
+      <img id="m5" class="machinemask" src="%(ctx)s/img/machine/m6.png" alt=""/>
+      <img id="m6" class="machinemask" src="%(ctx)s/img/machine/m7.png" alt=""/>
+      <img id="m7" class="machinemask" src="%(ctx)s/img/machine/m8.png" alt=""/>
+      <img id="m8" class="machinemask" src="%(ctx)s/img/machine/m9.png" alt=""/>
+      <img id="b0" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b1" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b2" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b3" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b4" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b5" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b6" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b7" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
+      <img id="b8" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
     </div>
   </body>
-</html>'''
+</html>''' % {'ctx': request.script_name}
 
 
 # REST API

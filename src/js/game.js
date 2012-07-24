@@ -2,6 +2,7 @@ var global = global || {}
 global.userid = 0;
 global.gameItems = [];
 global.userItems = [];
+global.ctx = $('meta[name=context]').attr("content");
 global.callbacks = {
     newGame: function(){}
 };
@@ -66,13 +67,13 @@ function createDlg(data){
   }
 }
 function GameCorrectAnswer() {
-  $.get('/rest/game/done/user/'+global.userid, function(data){
+  $.get(global.ctx + '/rest/game/done/user/'+global.userid, function(data){
       createDlg(data);
   });
 }
 
 function GameIncorrectAnswer() {
-  $.get('/rest/game/incorrect/user/'+global.userid, function(data){
+  $.get(global.ctx + '/rest/game/incorrect/user/'+global.userid, function(data){
       createDlg(data);
   });
 }
