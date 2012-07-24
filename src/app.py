@@ -3,7 +3,13 @@ import sys, os,	os.path
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__))) 
 #print 'adsfa', sys.argv, os.getcwd(), os.listdir(os.getcwd()), os.path.realpath(__file__)
 #print sys.path
-from bottle import route, run, static_file
+from bottle import route, run, static_file, debug
+
+logging.basicConfig(level=logging.DEBUG)
+logging.info('Started')
+debug(mode=True)
+
+
 
 import random, json
 from StringIO import StringIO
@@ -189,4 +195,5 @@ def icon():
     return static_img('favicon.ico')
 
 
-run(host='localhost', port=8080, reloader=True)
+if __name__ == '__main__':
+    run(host='localhost', port=8080, reloader=True)
