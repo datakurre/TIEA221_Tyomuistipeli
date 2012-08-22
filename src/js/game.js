@@ -4,7 +4,9 @@ global.gameItems = [];
 global.userItems = [];
 global.ctx = $('meta[name=context]').attr("content");
 global.callbacks = {
-    newGame: function(){}
+    newGame: function(){},
+    answerRight: function(rightItem){},
+    answerWrong: function(rightItem, wrongItem){}
 };
 
 $.getDocHeight = function(){
@@ -37,7 +39,9 @@ function GameCheckUserPress(item) {
   var currentIdx = global.userItems.length;
   if (global.gameItems[currentIdx] == item) {
     global.userItems.push(item)
+    global.callbacks.answerRight(item);
   } else {
+    global.callbacks.answerWrong(global.gameItems[currentIdx], item);
     GameIncorrectAnswer();
   }
 

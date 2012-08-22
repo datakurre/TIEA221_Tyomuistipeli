@@ -266,3 +266,57 @@ background-image: -webkit-gradient(
   left: 271px;
 }  
 
+
+/* Numerals game */
+
+#answerLine {
+  height: 200px;
+  margin-left: 100px;
+}
+.rightNro {
+  width: 120px;
+  height: 120px;
+  margin: 5px 5px 40px;
+  border-radius: 60px;
+  background-color: black;
+  display: inline-block;
+  font-size: 100px;
+  color: white;
+  text-align: center;
+}
+.wrongNro {
+  width: 120px;
+  height: 120px;
+  margin: 10px 10px;
+  border-radius: 60px;
+  background-color: red;
+  display: inline-block;
+  font-size: 100px;
+  color: white;
+  text-align: center;
+}
+
+.row {
+  margin-left: 100px;
+
+}
+.numberBtn {
+  width: 150px;
+  height: 150px;
+  margin: 10px 10px;
+  border-radius: 25px;
+  font-color: white;
+  display: inline-block;
+  font-size: 120px;
+  text-align: center;
+
+
+background: rgb(242,246,248); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,248,1)), color-stop(50%,rgba(216,225,231,1)), color-stop(51%,rgba(181,198,208,1)), color-stop(100%,rgba(224,239,249,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=0 ); /* IE6-9 */
+}

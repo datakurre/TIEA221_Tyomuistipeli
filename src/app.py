@@ -3,6 +3,7 @@ import sys, os,	os.path
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__))) 
 #print 'adsfa', sys.argv, os.getcwd(), os.listdir(os.getcwd()), os.path.realpath(__file__)
 #print sys.path
+import random, string
 from bottle import route, run, static_file, debug, request
 import logging
 
@@ -15,6 +16,16 @@ debug(mode=True)
 import random, json
 from StringIO import StringIO
 
+class Vocab:
+    Client = 'http://vocabulary/clientId'
+
+
+
+def ctx(req):
+    ret = req.script_name
+    if ret == '/': ret = ''
+    return ret
+
 @route('/')
 @route('/index.html')
 def index():
@@ -24,13 +35,14 @@ def index():
     <title>Title of the document</title>
     <meta name="context" content="%(ctx)s" />
     <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.cookie.js"></script>
     <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/browsertest.js"></script>
   </head>
   <body>
     <h1>Ty&ouml;muistitreenari</h1>
     <noscript>Valitettavasti javascript ei ole selaimestasi päällä.</noscript>
   </body>
-</html>'''%{'ctx':request.script_name}
+</html>'''%{'ctx':ctx(request) }
 
 @route('/game/<idx:int>')
 def game(idx):
@@ -60,8 +72,8 @@ def game(idx):
       <img id="car5" class="carmask" src="%(ctx)s/img/race/mask2.png" alt=""/>
     </div>
   </body>
-</html>''' % {'ctx': request.script_name}
-    else:
+</html>''' % {'ctx':ctx(request) }
+    elif idx == 1:
         return '''<!DOCTYPE html>
 <html>
   <head>
@@ -99,11 +111,57 @@ def game(idx):
       <img id="b8" class="blink" src="%(ctx)s/img/machine/blink.png" alt=""/>
     </div>
   </body>
-</html>''' % {'ctx': request.script_name}
+</html>''' % {'ctx':ctx(request) }
+    elif idx == 2:
+        return '''<!DOCTYPE html>
+<html>
+  <head>
+    <title>Numeroita</title>
+    <meta name="context" content="%(ctx)s" />
+    <link rel="stylesheet" type="text/css" href="%(ctx)s/css/style.css" /> 
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/lib/html5preloader.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/game.js"></script>
+    <script type="text/javascript" charset="utf-8" src="%(ctx)s/js/numbers.js"></script>
+  </head>
+  <body>
+    <div id="game">
+      <div id="level">
+        Taso: 
+        <span/>
+      </div>
+
+      <div id="answerLine" >
+      </div>
+      <div class="row">
+        <a id="nro1" class="numberBtn" alt="" href="#">1</a>
+        <a id="nro2" class="numberBtn" alt="" href="#">2</a>
+        <a id="nro3" class="numberBtn" alt="" href="#">3</a>
+      </div>
+      <div class="row">
+        <a id="nro4" class="numberBtn" alt="" href="#">4</a>
+        <a id="nro5" class="numberBtn" alt="" href="#">5</a>
+        <a id="nro6" class="numberBtn" alt="" href="#">6</a>
+      </div>
+      <div class="row">
+        <a id="nro7" class="numberBtn" alt="" href="#">7</a>
+        <a id="nro8" class="numberBtn" alt="" href="#">8</a>
+        <a id="nro9" class="numberBtn" alt="" href="#">9</a>
+      </div>
+    </div>
+  </body>
+</html>''' % {'ctx':ctx(request) }
 
 
 # REST API
 # ========
+
+@route('/rest/new/client')
+def game():
+    clientid = ''.join(random.choice(string.letters+string.digits) for i in xrange(10))
+
+    #rdf.add('data.rst', clientid, rdf.Type, Vocab.Client)
+    return clientid
 
 @route('/rest/get/game/<game:int>/user/<uid>')
 def game(game, uid): 
@@ -114,9 +172,13 @@ def game(game, uid):
         count = 6
     elif game == 1:
         count = 9
+    elif game == 2:
+        count = 9
     items = random.sample(range(count)*2, level)
     if level <= count:
         items = random.sample(range(count), level)
+    if game == 2:
+        items = [ random.sample(range(1,10), 1)[0] for i in range(level)]
     json.dump({ 
             'items': items,
             'level': get_level(uid)
@@ -190,6 +252,10 @@ def static_js(file):
 def static_img(file):
     logging.info('wd: '+os.getcwd())
     return static_file(file, root='./src/img')
+
+@route('/snd/<file:path>')
+def static_snd(file):
+    return static_file(file, root='./src/snd')
 
 @route('/css/<file:path>')
 def static_css(file):

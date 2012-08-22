@@ -12,7 +12,9 @@ tyomuistipelit.fi
 
    * Stop and ask the user to download a recent browser.
 
-* Select user, register, or try it out.
+* Select user, new user;
+
+* or, register, or try it out, or send login link to email.
 
 * We send you a link to login as an existing user.
 
