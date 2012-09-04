@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Työmuistin harjoituspelit</title>
+</head>
+<body>
+
+<h1>Työmuistin harjoituspelit</h1>
+
+<ul>
+  <li><a href="4x4.html">4x4</a></li>
+  <li><a href="numbers.html">Numeroiden toistaminen</a></li>
+  <li><a href="birds.html">Kurkiaura</a></li>
+</ul>
+
+</body>
+</html>

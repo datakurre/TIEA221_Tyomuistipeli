@@ -1,0 +1,23 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <static name="css"
+            path="kog_working_mem:static/css" />
+
+    <static name="js"
+            path="kog_working_mem:static/js" />
+
+    <static name="img"
+            path="kog_working_mem:static/img" />
+
+    <static name="snd"
+            path="kog_working_mem:static/snd" />
+
+    <view context=".interfaces.IApplication"
+          view=".static.favicon"
+          name="favicon.ico" />
+
+    <view context=".interfaces.IApplication"
+          view=".static.robots"
+          name="robots.txt" />
+
+</configure>
