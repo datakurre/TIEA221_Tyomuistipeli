@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Pyramid application initialization and startup functions"""
 
-import transaction
+from zope.interface import alsoProvides
 
 from pyramid.config import Configurator
 
 from pyramid_zodbconn import get_connection
 
-from kog_working_mem.resources import Application
+from kog_working_mem.interfaces import IApplication
 
 
 def root_factory(request):
@@ -15,14 +15,8 @@ def root_factory(request):
     # Connect and retrieve ZODB root
     conn = get_connection(request)
     zodb_root = conn.root()
-
-    # Bootstrap ZODB when empty
-    if not 'app' in zodb_root:
-        zodb_root['app'] = Application()
-        transaction.commit()
-
-    # Return our application specific root object
-    return zodb_root['app']
+    alsoProvides(zodb_root, IApplication)
+    return zodb_root
 
 
 def main(global_config, **settings):
