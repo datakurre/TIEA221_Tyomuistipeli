@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal">
 <head>
     <meta charset="utf-8" />
     <title>Työmuistin harjoituspelit</title>
@@ -9,9 +9,7 @@
 <h1>Työmuistin harjoituspelit</h1>
 
 <ul>
-  <li><a href="4x4.html">4x4</a></li>
-  <li><a href="numbers.html">Numeroiden toistaminen</a></li>
-  <li><a href="birds.html">Kurkiaura</a></li>
+  <li tal:repeat="game games"><a href="${game.name}">${game.title}</a></li>
 </ul>
 
 </body>

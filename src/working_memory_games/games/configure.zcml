@@ -1,0 +1,6 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <adapter name="4x4" provides="..interfaces.IGame"
+             factory=".4x4.Game" for="..interfaces.IApplication" />
+
+</configure>

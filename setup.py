@@ -11,7 +11,7 @@ requires = [
 ],
 
 setup(
-    name="kog-working-mem",
+    name="working-memory-games",
     version=version,
     description="Working memory training games",
     long_description=open("README.txt").read() + "\n" +
@@ -33,6 +33,6 @@ setup(
     install_requires=requires,
     entry_points="""\
     [paste.app_factory]
-    main = kog_working_mem:main
+    main = working_memory_games:main
     """,
 )
