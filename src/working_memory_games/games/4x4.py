@@ -3,7 +3,7 @@
 
 from zope.interface import implements
 
-from kog_working_mem.interfaces import IGame
+from working_memory_games.interfaces import IGame
 
 
 class Game(object):
