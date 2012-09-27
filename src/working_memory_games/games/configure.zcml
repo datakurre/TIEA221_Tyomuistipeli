@@ -1,6 +1,12 @@
 <configure xmlns="http://pylonshq.com/pyramid">
 
-    <adapter name="4x4" provides="..interfaces.IGame"
-             factory=".4x4.Game" for="..interfaces.IApplication" />
+    <!-- Car race -->
+
+    <adapter name="race" provides="..interfaces.IGame"
+             factory=".race.Game" for="..interfaces.IPlayer" />
+
+    <view context=".race.Game" view=".race.view" renderer="race.pt" />
+
+    <static name="race/static" path="working_memory_games:games/race" />
 
 </configure>

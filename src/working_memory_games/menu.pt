@@ -9,7 +9,7 @@
 <h1>Työmuistin harjoituspelit</h1>
 
 <ul>
-  <li tal:repeat="game games"><a href="${game.name}">${game.title}</a></li>
+    <li tal:repeat="game games"><a href="${game.name}">${game.title}</a></li>
 </ul>
 
 </body>

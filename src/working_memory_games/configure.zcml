@@ -2,10 +2,7 @@
 
     <include package="pyramid_zcml" />
 
-    <static name="css" path="working_memory_games:static/css" />
-    <static name="js" path="working_memory_games:static/js" />
-    <static name="img" path="working_memory_games:static/img" />
-    <static name="snd" path="working_memory_games:static/snd" />
+    <static name="static" path="working_memory_games:static" />
 
     <view context=".interfaces.IApplication"
           view=".views.favicon" name="favicon.ico" />
@@ -15,6 +12,12 @@
 
     <view context=".interfaces.IApplication"
           view=".views.menu" renderer="menu.pt" />
+
+    <view context=".interfaces.IGame" name="load"
+          view=".views.load" renderer="json" />
+
+    <view context=".interfaces.IGame" name="save"
+          view=".views.save" renderer="json" request_method="POST" />
 
     <include package=".games" />
 

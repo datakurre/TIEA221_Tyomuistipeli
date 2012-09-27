@@ -14,8 +14,8 @@ setup(
     name="working-memory-games",
     version=version,
     description="Working memory training games",
-    long_description=open("README.txt").read() + "\n" +
-                     open("CHANGES.txt").read(),
+    long_description=(open("README.txt").read() + "\n" +
+                      open("CHANGES.txt").read()),
     # Get more strings from
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
