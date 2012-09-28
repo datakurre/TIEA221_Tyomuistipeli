@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" ZCA interface definitions """
+""" Interface definitions """
 
 from zope.interface import Interface, Attribute
 
@@ -18,10 +18,17 @@ class IPlayer(Interface):
 class IGame(Interface):
     """ Game """
 
+    name = Attribute("Game id")
     title = Attribute("Game title")
-    player = Attribute("Current player")
 
-    __name__ = Attribute("Dynamically set game lookup name")
+    start_level = Attribute("Game start level")
+
+    player = Attribute("The current player")
+    player_data = Attribute("Game data for the current player")
+    player_level = Attribute("The current level of the current player")
 
     def __init__(player):
         """ Game initialization requires a player object """
+
+    def get_new_game_items():
+        """ Return a new set of items for the current level """

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Koneita</title>
+        <meta name="context" content="${context}" />
+        <link rel="stylesheet" type="text/css" href="${root}/static/style.css" />
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/lib/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/game.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${context}/static/machines.js"></script>
+    </head>
+    <body>
+        <div id="game">
+            <div id="level">
+              Taso: <span>3.0</span>
+            </div>
+            <img src="${context}/static/machines.jpg" alt=""/>
+            <img id="m0" class="machinemask" src="${context}/static/m1.png" alt=""/>
+            <img id="m1" class="machinemask" src="${context}/static/m2.png" alt=""/>
+            <img id="m2" class="machinemask" src="${context}/static/m3.png" alt=""/>
+            <img id="m3" class="machinemask" src="${context}/static/m4.png" alt=""/>
+            <img id="m4" class="machinemask" src="${context}/static/m5.png" alt=""/>
+            <img id="m5" class="machinemask" src="${context}/static/m6.png" alt=""/>
+            <img id="m6" class="machinemask" src="${context}/static/m7.png" alt=""/>
+            <img id="m7" class="machinemask" src="${context}/static/m8.png" alt=""/>
+            <img id="m8" class="machinemask" src="${context}/static/m9.png" alt=""/>
+            <img id="b0" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b1" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b2" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b3" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b4" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b5" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b6" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b7" class="blink" src="${context}/static/blink.png" alt=""/>
+            <img id="b8" class="blink" src="${context}/static/blink.png" alt=""/>
+        </div>
+    </body>
+</html>

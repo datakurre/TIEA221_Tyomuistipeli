@@ -31,7 +31,7 @@ function GameInitialize(items, callbacks) {
   global.userItems = [];
 
     for (cb in callbacks) {
-	global.callbacks[cb] = callbacks[cb];
+      global.callbacks[cb] = callbacks[cb];
     }
 }
 
@@ -61,23 +61,23 @@ function createDlg(data){
     $('#shader').animate({'opacity':'0.6'}, 500);
 
     $('#next').click(function(event){
-	event.preventDefault();
-	$('#dialog').fadeOut();
-	$('#shader').fadeOut().promise().done(function() {
-	    $('#overlay').remove();
-	    global.callbacks.newGame();
-	});
+      event.preventDefault();
+      $('#dialog').fadeOut();
+      $('#shader').fadeOut().promise().done(function() {
+        $('#overlay').remove();
+        global.callbacks.newGame();
+      });
     });
   }
 }
 function GameCorrectAnswer() {
-  $.get(global.ctx + '/rest/game/done/user/'+global.userid, function(data){
+  $.get(global.ctx + '/pass', function(data){
       createDlg(data);
   });
 }
 
 function GameIncorrectAnswer() {
-  $.get(global.ctx + '/rest/game/incorrect/user/'+global.userid, function(data){
+  $.get(global.ctx + '/fail', function(data){
       createDlg(data);
   });
 }

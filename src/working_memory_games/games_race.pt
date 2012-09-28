@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Autokisa</title>
+        <meta name="context" content="${context}" />
+        <link rel="stylesheet" type="text/css" href="${root}/static/style.css" />
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/lib/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/game.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${context}/static/race.js"></script>
+    </head>
+    <body>
+        <div id="game">
+            <div id="level">
+                Taso: <span>3.0</span>
+            </div>
+            <img src="${context}/static/race.jpg" alt="" />
+            <img id="car0" class="carmask" src="${context}/static/mask1.png" alt="" />
+            <img id="car1" class="carmask" src="${context}/static/mask2.png" alt="" />
+            <img id="car2" class="carmask" src="${context}/static/mask3.png" alt="" />
+            <img id="car3" class="carmask" src="${context}/static/mask1.png" alt="" />
+            <img id="car4" class="carmask" src="${context}/static/mask3.png" alt="" />
+            <img id="car5" class="carmask" src="${context}/static/mask2.png" alt="" />
+        </div>
+    </body>
+</html>

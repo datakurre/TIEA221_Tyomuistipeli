@@ -1,21 +1,11 @@
 from setuptools import setup, find_packages
 
-version = "1.0.0"
-requires = [
-    "zope.interface",
-
-    "pyramid",
-    "pyramid-zcml",
-    "pyramid-zodbconn",
-    "pyramid-tm",  # (transaction manager)
-],
-
 setup(
     name="working-memory-games",
-    version=version,
+    version="1.0.0",
     description="Working memory training games",
-    long_description=(open("README.txt").read() + "\n" +
-                      open("CHANGES.txt").read()),
+    long_description=(open("README.rst").read() + "\n" +
+                      open("CHANGES.rst").read()),
     # Get more strings from
     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -30,7 +20,14 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    install_requires=requires,
+    install_requires=[
+        "zope.interface",
+
+        "pyramid",
+        "pyramid-zcml",
+        "pyramid-zodbconn",
+        "pyramid-tm",  # (transaction manager)
+    ],
     entry_points="""\
     [paste.app_factory]
     main = working_memory_games:main

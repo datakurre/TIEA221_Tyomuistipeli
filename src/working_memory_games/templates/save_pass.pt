@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+    <meta charset="utf-8" />
+    <title>Hienoa!</title>
+</head>
+<body>
+
+<div id="overlay">
+    <div id="shader"/>
+    <div id="dialog">
+        <h2>Hienoa!</h2>
+        <a id="next" href="#">Seuraava peli</a>
+    </div>
+</div>
+
+</body>
+</html>

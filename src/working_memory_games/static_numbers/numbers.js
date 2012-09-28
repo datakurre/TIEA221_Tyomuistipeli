@@ -1,19 +1,15 @@
-
-
 $(document).ready(function(){
   newGame();
 });
-
 
 function newGame() {
   global.loader = html5Preloader();
   $('.numberBtn').unbind('click');
   $('#answerLine').children().remove();
-  $.get(global.ctx + '/rest/get/game/2/user/0', function(data){
-    var jsdata = jQuery.parseJSON(data);
-    var level = jsdata.level;
+  $.get(global.ctx + '/new', function(data){
+    var level = data.level;
       $('#level span').text(level);
-    var items = jsdata.items;
+    var items = data.items;
     console.log('new game '+data);
 
     GameInitialize(items, {
@@ -25,15 +21,15 @@ function newGame() {
     var sounds = {};
     var i = 0;
     for (i=0; i<items.length; i++) {
-	var nro = items[i];
-	sounds['snd'+nro+'*:'+global.ctx+'/snd/'+nro+'.ogg||'+global.ctx+'/snd/'+nro+'.mp3'] = nro;
+      var nro = items[i];
+      sounds['snd'+nro+'*:'+global.ctx+'/static/'+nro+'.ogg||'+global.ctx+'/static/'+nro+'.mp3'] = nro;
     }
     files = [];
     for (f in sounds) files.push(f);
     console.log(files);
     global.loader.on('finish', function(){
       for (i=0; i<items.length; i++) {
-	var nro = items[i];
+          var nro = items[i];
           playSound(nro, i*1800);
       }
       setTimeout(setupGame, items.length*1700);
@@ -41,8 +37,6 @@ function newGame() {
     global.loader.on('error', function(e){ console.error(e); });
     //global.loader.on('fileloaded', function(e){ console.error(e); });
     global.loader.addFiles(files);
-
-
   });
 }
 
@@ -97,6 +91,7 @@ function answerWrong(right, item) {
     'margin-left': '5'
   }, 500);
     var i;
-    for (i=0;i<4;i++)
-	elmRight = elmRight.animate({opacity: 0.3}, 'fast').animate({opacity: 1}, 'fast');
+    for (i=0;i<4;i++) {
+      elmRight = elmRight.animate({opacity: 0.3}, 'fast').animate({opacity: 1}, 'fast');
+    }
 }

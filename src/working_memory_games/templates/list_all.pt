@@ -12,5 +12,7 @@
     <li tal:repeat="game games"><a href="${game.name}">${game.title}</a></li>
 </ul>
 
+<noscript>Valitettavasti javascript ei ole selaimestasi päällä.</noscript>
+
 </body>
 </html>

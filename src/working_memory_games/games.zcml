@@ -1,0 +1,53 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <!-- Common -->
+
+    <view context=".interfaces.IGame" name="new"
+          view=".games.new_game" renderer="json"
+          xhr="True" />
+
+    <view context=".interfaces.IGame" name="pass"
+          view=".games.save_pass" renderer="templates/save_pass.pt"
+          xhr="True" />
+
+    <view context=".interfaces.IGame" name="fail"
+          view=".games.save_fail" renderer="templates/save_fail.pt"
+          xhr="True" />
+
+    <view context=".interfaces.IGame" name="dump"
+          view=".games.dump_saved_data" renderer="json" />
+
+
+    <!-- Game 1 -->
+
+    <adapter name="race" provides=".interfaces.IGame"
+             factory=".games.Race" for=".interfaces.IPlayer" />
+
+    <static name="race/static" path="static_race" />
+
+    <view context=".games.Race"
+          view=".games.view" renderer="games_race.pt" />
+
+
+    <!-- Game 2 -->
+
+    <adapter name="machines" provides=".interfaces.IGame"
+             factory=".games.Machines" for=".interfaces.IPlayer" />
+
+    <static name="machines/static" path="static_machines" />
+
+    <view context=".games.Machines"
+          view=".games.view" renderer="games_machines.pt" />
+
+
+    <!-- Game 3 -->
+
+    <adapter name="numbers" provides=".interfaces.IGame"
+             factory=".games.Numbers" for=".interfaces.IPlayer" />
+
+    <static name="numbers/static" path="static_numbers" />
+
+    <view context=".games.Numbers"
+          view=".games.view" renderer="games_numbers.pt" />
+
+</configure>

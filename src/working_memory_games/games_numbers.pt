@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Numeroita</title>
+        <meta name="context" content="${context}" />
+        <link rel="stylesheet" type="text/css" href="${root}/static/style.css" />
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/lib/html5preloader.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/lib/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${root}/static/game.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${context}/static/numbers.js"></script>
+    </head>
+    <body>
+        <div id="game">
+            <div id="level">
+              Taso: <span>3.0</span>
+            </div>
+            <div id="answerLine"></div>
+            <div class="row">
+                <a id="nro1" class="numberBtn" alt="" href="#">1</a>
+                <a id="nro2" class="numberBtn" alt="" href="#">2</a>
+                <a id="nro3" class="numberBtn" alt="" href="#">3</a>
+            </div>
+            <div class="row">
+                <a id="nro4" class="numberBtn" alt="" href="#">4</a>
+                <a id="nro5" class="numberBtn" alt="" href="#">5</a>
+                <a id="nro6" class="numberBtn" alt="" href="#">6</a>
+            </div>
+            <div class="row">
+                <a id="nro7" class="numberBtn" alt="" href="#">7</a>
+                <a id="nro8" class="numberBtn" alt="" href="#">8</a>
+                <a id="nro9" class="numberBtn" alt="" href="#">9</a>
+            </div>
+        </div>
+    </body>
+</html>
+
