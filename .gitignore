@@ -1,22 +1,17 @@
 syntax:glob
 
-*~
-.hgignore
-.DS_Store
 *.egg-info
 *.pyc
 
-Data.fs*
+*~
+.DS_Store
 
 .installed.cfg
 .mr.developer.cfg
-develop-eggs
-downloads
-coverage
-docs
-eggs
+
+bin
 parts
+eggs
+develop-eggs
 dist
 var
-bin
-
