@@ -1,13 +1,10 @@
 #-*- coding: utf-8 -*-
 """ Application """
 
-import os
 import uuid
 
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-
-from pyramid.response import FileResponse
 
 from pyramid_zodbconn import get_connection
 
@@ -56,20 +53,6 @@ class Application(object):
     def __getitem__(self, name):
         """ Returns the game registered with name """
         return self.games[name]
-
-
-def favicon(request):
-    """ /favicon.ico from ./favicon.ico """
-    here = os.path.dirname(__file__)
-    icon = os.path.join(here, 'favicon.ico')
-    return FileResponse(icon, request=request)
-
-
-def robots(request):
-    """ /robots.txt from ./robots.txt """
-    here = os.path.dirname(__file__)
-    robots = os.path.join(here, 'robots.txt')
-    return FileResponse(robots, request=request)
 
 
 def list_all(context, request):

@@ -15,6 +15,11 @@ def main(global_config, **settings):
     config = Configurator(root_factory=Application,
                           settings=settings)
 
+    # Register robots.txt and favicon.ico
+    config.include("pyramid_assetviews")
+    config.add_asset_views("working_memory_games:",  # requires package name
+                           filenames=['robots.txt', 'favicon.ico'])
+
     # Enable ZODB support
     config.include("pyramid_zodbconn")
     config.include("pyramid_tm")

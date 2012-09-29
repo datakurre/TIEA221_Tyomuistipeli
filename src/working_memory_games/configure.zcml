@@ -5,12 +5,6 @@
     <static name="static" path="static" />
 
     <view context=".interfaces.IApplication"
-          view=".app.favicon" name="favicon.ico" />
-
-    <view context=".interfaces.IApplication"
-          view=".app.robots" name="robots.txt" />
-
-    <view context=".interfaces.IApplication"
           view=".app.list_all" renderer="templates/list_all.pt" />
 
     <view context=".interfaces.IApplication" name="dump"
