@@ -6,7 +6,7 @@ Tarvitaan Python 2.7.
 Asennetaan kaikki tarvittavat ja asetetaan polut kohdalleen::
 
     python bootstrap.py
-    bin/buildout -c develop.cfg
+    bin/buildout
     source bin/activate
 
 Annetaan supervisorin huolehtia ZEO-palvelimesta::
@@ -21,10 +21,18 @@ Käynnistetään Pyramid-sovellus edustalle kehitystilaan::
 
     pserve development.ini
 
-Myöhemmin sovelluksen voi käynnistää taustalle tuotantotilaan::
+Myöhemmin sovelluksen voi käynnistää taustalle tuotantotilaan (ja vielä
+myöhemmin supervisor configuroidaan käynnistämään myös pyramid
+automaattisesti)::
 
     supervisorctl start pyramid
 
 Ja sammutetaan kaikki::
 
     supervisorctl shutdown
+
+Nollataan tietokanta::
+
+    supervisorctl shutdown
+    bin/buildout install reset
+
