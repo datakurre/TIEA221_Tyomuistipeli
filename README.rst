@@ -34,5 +34,5 @@ Ja sammutetaan kaikki::
 Nollataan tietokanta::
 
     supervisorctl shutdown
-    bin/buildout install reset
+    bin/buildout -o install reset
 
