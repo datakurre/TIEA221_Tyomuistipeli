@@ -7,6 +7,7 @@ function newGame() {
   $('.numberBtn').unbind('click');
   $('#answerLine').children().remove();
   $.get(global.ctx + '/new', function(data){
+    $('body').append('<div class="modal-backdrop curtain"></div>');
     var level = data.level;
       $('#level span').text(level);
     var items = data.items;
@@ -47,6 +48,7 @@ function playSound(nro, delay) {
 }
 
 function setupGame() {
+  $('.modal-backdrop.curtain').remove();
   $('.numberBtn').unbind('mousedown');
   $('.numberBtn').mousedown(function(event){
     event.preventDefault();
