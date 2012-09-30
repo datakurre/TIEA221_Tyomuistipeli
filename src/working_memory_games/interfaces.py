@@ -29,6 +29,3 @@ class IGame(Interface):
 
     def __init__(player):
         """ Game initialization requires a player object """
-
-    def get_new_game_items():
-        """ Return a new set of items for the current level """

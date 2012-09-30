@@ -1,0 +1,11 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <adapter name="race" factory=".race.Race"
+             provides="working_memory_games.interfaces.IGame"
+             for="working_memory_games.interfaces.IPlayer" />
+
+    <static name="race/static" path="race" />
+
+    <view context=".race.Race" renderer="race.pt" />
+
+</configure>

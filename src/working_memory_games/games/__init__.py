@@ -5,7 +5,6 @@ import datetime
 
 import random
 
-from zope.interface import implements
 from zope.interface.verify import verifyObject
 
 from working_memory_games.persistent import (
@@ -43,66 +42,19 @@ class Game(object):
 
     player_level = property(get_player_level, set_player_level)
 
-    def get_new_game_items(self):
-
-        level = int(self.player_level)
-        count = 6
-
-        if level <= count:
-            items = random.sample(range(count), level)
-        else:
-            items = random.sample(range(count) * 2, level)
-
-        return items
-
-
-class Race(Game):
-    """ Car race """
-
-    implements(IGame)
-
-    name = "race"
-    title = u"Autokisa"
-
-
-class Machines(Game):
-    """ Machines """
-
-    implements(IGame)
-
-    name = "machines"
-    title = u"Koneita"
-
-
-class Numbers(Game):
-    """ Numbers """
-
-    implements(IGame)
-
-    name = "numbers"
-    title = u"Numeroita"
-
-    def get_new_game_items(self):
-
-        level = int(self.player_level)
-
-        items = [random.sample(range(1, 10), 1)[0]
-                 for i in range(level)]
-
-        return items
-
-
-def view(context, request):
-    return {}
-
 
 def new_game(context, request):
     """ Return new game data """
 
     assert verifyObject(IGame, context)
 
-    level = context.player_level
-    items = context.get_new_game_items()
+    level = int(context.player_level)
+
+    count = 6
+    if level <= count:
+        items = random.sample(range(count), level)
+    else:
+        items = random.sample(range(count) * 2, level)
 
     return {
         "level": level,

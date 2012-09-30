@@ -1,0 +1,15 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <adapter name="numbers" factory=".numbers.Numbers"
+             provides="working_memory_games.interfaces.IGame"
+             for="working_memory_games.interfaces.IPlayer" />
+
+    <static name="numbers/static" path="numbers" />
+
+    <view context=".numbers.Numbers" renderer="numbers.pt" />
+
+    <view name="new"
+          context=".numbers.Numbers"
+          view=".new_game" renderer="json" xhr="True" />
+
+</configure>

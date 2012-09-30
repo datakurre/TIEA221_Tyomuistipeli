@@ -22,7 +22,7 @@ class Length(LengthBase):
     """ JSON-serializable Length (a numeric value with conflict resolution) """
 
     def __json__(self, request):
-        return str(self())
+        return self()
 
 
 class Player(OOBTree):

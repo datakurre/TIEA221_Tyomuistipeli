@@ -1,0 +1,11 @@
+<configure xmlns="http://pylonshq.com/pyramid">
+
+    <adapter name="machines" factory=".machines.Machines"
+             provides="working_memory_games.interfaces.IGame"
+             for="working_memory_games.interfaces.IPlayer" />
+
+    <static name="machines/static" path="machines" />
+
+    <view context=".machines.Machines" renderer="machines.pt" />
+
+</configure>
