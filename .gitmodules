@@ -1,0 +1,3 @@
+[submodule "docs/style"]
+	path = docs/style
+	url = https://github.com/datakurre/tutkielma.git
