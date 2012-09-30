@@ -85,8 +85,10 @@ def list_all(context, request):
             "title": game.title
         })
 
+    cmp_by_title = lambda x, y: cmp(x["title"], y["title"])
+
     return {
-        "games": games
+        "games": sorted(games, cmp=cmp_by_title)
     }
 
 
