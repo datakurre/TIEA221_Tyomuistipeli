@@ -20,6 +20,6 @@
     <view context=".interfaces.IApplication" name="dump"
           view=".app.dump_saved_data" renderer="json" />
 
-    <include file="games.zcml" />
+    <include package=".games" />
 
 </configure>
