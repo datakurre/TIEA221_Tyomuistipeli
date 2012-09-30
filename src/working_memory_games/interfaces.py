@@ -8,11 +8,15 @@ class IApplication(Interface):
     """ Application """
 
     player = Attribute("Current player")
+    players = Attribute("Available players")
+
     games = Attribute("Available games")
 
 
 class IPlayer(Interface):
     """ Player """
+
+    name = Attribute("Player name")
 
 
 class IGame(Interface):

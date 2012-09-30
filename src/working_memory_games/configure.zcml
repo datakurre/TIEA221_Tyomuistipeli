@@ -3,22 +3,41 @@
     <include package="pyramid_zcml" />
 
     <!-- Register Twitter Bootstrap -->
+
     <static name="bootstrap" path="bootstrap" />
 
+
     <!-- Register Our owns static resources -->
+
     <static name="static" path="static" />
 
+
     <!-- Subscribe to before render event to add the base template -->
+
     <subscriber for="pyramid.events.BeforeRender"
                 handler=".app.add_base_template" />
+
 
     <!-- Register root application views -->
 
     <view context=".interfaces.IApplication"
-          view=".app.list_all" renderer="templates/list_all.pt" />
+          view=".app.select_player" renderer="templates/select_player.pt" />
 
-    <view context=".interfaces.IApplication" name="dump"
+    <view name="select" context=".interfaces.IApplication"
+          view=".app.handle_select_player" request_method="POST" />
+
+    <view name="liity" context=".interfaces.IApplication"
+          renderer="templates/register_player.pt" request_method="GET" />
+
+    <view name="liity" context=".interfaces.IApplication"
+          view=".app.handle_new_player" renderer="templates/register_player.pt"
+          request_method="POST" />
+
+    <view name="dump" context=".interfaces.IApplication"
           view=".app.dump_saved_data" renderer="json" />
+
+
+    <!-- Include games -->
 
     <include package=".games" />
 

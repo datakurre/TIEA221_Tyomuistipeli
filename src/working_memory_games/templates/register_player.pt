@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="base_template.macros['main']">
+
+  <head>
+    <style metal:fill-slot="css">
+    body {
+        padding-top: 60px; /* 60px to make the container go all the way
+                              to the bottom of the topbar */
+    }
+    </style>
+  </head>
+
+  <body>
+
+    <div metal:fill-slot="navbar"
+         class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="${base_url}">Työmuistipelit.fi</a>
+        </div>
+      </div>
+    </div>
+
+    <metal:content fill-slot="content">
+
+    <form metal:fill-slot="content" action="${current_url}" method="post">
+      <legend>Uusi pelaaja</legend>
+
+      <label>Nimi</label>
+      <input type="text" name="name" placeholder="Etunimi" />
+
+      <br/>
+
+      <button type="submit" class="btn">Liity pelaajaksi</button>
+    </form>
+
+    </metal:content>
+
+  </body>
+</html>

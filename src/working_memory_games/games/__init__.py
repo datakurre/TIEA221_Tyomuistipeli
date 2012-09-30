@@ -7,7 +7,7 @@ import random
 
 from zope.interface.verify import verifyObject
 
-from working_memory_games.persistent import (
+from working_memory_games.datatypes import (
     OOBTree,
     Length
 )

@@ -6,13 +6,13 @@
 
   <head>
     <tal:block metal:fill-slot="css">
-    <link rel="stylesheet" href="${context_url}/static/style.css" />
+    <link rel="stylesheet" href="${current_url}/static/style.css" />
     </tal:block>
 
     <tal:block metal:fill-slot="js">
     <script type="text/javascript" src="${base_url}/static/lib/html5preloader.js"></script>
     <script type="text/javascript" src="${base_url}/static/game.js"></script>
-    <script type="text/javascript" src="${context_url}/static/numbers.js"></script>
+    <script type="text/javascript" src="${current_url}/static/numbers.js"></script>
     </tal:block>
   </head>
 

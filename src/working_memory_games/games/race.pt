@@ -6,12 +6,12 @@
 
   <head>
     <tal:block metal:fill-slot="css">
-    <link rel="stylesheet" href="${context_url}/static/style.css" />
+    <link rel="stylesheet" href="${current_url}/static/style.css" />
     </tal:block>
 
     <tal:block metal:fill-slot="js">
     <script type="text/javascript" src="${base_url}/static/game.js"></script>
-    <script type="text/javascript" src="${context_url}/static/race.js"></script>
+    <script type="text/javascript" src="${current_url}/static/race.js"></script>
     </tal:block>
   </head>
 
@@ -20,13 +20,13 @@
       <div id="level" class="btn disabled">
           Taso: <span>3.0</span>
       </div>
-      <img src="${context_url}/static/race.jpg" alt="" />
-      <img id="car0" class="carmask" src="${context_url}/static/mask1.png" alt="" />
-      <img id="car1" class="carmask" src="${context_url}/static/mask2.png" alt="" />
-      <img id="car2" class="carmask" src="${context_url}/static/mask3.png" alt="" />
-      <img id="car3" class="carmask" src="${context_url}/static/mask1.png" alt="" />
-      <img id="car4" class="carmask" src="${context_url}/static/mask3.png" alt="" />
-      <img id="car5" class="carmask" src="${context_url}/static/mask2.png" alt="" />
+      <img src="${current_url}/static/race.jpg" alt="" />
+      <img id="car0" class="carmask" src="${current_url}/static/mask1.png" alt="" />
+      <img id="car1" class="carmask" src="${current_url}/static/mask2.png" alt="" />
+      <img id="car2" class="carmask" src="${current_url}/static/mask3.png" alt="" />
+      <img id="car3" class="carmask" src="${current_url}/static/mask1.png" alt="" />
+      <img id="car4" class="carmask" src="${current_url}/static/mask3.png" alt="" />
+      <img id="car5" class="carmask" src="${current_url}/static/mask2.png" alt="" />
     </div>
   </body>
 

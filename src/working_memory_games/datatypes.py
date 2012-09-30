@@ -18,6 +18,7 @@ class OOBTree(OOBTreeBase):
     def __json__(self, request):
         return dict(self.items())
 
+
 class Length(LengthBase):
     """ JSON-serializable Length (a numeric value with conflict resolution) """
 
@@ -29,3 +30,15 @@ class Player(OOBTree):
     """ Player """
 
     implements(IPlayer)
+
+    def __init__(self, name):
+        super(Player, self).__init__()
+        self.name = name
+
+    def get_name(self):
+        return self.get("_name")
+
+    def set_name(self, value):
+        self["_name"] = value
+
+    name = property(get_name, set_name)

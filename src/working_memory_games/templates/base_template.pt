@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="context" content="${context_url}" />
+    <meta name="context" content="${current_url}" />
 
     <tal:title tal:define="subtitle context.title|nothing">
     <title tal:condition="not:subtitle">Työmuistipelit.fi</title>
@@ -43,8 +43,6 @@
 
     <div class="container">
       <metal:container-slot define-slot="container">
-
-      <h1 id="title" metal:define-slot="title">Työmuistipelit.fi</h1>
 
       <metal:content-slot define-slot="content"></metal:content-slot>
 
