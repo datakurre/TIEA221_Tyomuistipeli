@@ -10,6 +10,6 @@
 
     <view name="new"
           context=".numbers.Numbers"
-          view=".new_game" renderer="json" xhr="True" />
+          view=".numbers.new_game" renderer="json" xhr="True" />
 
 </configure>
