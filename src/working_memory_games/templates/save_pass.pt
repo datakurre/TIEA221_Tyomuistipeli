@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal">
-<head>
+
+  <head>
     <meta charset="utf-8" />
     <title>Hienoa!</title>
-</head>
-<body>
+  </head>
 
-<div id="overlay">
-    <div id="shader"/>
-    <div id="dialog">
-        <h2>Hienoa!</h2>
-        <a id="next" href="#">Seuraava peli</a>
+  <body>
+    <div class="modal hide fade" data-backdrop="static">
+      <div class="modal-header">
+        <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Hienoa!</h3>
+      </div>
+      <div class="modal-body">
+        <a href="#" class="btn btn-large btn-success"
+                    style="font-size: 800%">Seuraava peli</a>
+      </div>
+      <!-- <div class="modal-footer"> -->
+      <!--   <a href="#" class="btn btn-large btn-success">Seuraava peli</a> -->
+      <!-- </div> -->
     </div>
-</div>
+  </body>
 
-</body>
 </html>

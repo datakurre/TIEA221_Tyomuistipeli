@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Autokisa</title>
-        <meta name="context" content="${context}" />
-        <link rel="stylesheet" type="text/css" href="${root}/static/style.css" />
-        <script type="text/javascript" charset="utf-8"
-                src="${root}/static/lib/jquery.min.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${root}/static/game.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${context}/static/race.js"></script>
-    </head>
-    <body>
-        <div id="game">
-            <div id="level">
-                Taso: <span>3.0</span>
-            </div>
-            <img src="${context}/static/race.jpg" alt="" />
-            <img id="car0" class="carmask" src="${context}/static/mask1.png" alt="" />
-            <img id="car1" class="carmask" src="${context}/static/mask2.png" alt="" />
-            <img id="car2" class="carmask" src="${context}/static/mask3.png" alt="" />
-            <img id="car3" class="carmask" src="${context}/static/mask1.png" alt="" />
-            <img id="car4" class="carmask" src="${context}/static/mask3.png" alt="" />
-            <img id="car5" class="carmask" src="${context}/static/mask2.png" alt="" />
-        </div>
-    </body>
+<html lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="base_template.macros['main']">
+
+  <head>
+    <tal:block metal:fill-slot="css">
+    <link rel="stylesheet" href="${context_url}/static/style.css" />
+    </tal:block>
+
+    <tal:block metal:fill-slot="js">
+    <script type="text/javascript" src="${base_url}/static/game.js"></script>
+    <script type="text/javascript" src="${context_url}/static/race.js"></script>
+    </tal:block>
+  </head>
+
+  <body metal:fill-slot="body" tal:omit-tag="">
+    <div id="game">
+      <div id="level" class="btn disabled">
+          Taso: <span>3.0</span>
+      </div>
+      <img src="${context_url}/static/race.jpg" alt="" />
+      <img id="car0" class="carmask" src="${context_url}/static/mask1.png" alt="" />
+      <img id="car1" class="carmask" src="${context_url}/static/mask2.png" alt="" />
+      <img id="car2" class="carmask" src="${context_url}/static/mask3.png" alt="" />
+      <img id="car3" class="carmask" src="${context_url}/static/mask1.png" alt="" />
+      <img id="car4" class="carmask" src="${context_url}/static/mask3.png" alt="" />
+      <img id="car5" class="carmask" src="${context_url}/static/mask2.png" alt="" />
+    </div>
+  </body>
+
 </html>

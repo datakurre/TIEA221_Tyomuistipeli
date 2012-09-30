@@ -93,10 +93,7 @@ class Numbers(Game):
 
 
 def view(context, request):
-    return {
-        "root": request.application_url,
-        "context": "%s%s" % (request.application_url, request.path),
-    }
+    return {}
 
 
 def new_game(context, request):

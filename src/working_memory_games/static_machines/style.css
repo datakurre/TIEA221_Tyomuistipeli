@@ -1,0 +1,96 @@
+.machinemask {
+  opacity: 0;
+}
+.blink {
+  opacity: 0.6;
+}
+#m0 {
+  position: absolute;
+  top: 27px;
+  left: 570px;
+}
+#m1 {
+  position: absolute;
+  top: 91px;
+  left: 293px;
+}
+#m2 {
+  position: absolute;
+  top: 177px;
+  left: 447px;
+}
+#m3 {
+  position: absolute;
+  top: 262px;
+  left: 189px;
+}
+#m4 {
+  position: absolute;
+  top: 236px;
+  left: 19px;
+}
+#m5 {
+  position: absolute;
+  top: 512px;
+  left: 100px;
+}
+#m6 {
+  position: absolute;
+  top: 410px;
+  left: 281px;
+}
+#m7 {
+  position: absolute;
+  top: 503px;
+  left: 577px;
+}
+#m8 {
+  position: absolute;
+  top: 576px;
+  left: 255px;
+}
+#b0 {
+  position: absolute;
+  top: 5px;
+  left: 538px;
+}
+#b1 {
+  position: absolute;
+  top: 69px;
+  left: 261px;
+}
+#b2 {
+  position: absolute;
+  top: 293px;
+  left: 570px;
+}
+#b3 {
+  position: absolute;
+  top: 240px;
+  left: 294px;
+}
+#b4 {
+  position: absolute;
+  top: 244px;
+  left: 33px;
+}
+#b5 {
+  position: absolute;
+  top: 491px;
+  left: 138px;
+}
+#b6 {
+  position: absolute;
+  top: 391px;
+  left: 331px;
+}
+#b7 {
+  position: absolute;
+  top: 481px;
+  left: 621px;
+}
+#b8 {
+  position: absolute;
+  top: 562px;
+  left: 271px;
+}

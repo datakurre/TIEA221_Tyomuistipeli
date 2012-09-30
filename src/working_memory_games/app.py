@@ -1,10 +1,13 @@
 #-*- coding: utf-8 -*-
 """ Application """
 
+import re
 import uuid
 
 from zope.interface import implements
 from zope.interface.verify import verifyObject
+
+from pyramid.renderers import get_renderer
 
 from pyramid_zodbconn import get_connection
 
@@ -53,6 +56,21 @@ class Application(object):
     def __getitem__(self, name):
         """ Returns the game registered with name """
         return self.games[name]
+
+
+def add_base_template(event):
+    """ Adds base template for Chameleon renderer """
+
+    base_template = get_renderer("templates/base_template.pt").implementation()
+
+    request = event["request"]
+    path = re.sub("/*$", "", request.path)
+
+    event.update({
+        "base_template": base_template,
+        "base_url": request.application_url,
+        "context_url": "%s%s" % (request.application_url, path),
+    })
 
 
 def list_all(context, request):

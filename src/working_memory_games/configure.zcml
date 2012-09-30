@@ -2,7 +2,17 @@
 
     <include package="pyramid_zcml" />
 
+    <!-- Register Twitter Bootstrap -->
+    <static name="bootstrap" path="bootstrap" />
+
+    <!-- Register Our owns static resources -->
     <static name="static" path="static" />
+
+    <!-- Subscribe to before render event to add the base template -->
+    <subscriber for="pyramid.events.BeforeRender"
+                handler=".app.add_base_template" />
+
+    <!-- Register root application views -->
 
     <view context=".interfaces.IApplication"
           view=".app.list_all" renderer="templates/list_all.pt" />

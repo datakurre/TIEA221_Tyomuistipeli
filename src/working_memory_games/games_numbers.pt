@@ -1,40 +1,43 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Numeroita</title>
-        <meta name="context" content="${context}" />
-        <link rel="stylesheet" type="text/css" href="${root}/static/style.css" />
-        <script type="text/javascript" charset="utf-8"
-                src="${root}/static/lib/html5preloader.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${root}/static/lib/jquery.min.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${root}/static/game.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${context}/static/numbers.js"></script>
-    </head>
-    <body>
-        <div id="game">
-            <div id="level">
-              Taso: <span>3.0</span>
-            </div>
-            <div id="answerLine"></div>
-            <div class="row">
-                <a id="nro1" class="numberBtn" alt="" href="#">1</a>
-                <a id="nro2" class="numberBtn" alt="" href="#">2</a>
-                <a id="nro3" class="numberBtn" alt="" href="#">3</a>
-            </div>
-            <div class="row">
-                <a id="nro4" class="numberBtn" alt="" href="#">4</a>
-                <a id="nro5" class="numberBtn" alt="" href="#">5</a>
-                <a id="nro6" class="numberBtn" alt="" href="#">6</a>
-            </div>
-            <div class="row">
-                <a id="nro7" class="numberBtn" alt="" href="#">7</a>
-                <a id="nro8" class="numberBtn" alt="" href="#">8</a>
-                <a id="nro9" class="numberBtn" alt="" href="#">9</a>
-            </div>
-        </div>
-    </body>
-</html>
+<html lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="base_template.macros['main']">
 
+  <head>
+    <tal:block metal:fill-slot="css">
+    <link rel="stylesheet" href="${context_url}/static/style.css" />
+    </tal:block>
+
+    <tal:block metal:fill-slot="js">
+    <script type="text/javascript" src="${base_url}/static/lib/html5preloader.js"></script>
+    <script type="text/javascript" src="${base_url}/static/game.js"></script>
+    <script type="text/javascript" src="${context_url}/static/numbers.js"></script>
+    </tal:block>
+  </head>
+
+  <body metal:fill-slot="body" tal:omit-tag="">
+    <div id="game">
+      <div id="level" class="btn disabled">
+        Taso: <span>3.0</span>
+      </div>
+      <div id="answerLine"></div>
+      <div class="row">
+        <a id="nro1" class="numberBtn" alt="" href="#">1</a>
+        <a id="nro2" class="numberBtn" alt="" href="#">2</a>
+        <a id="nro3" class="numberBtn" alt="" href="#">3</a>
+      </div>
+      <div class="row">
+        <a id="nro4" class="numberBtn" alt="" href="#">4</a>
+        <a id="nro5" class="numberBtn" alt="" href="#">5</a>
+        <a id="nro6" class="numberBtn" alt="" href="#">6</a>
+      </div>
+      <div class="row">
+        <a id="nro7" class="numberBtn" alt="" href="#">7</a>
+        <a id="nro8" class="numberBtn" alt="" href="#">8</a>
+        <a id="nro9" class="numberBtn" alt="" href="#">9</a>
+      </div>
+    </div>
+  </body>
+
+</html>

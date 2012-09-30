@@ -49,35 +49,25 @@ function GameCheckUserPress(item) {
     GameCorrectAnswer();
 }
 
-function createDlg(data){
-  console.log('create dlg');
-  if ($('#overlay').length === 0) {
-    $('body').append(data);
-    $('#shader').css('width', window.innerWidth+'px');
-    $('#shader').css('height', $.getDocHeight()+'px');
-    $('#shader').css('left', ((768-window.innerWidth)/2)+'px');
-
-    $('#dialog').animate({'opacity':'1.0'}, 500);
-    $('#shader').animate({'opacity':'0.6'}, 500);
-
-    $('#next').click(function(event){
-      event.preventDefault();
-      $('#dialog').fadeOut();
-      $('#shader').fadeOut().promise().done(function() {
-        $('#overlay').remove();
-        global.callbacks.newGame();
-      });
+function createDialog(data){
+  var dialog;
+  if ($('.modal').length === 0) {
+    dialog = $('body').append($(data).filter('.modal')).find('.modal');
+    dialog.find('.btn').click(function(event) {
+      dialog.modal('hide');
     });
+    dialog.on('hidden', function(event) {
+      dialog.remove();
+      global.callbacks.newGame();
+    });
+    dialog.modal('show');
   }
 }
+
 function GameCorrectAnswer() {
-  $.get(global.ctx + '/pass', function(data){
-      createDlg(data);
-  });
+  $.get(global.ctx + '/pass', function(data) { createDialog(data); });
 }
 
 function GameIncorrectAnswer() {
-  $.get(global.ctx + '/fail', function(data){
-      createDlg(data);
-  });
+  $.get(global.ctx + '/fail', function(data) { createDialog(data); });
 }
