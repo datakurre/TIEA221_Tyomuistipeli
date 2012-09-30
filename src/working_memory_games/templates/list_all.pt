@@ -40,8 +40,11 @@
 
     <h1 metal:fill-slot="title">Tervetuloa!</h1>
 
-    <ul metal:fill-slot="content">
-      <li tal:repeat="game games"><a href="${game.name}">${game.title}</a></li>
+    <ul metal:fill-slot="content" style="margin: 2em 0 0 0;">
+      <li tal:repeat="game games"
+          style="display: inline; margin: 0 1em 0 0; list-style-type: none;">
+        <a class="btn btn-large" href="${game.name}">${game.title}</a>
+      </li>
     </ul>
 
   </body>
