@@ -36,3 +36,6 @@ Nollataan tietokanta::
     supervisorctl shutdown
     bin/buildout -o install reset
 
+Ja koskus ajetaan testit::
+
+    bin/test
