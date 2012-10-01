@@ -33,12 +33,18 @@ class Application(object):
 
     implements(IApplication)
 
-    def __init__(self, request):
-        root = get_connection(request).root()
+    def __init__(self, request, root=None):
         registry = request.registry
 
+        # Set up the database
+
+        if root is None:
+            root = get_connection(request).root()
         if not "players" in root:
             root["players"] = OOBTree()
+        self.root = root
+
+        # Continue to look up the current players
 
         players = root["players"]
 
@@ -115,10 +121,9 @@ def handle_select_player(context, request):
 
     assert verifyObject(IApplication, context)
 
-    root = get_connection(request).root()
     player_id = request.params.get("player_id", "").strip()
 
-    if player_id in root["players"]:
+    if player_id in context.root["players"]:
         request.response.set_cookie("player_id", player_id,
                                     max_age=(60 * 60 * 24 * 365))
         headers = ResponseHeaders({
@@ -138,8 +143,7 @@ def handle_new_player(context, request):
     if name:
         player_id = str(uuid.uuid4())
 
-        root = get_connection(request).root()
-        root["players"][player_id] = Player(name=name)
+        context.root["players"][player_id] = Player(name=name)
 
         request.response.set_cookie("player_id", player_id,
                                     max_age=(60 * 60 * 24 * 365))

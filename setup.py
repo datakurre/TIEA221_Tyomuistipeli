@@ -29,6 +29,11 @@ setup(
         "pyramid-zodbconn",
         "pyramid-tm",  # (transaction manager)
     ],
+    extras_require={'test': [
+        'plone.testing',
+        'robotframework-selenium2library',
+        'robotsuite',
+    ]},
     entry_points="""\
     [paste.app_factory]
     main = working_memory_games:main

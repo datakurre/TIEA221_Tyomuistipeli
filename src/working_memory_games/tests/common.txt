@@ -1,0 +1,11 @@
+*** Settings ***
+
+Library  Selenium2Library  timeout=5  implicit_wait=5
+
+*** Variables ***
+
+${BROWSER} =  firefox
+${FF_PROFILE_DIR} =  ${CURDIR}/firefox_profile
+
+${PORT} =  55002
+${ROOT} =  http://localhost:${PORT}/

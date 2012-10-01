@@ -12,8 +12,7 @@ logger = logging.getLogger("working_memory_games")
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application """
     # Configure
-    config = Configurator(root_factory=Application,
-                          settings=settings)
+    config = Configurator(root_factory=Application, settings=settings)
 
     # Register robots.txt and favicon.ico
     config.include("pyramid_assetviews")

@@ -7,6 +7,8 @@ from zope.interface import Interface, Attribute
 class IApplication(Interface):
     """ Application """
 
+    root = Attribute("Database root object")
+
     player = Attribute("Current player")
     players = Attribute("Available players")
 
