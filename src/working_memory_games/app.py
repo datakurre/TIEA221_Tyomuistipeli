@@ -4,6 +4,12 @@
 import re
 import uuid
 
+from pyramid.view import view_config
+from pyramid.events import (
+    BeforeRender,
+    subscriber
+)
+
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 
@@ -73,6 +79,7 @@ class Application(object):
             raise KeyError
 
 
+@subscriber(BeforeRender)
 def add_base_template(event):
     """ Adds base template for Chameleon renderer """
 
@@ -88,6 +95,7 @@ def add_base_template(event):
     })
 
 
+@view_config(context=IApplication, renderer="templates/select_player.pt")
 def select_player(context, request):
 
     assert verifyObject(IApplication, context)
@@ -117,6 +125,7 @@ def select_player(context, request):
     }
 
 
+@view_config(name="select", context=IApplication, request_method="POST")
 def handle_select_player(context, request):
 
     assert verifyObject(IApplication, context)
@@ -134,6 +143,14 @@ def handle_select_player(context, request):
         return request.params
 
 
+@view_config(name="liity", context=IApplication,
+             renderer="templates/register_player.pt", request_method="GET")
+def new_player_form(context, request):
+    return {}
+
+
+@view_config(name="liity", context=IApplication,
+             renderer="templates/register_player.pt", request_method="POST")
 def handle_new_player(context, request):
 
     assert verifyObject(IApplication, context)
@@ -156,6 +173,7 @@ def handle_new_player(context, request):
         return request.params
 
 
+@view_config(name="dump", context=IApplication, renderer="json")
 def dump_saved_data(context, request):
     """ Return current player data """
 

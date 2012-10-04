@@ -23,9 +23,12 @@ def main(global_config, **settings):
 
     # Note: No ZODB for testing!
 
-    # Enable ZCML support
-    config.include("pyramid_zcml")
-    config.load_zcml("configure.zcml")
+    # Configure static resources
+    config.add_static_view(name="bootstrap", path="bootstrap")
+    config.add_static_view(name="static", path="static")
+
+    # Configure app
+    config.scan(".app")
 
     # Enable imperative configuration for games
     config.scan(".games")

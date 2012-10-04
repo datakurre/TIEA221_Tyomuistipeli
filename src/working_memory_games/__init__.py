@@ -55,11 +55,15 @@ def main(global_config, **settings):
     config.include("pyramid_zodbconn")
     config.include("pyramid_tm")
 
-    # Enable ZCML support
-    config.include("pyramid_zcml")
-    config.load_zcml("configure.zcml")
 
-    # Enable imperative configuration for games
+    # Configure static resources
+    config.add_static_view(name="bootstrap", path="bootstrap")
+    config.add_static_view(name="static", path="static")
+
+    # Configure app
+    config.scan(".app")
+
+    # Configure games
     config.scan(".games")
 
     # Make WSGI

@@ -25,7 +25,6 @@ setup(
 
         "pyramid",
         "pyramid-assetviews",
-        "pyramid-zcml",
         "pyramid-zodbconn",
         "pyramid-tm",  # (transaction manager)
     ],
