@@ -41,8 +41,8 @@ class PyramidLayer(Layer):
 
     def setUp(self):
         self['config'] = testing.setUp(settings={})
-        self['config'].include("pyramid_zcml")
-        self['config'].include("configure_zcml")
+        self['config'].scan("working_memory_games.app")
+        self['config'].scan("working_memory_games.games")
 
     def tearDown(self):
         testing.tearDown()
