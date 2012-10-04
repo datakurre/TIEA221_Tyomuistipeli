@@ -10,7 +10,7 @@ class IApplication(Interface):
     root = Attribute("Database root object")
 
     player = Attribute("Current player")
-    players = Attribute("Available players")
+    players = Attribute("Available players (for the current session)")
 
     games = Attribute("Available games")
 
