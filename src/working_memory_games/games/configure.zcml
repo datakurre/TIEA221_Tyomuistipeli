@@ -18,6 +18,5 @@
 
     <include file="race.zcml" />
     <include file="machines.zcml" />
-    <include file="numbers.zcml" />
 
 </configure>
