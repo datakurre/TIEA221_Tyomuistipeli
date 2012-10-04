@@ -36,9 +36,4 @@
     <view name="dump" context=".interfaces.IApplication"
           view=".app.dump_saved_data" renderer="json" />
 
-
-    <!-- Include games -->
-
-    <include package=".games" />
-
 </configure>

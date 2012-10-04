@@ -5,6 +5,8 @@ import datetime
 
 import random
 
+from pyramid.view import view_config
+
 from zope.interface.verify import verifyObject
 
 from working_memory_games.datatypes import (
@@ -43,6 +45,7 @@ class Game(object):
     player_level = property(get_player_level, set_player_level)
 
 
+@view_config(name="new", context=IGame, renderer="json", xhr=True)
 def new_game(context, request):
     """ Return new game data """
 
@@ -62,6 +65,8 @@ def new_game(context, request):
     }
 
 
+@view_config(name="pass", context=IGame,
+             renderer="../templates/save_pass.pt", xhr=True,)
 def save_pass(context, request):
     """ Save successful game """
 
@@ -78,6 +83,8 @@ def save_pass(context, request):
     return {}
 
 
+@view_config(name="fail", context=IGame,
+             renderer="../templates/save_fail.pt", xhr=True)
 def save_fail(context, request):
     """ Save failed game """
 
@@ -94,6 +101,7 @@ def save_fail(context, request):
     return {}
 
 
+@view_config(name="dump", context=IGame, renderer="json", xhr=False)
 def dump_saved_data(context, request):
     """ Return current player data """
 
