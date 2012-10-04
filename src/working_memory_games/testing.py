@@ -27,6 +27,9 @@ def main(global_config, **settings):
     config.include("pyramid_zcml")
     config.load_zcml("configure.zcml")
 
+    # Enable imperative configuration for games
+    config.scan(".games")
+
     # Make WSGI
     return config.make_wsgi_app()
 
