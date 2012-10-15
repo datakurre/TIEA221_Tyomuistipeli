@@ -94,8 +94,12 @@ def add_base_template(event):
         "current_url": "%s%s" % (request.application_url, path),
     })
 
+@view_config(context=IApplication, renderer="templates/index.html.pt")
+def root_view(context, request):
+    return {}
 
-@view_config(context=IApplication, renderer="templates/select_player.pt")
+
+@view_config(name="blaah", context=IApplication, renderer="templates/select_player.pt")
 def select_player(context, request):
 
     assert verifyObject(IApplication, context)
