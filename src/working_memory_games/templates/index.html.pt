@@ -15,13 +15,13 @@
 
       <div id="majorRow">
 	<div class="center">
-          <a id="join" class="gameBtn" href="#">
+          <a id="join" class="gameBtn btn-0" href="#">
             <div class="middle">Aapo</div>
           </a>
-          <a id="join" class="gameBtn" href="#">
+          <a id="join" class="gameBtn btn-1" href="#">
             <div class="middle">Eeti</div>
           </a>
-          <a id="join" class="gameBtn" href="#">
+          <a id="join" class="gameBtn btn-2" href="#">
             <div class="middle">Liity pelaajaksi</div>
           </a>
         </div>
@@ -29,7 +29,7 @@
 
       <div id="minorRow">
 	<div class="center">
-          <a id="try" class="gameBtn" href="#">
+          <a id="try" class="gameBtn btn-3" href="#">
             <div class="middle">Kokeile peliä</div>
           </a>
         </div>
