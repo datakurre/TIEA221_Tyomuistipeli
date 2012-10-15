@@ -104,6 +104,10 @@ def add_base_template(event):
         "current_url": "%s%s" % (request.application_url, path),
     })
 
+@view_config(context=IApplication, renderer="templates/index.html.pt")
+def root_view(context, request):
+    return {}
+
 
 # @view_config(name="game", context=IApplication,
 #              renderer="templates/game.launchpage.html")
