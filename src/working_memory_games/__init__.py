@@ -31,7 +31,7 @@ class game_config(object):
                                             provided=IGame)
 
             if settings.get("add_view", True):
-                config.add_view(context=ob, renderer="%s.pt" % ob.name)
+                config.add_view(context=ob, renderer="%s.html" % ob.name)
 
             if settings.get("add_static_view", True):
                 config.add_static_view("%s/static" % ob.name, path=ob.name)

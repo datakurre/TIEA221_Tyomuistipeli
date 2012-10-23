@@ -66,7 +66,7 @@ def new_game(context, request):
 
 
 @view_config(name="pass", context=IGame,
-             renderer="../templates/save_pass.pt", xhr=True,)
+             renderer="../templates/save_pass.html", xhr=True,)
 def save_pass(context, request):
     """ Save successful game """
 
@@ -84,7 +84,7 @@ def save_pass(context, request):
 
 
 @view_config(name="fail", context=IGame,
-             renderer="../templates/save_fail.pt", xhr=True)
+             renderer="../templates/save_fail.html", xhr=True)
 def save_fail(context, request):
     """ Save failed game """
 

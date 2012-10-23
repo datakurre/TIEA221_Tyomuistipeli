@@ -83,7 +83,8 @@ class Application(object):
 def add_base_template(event):
     """ Adds base template for Chameleon renderer """
 
-    base_template = get_renderer("templates/base_template.pt").implementation()
+    base_template =\
+        get_renderer("templates/base_template.html").implementation()
 
     request = event["request"]
     path = re.sub("/*$", "", request.path)
@@ -94,12 +95,14 @@ def add_base_template(event):
         "current_url": "%s%s" % (request.application_url, path),
     })
 
-@view_config(context=IApplication, renderer="templates/index.html.pt")
+
+@view_config(context=IApplication, renderer="templates/index.html")
 def root_view(context, request):
     return {}
 
 
-@view_config(name="blaah", context=IApplication, renderer="templates/select_player.pt")
+@view_config(name="old", context=IApplication,
+             renderer="templates/select_player.html")
 def select_player(context, request):
 
     assert verifyObject(IApplication, context)
@@ -148,13 +151,13 @@ def handle_select_player(context, request):
 
 
 @view_config(name="liity", context=IApplication,
-             renderer="templates/register_player.pt", request_method="GET")
+             renderer="templates/register_player.html", request_method="GET")
 def new_player_form(context, request):
     return {}
 
 
 @view_config(name="liity", context=IApplication,
-             renderer="templates/register_player.pt", request_method="POST")
+             renderer="templates/register_player.html", request_method="POST")
 def handle_new_player(context, request):
 
     assert verifyObject(IApplication, context)
