@@ -58,7 +58,6 @@ def main(global_config, **settings):
     config.include("pyramid_zodbconn")
     config.include("pyramid_tm")
 
-
     # Configure static resources
     config.add_static_view(name="bootstrap", path="bootstrap")
     config.add_static_view(name="static", path="static")

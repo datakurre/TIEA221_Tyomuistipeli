@@ -23,6 +23,9 @@ def main(global_config, **settings):
 
     # Note: No ZODB for testing!
 
+    # Register Chameleon rendederer also for .html-files
+    config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
+
     # Configure static resources
     config.add_static_view(name="bootstrap", path="bootstrap")
     config.add_static_view(name="static", path="static")
@@ -41,6 +44,11 @@ class PyramidLayer(Layer):
 
     def setUp(self):
         self['config'] = testing.setUp(settings={})
+
+        # Register Chameleon rendederer also for .html-files
+        self['config'].add_renderer(".html",
+                                    "pyramid.chameleon_zpt.renderer_factory")
+
         self['config'].scan("working_memory_games.app")
         self['config'].scan("working_memory_games.games")
 
