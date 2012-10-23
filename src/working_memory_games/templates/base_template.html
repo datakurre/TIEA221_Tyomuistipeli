@@ -11,13 +11,15 @@
     &ndash; <tal:subtitle content="subtitle">Alasivu</tal:subtitle></title>
     </tal:title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,
+                                   initial-scale=1.0,maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <metal:bootstrap-slot define-slot="bootstrap">
     <link rel="stylesheet" href="${base_url}/bootstrap/css/bootstrap.min.css" />
+    </metal:bootstrap-slot>
     <link rel="stylesheet" href="${base_url}/static/style.css" />
-
     <metal:css-slot define-slot="css"></metal:css-slot>
 
     <link rel="shortcut icon" href="${base_url}/favicon.ico">
