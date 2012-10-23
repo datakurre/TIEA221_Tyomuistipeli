@@ -51,6 +51,9 @@ def main(global_config, **settings):
     config.add_asset_views("working_memory_games:",  # requires package name
                            filenames=["robots.txt", "favicon.ico"])
 
+    # Register Chameleon rendederer also for .html-files
+    config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
+
     # Enable ZODB support
     config.include("pyramid_zodbconn")
     config.include("pyramid_tm")
