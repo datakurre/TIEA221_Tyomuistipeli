@@ -5,14 +5,16 @@
     <meta charset="utf-8" />
     <meta name="context" content="${current_url}" />
 
-    <tal:title tal:define="subtitle context.title|nothing">
+    <tal:title tal:define="subtitle context.title|nothing"
+               metal:define-macro="title">
     <title tal:condition="not:subtitle">Työmuistipelit.fi</title>
     <title tal:condition="subtitle">Työmuistipelit.fi
     &ndash; <tal:subtitle content="subtitle">Alasivu</tal:subtitle></title>
     </tal:title>
 
     <meta name="viewport" content="width=device-width,
-                                   initial-scale=1.0,maximum-scale=1.0">
+                          initial-scale=1.0,maximum-scale=1.0"
+          metal:define-macro="viewport">
     <meta name="description" content="">
     <meta name="author" content="">
 
