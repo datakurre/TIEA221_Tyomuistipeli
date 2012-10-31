@@ -23,7 +23,8 @@ class Numbers(Game):
     title = u"Numeroita"
 
 
-@view_config(name="new", context=Numbers, renderer="json", xhr=True)
+@view_config(route_name="traversal",
+             name="new", context=Numbers, renderer="json", xhr=True)
 def new_game(context, request):
     """ Return new game data """
 

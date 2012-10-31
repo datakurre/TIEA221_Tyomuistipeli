@@ -35,7 +35,8 @@ logger = logging.getLogger("working_memory_games")
 
 
 class Application(object):
-    """ Dynamic application root object (with traverse for available games) """
+    """ Dynamic application root object, which provides access to the
+    database and enables traverse for available games """
 
     implements(IApplication)
 
@@ -43,15 +44,15 @@ class Application(object):
         registry = request.registry
 
         # Set up the database
-
         if root is None:
             root = get_connection(request).root()
         if not "players" in root:
             root["players"] = OOBTree()
+        if not hasattr(root, "guests"):
+            root["guests"] = OOBTree()
         self.root = root
 
         # Continue to look up the current players
-
         players = root["players"]
 
         player_id = request.cookies.get("player_id")
@@ -62,17 +63,21 @@ class Application(object):
                              for player_id in set(player_ids + [player_id])
                              if player_id in players])
 
-        self.games = dict(registry.getAdapters((self.player,), IGame))
-
         # Refresh cookies to give them more lifetime
-        if self.player:
+        if self.player is not None:
             player_ids = self.players.keys()
             request.response.set_cookie("player_ids", ",".join(player_ids),
                                         max_age=(60 * 60 * 24 * 365))
 
+        # Player not selected. Try guest:
+        if self.player is None:
+            guests = root["guests"]
+            self.player = guests.get(player_id)
+
+        self.games = dict(registry.getAdapters((self.player,), IGame))
+
     def __getitem__(self, name):
         """ Returns the game registered with name """
-        # TODO: Eventually, magical game selection will be implemented here.
         if self.player:
             return self.games[name]
         else:
@@ -96,43 +101,75 @@ def add_base_template(event):
     })
 
 
-@view_config(context=IApplication, renderer="templates/index.html")
-def root_view(context, request):
+@view_config(route_name="root", renderer="templates/index.html")
+def root_view(request):
     return {}
 
 
-@view_config(name="old", context=IApplication,
-             renderer="templates/select_player.html")
-def select_player(context, request):
+@view_config(route_name="register", renderer="templates/register_player.html",
+             request_method="GET")
+def new_player_form(context, request):
+    return {}
+
+
+@view_config(route_name="traversal",
+             name="liity", context=IApplication,
+             renderer="templates/register_player.html",
+             request_method="POST")
+def handle_new_player(context, request):
+
+    assert verifyObject(IApplication, context)
+
+    name = request.params.get("name", "").strip()
+
+    if name:
+        player_id = str(uuid.uuid4())
+
+        context.root["players"][player_id] = Player(name=name)
+
+
+        request.response.set_cookie("player_id", player_id,
+                                    max_age=(60 * 60 * 24 * 365))
+        headers = ResponseHeaders({
+            "Set-Cookie": request.response.headers.get("Set-Cookie")
+        })
+
+        return HTTPFound(location=request.application_url, headers=headers)
+    else:
+        return request.params
+
+
+@view_config(route_name="traversal",
+             name="list_players", context=IApplication,
+             renderer="templates/list_players.html",
+             request_method="GET", xhr="True")
+def list_players(context, request):
 
     assert verifyObject(IApplication, context)
 
     players = []
-    games = []
 
+    counter = 0
     for player_id, player in context.players.items():
+        css = "gameBtn btn-%s" % counter
+        css += " selected" if player is context.player else ""
         players.append({
             "id": player_id,
             "name": player.name,
-            "selected": player is context.player
+            "css": css
         })
-
-    for name, game in context.games.items():
-        games.append({
-            "name": name,
-            "title": game.title
-        })
+        counter += 1
 
     cmp_by_name = lambda x, y: cmp(x["name"], y["name"])
-    cmp_by_title = lambda x, y: cmp(x["title"], y["title"])
 
     return {
         "players": sorted(players, cmp=cmp_by_name),
-        "games": sorted(games, cmp=cmp_by_title)
     }
 
 
-@view_config(name="select", context=IApplication, request_method="POST")
+@view_config(route_name="traversal",
+             name="select_player", context=IApplication,
+             request_method="POST")
 def handle_select_player(context, request):
 
     assert verifyObject(IApplication, context)
@@ -150,40 +187,45 @@ def handle_select_player(context, request):
         return request.params
 
 
-@view_config(name="liity", context=IApplication,
-             renderer="templates/register_player.html", request_method="GET")
-def new_player_form(context, request):
-    return {}
-
-
-@view_config(name="liity", context=IApplication,
-             renderer="templates/register_player.html", request_method="POST")
-def handle_new_player(context, request):
+@view_config(route_name="traversal",
+             name="select_guest", context=IApplication,
+             request_method="POST")
+def handle_select_guest(context, request):
 
     assert verifyObject(IApplication, context)
 
-    name = request.params.get("name", "").strip()
+    player_id = str(uuid.uuid4())
+    context.root["guests"][player_id] = Player(name=u"Guest")
 
-    if name:
-        player_id = str(uuid.uuid4())
+    request.response.set_cookie("player_id", player_id,
+                                max_age=(60 * 60 * 24 * 365))
+    headers = ResponseHeaders({
+        "Set-Cookie": request.response.headers.get("Set-Cookie")
+    })
 
-        context.root["players"][player_id] = Player(name=name)
-
-        request.response.set_cookie("player_id", player_id,
-                                    max_age=(60 * 60 * 24 * 365))
-        headers = ResponseHeaders({
-            "Set-Cookie": request.response.headers.get("Set-Cookie")
-        })
-
-        return HTTPFound(location=request.application_url, headers=headers)
-    else:
-        return request.params
+    return HTTPFound(location=request.application_url, headers=headers)
 
 
-@view_config(name="dump", context=IApplication, renderer="json")
+@view_config(route_name="traversal",
+             name="dump", context=IApplication, renderer="json")
 def dump_saved_data(context, request):
     """ Return current player data """
 
     assert verifyObject(IApplication, context)
 
     return dict(context.player.items())
+
+
+#     games = []
+#
+#     for name, game in context.games.items():
+#         games.append({
+#             "name": name,
+#             "title": game.title
+#         })
+#
+#     cmp_by_title = lambda x, y: cmp(x["title"], y["title"])
+#
+#     return {
+#         "games": sorted(games, cmp=cmp_by_title)
+#     }

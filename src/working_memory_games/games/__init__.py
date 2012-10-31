@@ -45,7 +45,8 @@ class Game(object):
     player_level = property(get_player_level, set_player_level)
 
 
-@view_config(name="new", context=IGame, renderer="json", xhr=True)
+@view_config(route_name="traversal",
+             name="new", context=IGame, renderer="json", xhr=True)
 def new_game(context, request):
     """ Return new game data """
 
@@ -65,7 +66,8 @@ def new_game(context, request):
     }
 
 
-@view_config(name="pass", context=IGame,
+@view_config(route_name="traversal",
+             name="pass", context=IGame,
              renderer="../templates/save_pass.html", xhr=True,)
 def save_pass(context, request):
     """ Save successful game """
@@ -83,7 +85,8 @@ def save_pass(context, request):
     return {}
 
 
-@view_config(name="fail", context=IGame,
+@view_config(route_name="traversal",
+             name="fail", context=IGame,
              renderer="../templates/save_fail.html", xhr=True)
 def save_fail(context, request):
     """ Save failed game """
@@ -101,7 +104,8 @@ def save_fail(context, request):
     return {}
 
 
-@view_config(name="dump", context=IGame, renderer="json", xhr=False)
+@view_config(route_name="traversal",
+             name="dump", context=IGame, renderer="json", xhr=False)
 def dump_saved_data(context, request):
     """ Return current player data """
 

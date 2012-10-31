@@ -1,6 +1,12 @@
 #-*- coding: utf-8 -*-
 """ Pyramid startup """
 
+# XXX: Monkeypatch a bug in Pyramid 1.4a3 debug mode
+import pyramid.config.predicates
+pyramid.config.predicates.RequestMethodPredicate.__text__ = u"n/a"
+pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
+#
+
 import venusian
 
 from pyramid.config import Configurator
@@ -13,8 +19,8 @@ logger = logging.getLogger("working_memory_games")
 
 
 class game_config(object):
-    """ A class decorator which allows a developer to config game registrations
-    nearer to actual code. """
+    """ A class decorator which allows a developer to configure game related
+    registrations nearer to actual code. """
 
     def __init__(self, **settings):
         self.__dict__.update(settings)
@@ -31,7 +37,10 @@ class game_config(object):
                                             provided=IGame)
 
             if settings.get("add_view", True):
-                config.add_view(context=ob, renderer="%s.html" % ob.name)
+                config.add_route(ob.name, "/%s" % ob.name,
+                                 request_method="GET")
+                config.add_view(route_name=ob.name,
+                                renderer="%s.html" % ob.name)
 
             if settings.get("add_static_view", True):
                 config.add_static_view("%s/static" % ob.name, path=ob.name)
@@ -44,7 +53,7 @@ class game_config(object):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application """
     # Configure
-    config = Configurator(root_factory=Application, settings=settings)
+    config = Configurator(settings=settings)
 
     # Register robots.txt and favicon.ico
     config.include("pyramid_assetviews")
@@ -62,11 +71,18 @@ def main(global_config, **settings):
     config.add_static_view(name="bootstrap", path="bootstrap")
     config.add_static_view(name="static", path="static")
 
-    # Configure app
+    # Configure direct routes (so that they take precedence over traverse)
+    config.add_route("root", "/")
+    config.add_route("register", "/liity", request_method="GET")
+
+    # Scan app views
     config.scan(".app")
 
-    # Configure games
+    # Scan games
     config.scan(".games")
 
-    # Make WSGI
+    # Configure traverse (for views that require access to the database)
+    config.add_route("traversal", "/*traverse", factory=Application)
+
+    # Make WSGI app
     return config.make_wsgi_app()

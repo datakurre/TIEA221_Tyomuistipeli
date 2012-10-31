@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Test layers for zope.testrunner"""
+""" Test layers for zope.testrunner """
 
 from plone.testing import Layer
 
@@ -13,8 +13,7 @@ from working_memory_games.app import Application
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application with mock database """
     # Configure
-    config = Configurator(root_factory=lambda req: Application(req, {}),
-                          settings=settings)
+    config = Configurator(settings=settings)
 
     # Register robots.txt and favicon.ico
     config.include("pyramid_assetviews")
@@ -30,11 +29,19 @@ def main(global_config, **settings):
     config.add_static_view(name="bootstrap", path="bootstrap")
     config.add_static_view(name="static", path="static")
 
-    # Configure app
+    # Configure direct routes (so that they take precedence over traverse)
+    config.add_route("root", "/")
+    config.add_route("join", "/liity", request_method="GET")
+
+    # Scan app views
     config.scan(".app")
 
-    # Enable imperative configuration for games
+    # Scan games
     config.scan(".games")
+
+    # Configure traverse (for views that require access to the database)
+    config.add_route("traversal", "/*traverse",
+                     factory=lambda request: Application(request, {}))
 
     # Make WSGI
     return config.make_wsgi_app()
@@ -99,7 +106,7 @@ ACCEPTANCE_TESTING = PyramidServerLayer()
 class Keywords(object):
     """Robot keywords"""
 
-    def stop_for_debugging(self):
+    def stop(self):
         import sys
         for attr in ('stdin', 'stdout', 'stderr'):
             setattr(sys, attr, getattr(sys, '__%s__' % attr))
