@@ -49,6 +49,10 @@ class Application(object):
         if not "players" in root:
             root["players"] = OOBTree()
         if not hasattr(root, "guests"):
+            # XXX: Actually, guests should be stored into temporary database,
+            # which would be clean when the server is restarted. I'll refactor
+            # this and add a code to remove old guest-data as soon as I'll
+            # figure out the proper ZEO-configuration... :) --asko
             root["guests"] = OOBTree()
         self.root = root
 
