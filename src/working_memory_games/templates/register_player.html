@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html metal:use-macro="base_template.macros['main']">
-
+<html>
   <head>
-    <style metal:fill-slot="css">
-    body {
-        padding-top: 60px; /* 60px to make the container go all the way
-                              to the bottom of the topbar */
-    }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="context" content="${current_url}" />
+    <meta metal:use-macro="base_template.macros['viewport']" />
+
+    <title>Liity pelaamaan</title>
+
+    <link rel="stylesheet" href="${base_url}/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${base_url}/static/style.css" />
+    <link rel="shortcut icon" href="${base_url}/favicon.ico">
   </head>
-
   <body>
+    <div class="container">
 
-    <div metal:fill-slot="navbar"
-         class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="${base_url}">Työmuistipelit.fi</a>
-        </div>
-      </div>
-    </div>
-
-    <metal:content fill-slot="content">
-
-    <form metal:fill-slot="content" action="${current_url}" method="post">
+    <form action="${current_url}" method="post">
       <legend>Uusi pelaaja</legend>
 
       <label>Nimi</label>
@@ -34,7 +25,8 @@
       <button type="submit" class="btn">Liity pelaajaksi</button>
     </form>
 
-    </metal:content>
-
+    </div>
+    <script src="${base_url}/static/lib/jquery.min.js"></script>
+    <script src="${base_url}/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
