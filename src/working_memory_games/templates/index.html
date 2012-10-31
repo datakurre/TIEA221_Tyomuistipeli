@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html metal:use-macro="base_template.macros['main']">
-
+<html>
   <head>
-    <tal:block metal:fill-slot="bootstrap">
+    <meta charset="utf-8" />
+    <meta name="context" content="${current_url}" />
+    <meta metal:use-macro="base_template.macros['viewport']" />
+
+    <title>Liity pelaamaan</title>
+
     <link rel="stylesheet" href="${base_url}/static/reset.css" />
-    </tal:block>
-
-    <tal:block metal:fill-slot="css">
-    <link href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One"
-          rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="${base_url}/static/root.css" />
-    </tal:block>
-
-    <tal:block metal:fill-slot="js">
-    <script type="text/javascript" src="${base_url}/static/root.js"></script>
-    </tal:block>
+    <link rel="stylesheet" href="${base_url}/static/style.css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One" />
   </head>
 
-  <body metal:fill-slot="body" tal:omit-tag="">
+  <body>
     <div id="game">
       <div id="rootHeader">
         <h1>Työmuistipeli</h1>
@@ -25,13 +21,13 @@
 
       <div id="majorRow">
         <div class="center">
-          <a id="join" class="gameBtn btn-0" href="#">
-            <div class="middle">Aapo</div>
-          </a>
-          <a id="join" class="gameBtn btn-1" href="#">
-            <div class="middle">Eeti</div>
-          </a>
-          <a id="join" class="gameBtn btn-2" href="#">
+          <!-- <a id="join" class="gameBtn btn-0" href="#"> -->
+          <!--   <div class="middle">Aapo</div> -->
+          <!-- </a> -->
+          <!-- <a id="join" class="gameBtn btn-1" href="#"> -->
+          <!--   <div class="middle">Eeti</div> -->
+          <!-- </a> -->
+          <a id="join" class="gameBtn btn-2" href="liity">
             <div class="middle">Liity pelaajaksi</div>
           </a>
         </div>
@@ -39,12 +35,18 @@
 
       <div id="minorRow">
         <div class="center">
-          <a id="try" class="gameBtn btn-3" href="#">
-            <div class="middle">Kokeile peliä</div>
-          </a>
+          <form action="${base_url}/select_guest" method="POST"
+                class="" style="display: inline-block;">
+            <button type="submit" id="try" class="gameBtn btn-3">
+              <div class="middle">Kokeile peliä</div>
+            </button>
+          </form>
         </div>
       </div>
 
     </div>
+
+    <script src="${base_url}/static/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="${base_url}/static/root.js"></script>
   </body>
 </html>
