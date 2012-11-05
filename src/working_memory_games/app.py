@@ -105,6 +105,17 @@ def add_base_template(event):
     })
 
 
+# @view_config(context=IApplication, renderer="templates/index.html.pt")
+# def root_view(context, request):
+#     return {}
+
+
+# @view_config(name="game", context=IApplication,
+#              renderer="templates/game.launchpage.html.pt")
+# def root_view(context, request):
+#     return {}
+
+
 @view_config(route_name="root", renderer="templates/index.html")
 def root_view(request):
     return {}
