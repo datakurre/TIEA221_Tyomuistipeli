@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html metal:use-macro="base_template.macros['main']">
-
+<html>
   <head>
-    <tal:block metal:fill-slot="css">
+    <meta charset="utf-8" />
+    <meta name="context" content="${current_url}" />
+    <meta metal:use-macro="base_template.macros['viewport']" />
+
+    <title>Numeropeli</title>
+
+    <link rel="stylesheet" href="${base_url}/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${base_url}/static/style.css" />
+
     <link rel="stylesheet" href="${current_url}/static/style.css" />
-    </tal:block>
 
-    <tal:block metal:fill-slot="js">
-    <script type="text/javascript" src="${base_url}/static/lib/html5preloader.js"></script>
-    <script type="text/javascript" src="${base_url}/static/game.js"></script>
-    <script type="text/javascript" src="${current_url}/static/numbers.js"></script>
-    </tal:block>
+    <link rel="shortcut icon" href="${base_url}/favicon.ico">
   </head>
+  <body>
 
-  <body metal:fill-slot="body" tal:omit-tag="">
     <div id="game">
       <div id="level" class="btn disabled">
         Taso: <span>3.0</span>
@@ -35,6 +37,13 @@
         <a id="nro9" class="numberBtn" alt="" href="#">9</a>
       </div>
     </div>
-  </body>
 
+    <script src="${base_url}/static/lib/jquery.min.js"></script>
+    <script src="${base_url}/bootstrap/js/bootstrap.min.js"></script>
+    <script src="${base_url}/static/game.js"></script>
+
+    <script src="${base_url}/static/lib/html5preloader.js"></script>
+    <script src="${base_url}/static/game.js"></script>
+    <script src="${current_url}/static/numbers.js"></script>
+  </body>
 </html>
