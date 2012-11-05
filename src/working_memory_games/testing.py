@@ -12,38 +12,41 @@ from working_memory_games.app import Application
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application with mock database """
-    # Configure
+
+    # Create Pyramid configurator
     config = Configurator(settings=settings)
 
-    # Register robots.txt and favicon.ico
+    # Register robots.txt, humans.txt  and favicon.ico
     config.include("pyramid_assetviews")
-    config.add_asset_views("working_memory_games:",  # requires package name
-                           filenames=['robots.txt', 'favicon.ico'])
-
-    # Note: No ZODB for testing!
+    config.add_asset_views(
+        "working_memory_games:",  # requires package name
+        filenames=["robots.txt", "humans.txt", "favicon.ico"]
+    )
 
     # Register Chameleon rendederer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
 
-    # Configure static resources
+    # Note: No ZODB for testing!
+
+    # Configure common static resources
     config.add_static_view(name="bootstrap", path="bootstrap")
     config.add_static_view(name="static", path="static")
 
-    # Configure direct routes (so that they take precedence over traverse)
+    # Configure common direct routes, which takes precedence over traverse
     config.add_route("root", "/")
-    config.add_route("join", "/liity", request_method="GET")
+    config.add_route("register", "/liity", request_method="GET")
 
-    # Scan app views
+    # Scan app views for their configuration
     config.scan(".app")
 
-    # Scan games
+    # Scan games for their configuration
     config.scan(".games")
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse",
                      factory=lambda request: Application(request, {}))
 
-    # Make WSGI
+    # Make WSGI app
     return config.make_wsgi_app()
 
 
