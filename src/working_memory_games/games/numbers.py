@@ -5,7 +5,6 @@ import random
 
 from pyramid.view import view_config
 
-from zope.interface import implements
 from zope.interface.verify import verifyObject
 
 from working_memory_games import game_config
@@ -13,11 +12,9 @@ from working_memory_games.interfaces import IGame
 from working_memory_games.games import Game
 
 
-@game_config(add_view=True, add_static_view=True)
+@game_config()
 class Numbers(Game):
     """ Numbers """
-
-    implements(IGame)
 
     name = "numbers"
     title = u"Numeroita"

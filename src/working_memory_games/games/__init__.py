@@ -7,6 +7,7 @@ import random
 
 from pyramid.view import view_config
 
+from zope.interface import implements
 from zope.interface.verify import verifyObject
 
 from working_memory_games.datatypes import (
@@ -19,6 +20,8 @@ from working_memory_games.interfaces import IGame
 
 class Game(object):
     """ Game base class """
+
+    implements(IGame)
 
     start_level = 3.0
 
