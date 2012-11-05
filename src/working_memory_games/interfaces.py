@@ -24,8 +24,8 @@ class IPlayer(Interface):
 class IGame(Interface):
     """ Game """
 
-    name = Attribute("Game id")
-    title = Attribute("Game title")
+#     name = Attribute("Game id")
+#     title = Attribute("Game title")
 
     start_level = Attribute("Game start level")
 

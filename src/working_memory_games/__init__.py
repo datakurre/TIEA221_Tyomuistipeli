@@ -43,23 +43,21 @@ class game_config(object):
         settings = self.__dict__.copy()
 
         def callback(context, name, ob):
+            name = name.lower()  # game id is its class name in lowercase
             config = context.config.with_package(info.module)
 
             # Register game so that sessions will be able to find it
-            config.registry.registerAdapter(ob, name=ob.name,
-                                            required=(IPlayer,),
-                                            provided=IGame)
+            config.registry.registerAdapter(
+                ob, name=name, required=(IPlayer,), provided=IGame)
 
             # Register main template for the game
             if settings.get("add_view", True):
-                config.add_route(ob.name, "/%s" % ob.name,
-                                 request_method="GET")
-                config.add_view(route_name=ob.name,
-                                renderer="%s.html" % ob.name)
+                config.add_route(name, "/%s" % name, request_method="GET")
+                config.add_view(route_name=name, renderer="%s.html" % name)
 
             # Register game specific static resource directory
             if settings.get("add_static_view", True):
-                config.add_static_view("%s/static" % ob.name, path=ob.name)
+                config.add_static_view("%s/static" % name, path=name)
 
         info = venusian.attach(wrapped, callback, category="pyramid")
 

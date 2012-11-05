@@ -15,6 +15,7 @@ from working_memory_games.datatypes import (
     Length
 )
 
+from working_memory_games import game_config
 from working_memory_games.interfaces import IGame
 
 
@@ -26,7 +27,7 @@ class Game(object):
     start_level = 3.0
 
     def __init__(self, player):
-        name = self.name
+        name = self.__class__.__name__.lower()
 
         if not name in player:
             player[name] = OOBTree()
@@ -115,3 +116,44 @@ def dump_saved_data(context, request):
     assert verifyObject(IGame, context)
 
     return dict(context.player_data.items())
+
+
+register = game_config()
+
+
+@register
+class Race(Game):
+    """ Rallipeli """
+
+
+@register
+class Machines(Game):
+    """ Konepeli """
+
+
+@register
+class Story(Game):
+    """ Tarinapeli """
+
+
+@register
+class Numbers(Game):
+    """ Numeropeli """
+
+
+@view_config(route_name="traversal",
+             name="new", context=Numbers, renderer="json", xhr=True)
+def new_numbers_game(context, request):
+    """ Return new game data """
+
+    assert verifyObject(IGame, context)
+
+    level = int(context.player_level)
+
+    items = [random.sample(range(1, 10), 1)[0]
+             for i in range(level)]
+
+    return {
+        "level": level,
+        "items": items
+    }
