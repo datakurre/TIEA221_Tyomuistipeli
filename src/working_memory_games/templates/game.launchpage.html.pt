@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="${base_url}/static/style.css" />
-    <script src="${base_url}/static/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="${base_url}/static/game.launchpage.js"></script>
+    <link rel="stylesheet" href="${base_url}/lib/reset.css" />
+    <link rel="stylesheet" href="${base_url}/css/common.css" />
+    <script src="${base_url}/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="${base_url}/js/game.launchpage.js"></script>
   </head>
   <body>
   </body>

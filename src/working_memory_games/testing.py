@@ -23,10 +23,14 @@ def main(global_config, **settings):
         filenames=["robots.txt", "humans.txt", "favicon.ico"]
     )
 
+    # Configure common static resources
+    config.add_static_view(name="css", path="css")
+    config.add_static_view(name="img", path="img")
+    config.add_static_view(name="js", path="js")
+    config.add_static_view(name="lib", path="lib")
+
     # Register Chameleon rendederer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
-
-    # Note: No ZODB for testing!
 
     # Configure common static resources
     config.add_static_view(name="bootstrap", path="bootstrap")
@@ -41,6 +45,8 @@ def main(global_config, **settings):
 
     # Scan games for their configuration
     config.scan(".games")
+
+    # Note: No ZODB for testing!
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse",

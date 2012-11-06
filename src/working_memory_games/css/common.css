@@ -1,0 +1,16 @@
+#game {
+  position: absolute;
+  top: 0; left: 50%; margin-left: -384px;
+  width: 768px;
+}
+
+#level {
+  position: absolute;
+  top: 5px; left: 5px;
+}
+
+.modal-backdrop.curtain {
+  opacity: 0.5;
+  background-color: transparent;
+  border: solid 1em black;
+}
