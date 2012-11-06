@@ -7,15 +7,25 @@ pyramid.config.predicates.RequestMethodPredicate.__text__ = u"n/a"
 pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
 #
 
+import os
+
 import venusian
 
 from pyramid.config import Configurator
+from pyramid.response import FileResponse
 
 from working_memory_games.app import Application
 from working_memory_games.interfaces import IPlayer, IGame
 
 import logging
 logger = logging.getLogger("working_memory_games")
+
+
+###
+# Static file view factory
+static_file = lambda filename: lambda request:\
+    FileResponse(filename, request=request)
+###
 
 
 class game_config(object):
@@ -31,7 +41,7 @@ class game_config(object):
         which accepts a boolean value and triggers registering the game
         template at ``/gamename``
 
-    add_static_view
+    add_asset_views
         which accepts a boolean value and triggers registering the game
         related static resource directory at  ``/gamename/static``
     """
@@ -55,9 +65,26 @@ class game_config(object):
                 config.add_route(name, "/%s" % name, request_method="GET")
                 config.add_view(route_name=name, renderer="%s.html" % name)
 
-            # Register game specific static resource directory
-            if settings.get("add_static_view", True):
-                config.add_static_view("%s/static" % name, path=name)
+            # Register game specific static assets
+            if settings.get("add_asset_views", True):
+                dirname = os.path.join(
+                    os.path.dirname(info.module.__file__), name)
+                try:
+                    resources = map(lambda x: os.path.join(dirname, x),
+                                    os.listdir(dirname))
+                except OSError:
+                    resources = ()
+
+                for path in filter(lambda x: os.path.isfile(x), resources):
+                    basename = os.path.basename(path)
+                    config.add_route(path, "/%s/%s" % (name, basename),
+                                     request_method="GET")
+                    config.add_view(static_file(path), route_name=path)
+
+                for path in filter(lambda x: os.path.isdir(x), resources):
+                    basename = os.path.basename(path)
+                    config.add_static_view("%s/%s" % (name, basename),
+                                           path=path)
 
         info = venusian.attach(wrapped, callback, category="pyramid")
 
