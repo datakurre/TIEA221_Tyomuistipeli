@@ -104,23 +104,14 @@ def add_base_template(event):
         "current_url": "%s%s" % (request.application_url, path),
     })
 
-@view_config(context=IApplication, renderer="templates/index.html.pt")
-def root_view(context, request):
-    return {}
-
-@view_config(name="game", context=IApplication, renderer="templates/game.launchpage.html.pt")
-def root_view(context, request):
-    return {}
-
-
-# @view_config(name="game", context=IApplication,
-#              renderer="templates/game.launchpage.html")
-# def root_view(context, request):
-#     return {}
-
-
 @view_config(route_name="root", renderer="templates/index.html")
 def root_view(request):
+    return {}
+
+
+@view_config(name="game", context=IApplication, 
+             renderer="templates/game.launchpage.html")
+def game_view(context, request):
     return {}
 
 
@@ -139,6 +130,8 @@ def handle_new_player(context, request):
     assert verifyObject(IApplication, context)
 
     name = request.params.get("name", "").strip()
+
+    logging.debug(request.params)
 
     if name:
         player_id = str(uuid.uuid4())

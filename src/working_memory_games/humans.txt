@@ -5,7 +5,7 @@
 	Matti Katila
 	matti.katila@gmail.com
 
-	Hauskanpito, ideointi, refaktorointi&abstrahointi
+	Hauskanpito, ideointi, refaktorointi&abstrahointi, toteutus
 	Asko Soukka
 	asko.soukka@iki.fi
 
