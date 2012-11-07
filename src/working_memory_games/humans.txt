@@ -1,0 +1,22 @@
+
+/* TIIMI */
+	
+	Hauskanpito, ideointi, säätö, suunnittelu ja toteutus
+	Matti Katila
+	matti.katila@gmail.com
+
+	Hauskanpito, ideointi, refaktorointi&abstrahointi, toteutus
+	Asko Soukka
+	asko.soukka@iki.fi
+
+	Sparraus ja matematiikka
+	Janne Kujala
+
+	Sparraus ja neuropsykologia
+	Sini Huolman
+
+
+/* KIITOKSET */
+
+	Numerot-kentän äänet: Sveins Petteri
+

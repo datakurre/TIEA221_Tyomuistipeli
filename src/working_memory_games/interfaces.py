@@ -29,8 +29,8 @@ class ISession(Interface):
 class IGame(Interface):
     """ Game, which is a dynamically instantiated transient object """
 
-    name = Attribute("Game id")
-    title = Attribute("Game title")
+#     name = Attribute("Game id")
+#     title = Attribute("Game title")
 
     start_level = Attribute("Game start level")
 

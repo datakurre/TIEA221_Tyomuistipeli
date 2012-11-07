@@ -23,7 +23,7 @@ function newGame() {
     var i = 0;
     for (i=0; i<items.length; i++) {
       var nro = items[i];
-      sounds['snd'+nro+'*:'+global.ctx+'/static/'+nro+'.ogg||'+global.ctx+'/static/'+nro+'.mp3'] = nro;
+      sounds['snd'+nro+'*:'+global.ctx+'/snd/'+nro+'.ogg||'+global.ctx+'/snd/'+nro+'.mp3'] = nro;
     }
     files = [];
     for (f in sounds) files.push(f);

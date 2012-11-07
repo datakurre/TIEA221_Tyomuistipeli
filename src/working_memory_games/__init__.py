@@ -7,9 +7,12 @@ pyramid.config.predicates.RequestMethodPredicate.__text__ = u"n/a"
 pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
 #
 
+import os
+
 import venusian
 
 from pyramid.config import Configurator
+from pyramid.response import FileResponse
 
 from working_memory_games.app import Application
 
@@ -20,6 +23,13 @@ from working_memory_games.interfaces import (
 
 import logging
 logger = logging.getLogger("working_memory_games")
+
+
+###
+# Static file view factory
+static_file = lambda filename: lambda request:\
+    FileResponse(filename, request=request)
+###
 
 
 class game_config(object):
@@ -35,7 +45,7 @@ class game_config(object):
         which accepts a boolean value and triggers registering the game
         template at ``/gamename``
 
-    add_static_view
+    add_asset_views
         which accepts a boolean value and triggers registering the game
         related static resource directory at  ``/gamename/static``
     """
@@ -47,23 +57,37 @@ class game_config(object):
         settings = self.__dict__.copy()
 
         def callback(context, name, ob):
+            name = name.lower()  # game id is its class name in lowercase
             config = context.config.with_package(info.module)
 
             # Register game so that sessions will be able to find it
-            config.registry.registerAdapter(ob, name=ob.name,
-                                            required=(ISession,),
-                                            provided=IGame)
+            config.registry.registerAdapter(
+                ob, name=name, required=(ISession,), provided=IGame)
 
             # Register main template for the game
             if settings.get("add_view", True):
-                config.add_route(ob.name, "/%s" % ob.name,
-                                 request_method="GET")
-                config.add_view(route_name=ob.name,
-                                renderer="%s.html" % ob.name)
+                config.add_route(name, "/%s" % name, request_method="GET")
+                config.add_view(route_name=name, renderer="%s.html" % name)
 
-            # Register game specific static resource directory
-            if settings.get("add_static_view", True):
-                config.add_static_view("%s/static" % ob.name, path=ob.name)
+            # Register game specific static assets
+            if settings.get("add_asset_views", True):
+                dirname = os.path.join(
+                    os.path.dirname(info.module.__file__), name)
+                try:
+                    resources = map(lambda x: os.path.join(dirname, x),
+                                    os.listdir(dirname))
+                except OSError:
+                    resources = ()
+
+                for path in filter(lambda x: os.path.isfile(x), resources):
+                    basename = os.path.basename(path)
+                    config.add_route(path, "/%s/%s" % (name, basename),
+                                     request_method="GET")
+                    config.add_view(route_name=path, view=static_file(path))
+                for path in filter(lambda x: os.path.isdir(x), resources):
+                    basename = os.path.basename(path)
+                    config.add_static_view("%s/%s" % (name, basename),
+                                           path=path)
 
         info = venusian.attach(wrapped, callback, category="pyramid")
 
@@ -77,22 +101,19 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     # Register robots.txt, humans.txt  and favicon.ico
-    config.include("pyramid_assetviews")
-    config.add_asset_views(
-        "working_memory_games:",  # requires package name
-        filenames=["robots.txt", "humans.txt", "favicon.ico"]
-    )
+    for filename in ["robots.txt", "humans.txt", "favicon.ico"]:
+        path = os.path.join(os.path.dirname(__file__), filename)
+        config.add_route(path, "/%s" % filename)
+        config.add_view(route_name=path, view=static_file(path))
+
+    # Configure common static resources
+    config.add_static_view(name="css", path="css")
+    config.add_static_view(name="img", path="img")
+    config.add_static_view(name="js", path="js")
+    config.add_static_view(name="lib", path="lib")
 
     # Register Chameleon rendederer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
-
-    # Enable ZODB support
-    config.include("pyramid_zodbconn")
-    config.include("pyramid_tm")
-
-    # Configure common static resources
-    config.add_static_view(name="bootstrap", path="bootstrap")
-    config.add_static_view(name="static", path="static")
 
     # Configure common direct routes, which takes precedence over traverse
     config.add_route("root", "/")
@@ -103,6 +124,10 @@ def main(global_config, **settings):
 
     # Scan games for their configuration
     config.scan(".games")
+
+    # Enable ZODB support
+    config.include("pyramid_zodbconn")
+    config.include("pyramid_tm")
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse", factory=Application)

@@ -7,10 +7,14 @@
 
     <title>Liity pelaamaan</title>
 
-    <link rel="stylesheet" href="${base_url}/static/reset.css" />
-    <link rel="stylesheet" href="${base_url}/static/root.css" />
-    <link rel="stylesheet" href="${base_url}/static/style.css" />
+    <link rel="author" href="${base_url}/humans.txt" />
+    <link rel="stylesheet" href="${base_url}/css/reset.css" />
+    <link rel="stylesheet" href="${base_url}/css/common.css" />
+    <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One" />
+
+    <script src="${base_url}/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="${base_url}/js/mainpage.js"></script>
   </head>
 
   <body>
@@ -19,34 +23,78 @@
         <h1>Työmuistipeli</h1>
       </div>
 
-      <div id="majorRow">
-        <div class="center">
-          <!-- <a id="join" class="gameBtn btn-0" href="#"> -->
-          <!--   <div class="middle">Aapo</div> -->
-          <!-- </a> -->
-          <!-- <a id="join" class="gameBtn btn-1" href="#"> -->
-          <!--   <div class="middle">Eeti</div> -->
-          <!-- </a> -->
-          <a id="join" class="gameBtn btn-2" href="liity">
+      <div id="joinView" class="center" style="display:none;">
+        <form id="joinData" action="${base_url}/liity" method="POST">
+          <label>Nimi</label>
+          <input type="text" name="name" placeholder="Etunimi" /><br/>
+          <label>Ikä</label>
+          <input type="number" name="age" placeholder="6" /><br/>
+          <label>Sukupuoli
+            <label>
+              <input type="radio" name="gender" id="gender1" value="f" >
+              Tyttö
+            </label><br/>
+            <label>
+              <input type="radio" name="gender" id="gender2" value="m">
+              Poika
+            </label>
+          </label><br/>
+          <label>
+            <input type="checkbox" name="adhd" id="adhd" value="true" >
+            Epäillään tai on todettu ADHD
+          </label><br/>
+          <label>
+            <input type="checkbox" name="delay" id="delay" value="true" >
+            Epäillään tai on todettu kehitysviivettä
+          </label><br/>
+          <label>
+            <input type="checkbox" name="wm" id="wm" value="true" >
+            Epäillään tai on todettu kapea työmuisti
+          </label><br/>
+          <label>
+            <input type="checkbox" name="wm" id="wm" value="true" >
+            Epäillään tai on todettu keskittymisvaikeutta
+          </label><br/>
+          <label>Sähköposti</label>
+          <input type="email" name="email" /><br/>
+
+          <div id="infoText">
+            Antamianne tietoja käytetään vain ja ainoastaan tutkimustarkoitukseen.
+          </div>
+	  <!--
+          <a id="join" class="gameBtn btn-2" href="#">
             <div class="middle">Liity pelaajaksi</div>
           </a>
-        </div>
+          -->
+          <input type="submit" name="submit" hidden="true" /><br/>
+          <button type="submit" class="btn">Liity pelaajaksi</button>
       </div>
 
-      <div id="minorRow">
-        <div class="center">
-          <form action="${base_url}/select_guest" method="POST"
+      <div id="mainView">
+        <div id="majorRow">
+          <div class="center">
+            <a class="gameBtn btn-2" href="#liity">
+              <div class="middle">Liity pelaajaksi</div>
+            </a>
+          </div>
+        </div>
+
+        <div id="minorRow">
+          <div class="center">
+            <form action="${base_url}/select_guest" method="POST"
                 class="" style="display: inline-block;">
-            <button type="submit" id="try" class="gameBtn btn-3">
-              <div class="middle">Kokeile peliä</div>
-            </button>
-          </form>
+              <button type="submit" id="try" class="gameBtn btn-3">
+                <div class="middle">Kokeile peliä</div>
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
 
+      </div>
+      <a href="${base_url}/humans.txt">
+        <img id="humans" src="${base_url}/img/humanstxt-transparent-color.png" />
+      </a>
     </div>
 
-    <script src="${base_url}/static/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="${base_url}/static/root.js"></script>
   </body>
 </html>

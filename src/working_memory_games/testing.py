@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 """ Test layers for zope.testrunner """
 
+import os
+
 from plone.testing import Layer
 
 from pyramid import testing
 
 from pyramid.config import Configurator
 
+from working_memory_games import static_file
 from working_memory_games.app import Application
 
 
@@ -17,16 +20,19 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     # Register robots.txt, humans.txt  and favicon.ico
-    config.include("pyramid_assetviews")
-    config.add_asset_views(
-        "working_memory_games:",  # requires package name
-        filenames=["robots.txt", "humans.txt", "favicon.ico"]
-    )
+    for filename in ["robots.txt", "humans.txt", "favicon.ico"]:
+        path = os.path.join(os.path.dirname(__file__), filename)
+        config.add_route(path, "/%s" % filename)
+        config.add_view(route_name=path, view=static_file(path))
+
+    # Configure common static resources
+    config.add_static_view(name="css", path="css")
+    config.add_static_view(name="img", path="img")
+    config.add_static_view(name="js", path="js")
+    config.add_static_view(name="lib", path="lib")
 
     # Register Chameleon rendederer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
-
-    # Note: No ZODB for testing!
 
     # Configure common static resources
     config.add_static_view(name="bootstrap", path="bootstrap")
@@ -41,6 +47,8 @@ def main(global_config, **settings):
 
     # Scan games for their configuration
     config.scan(".games")
+
+    # Note: No ZODB for testing!
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse",

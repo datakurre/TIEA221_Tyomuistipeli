@@ -24,7 +24,6 @@ setup(
         "zope.interface",
 
         "pyramid",
-        "pyramid-assetviews",
         "pyramid-zodbconn",
         "pyramid-tm",  # (transaction manager)
     ],
