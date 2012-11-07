@@ -104,12 +104,13 @@ def add_base_template(event):
         "current_url": "%s%s" % (request.application_url, path),
     })
 
+
 @view_config(route_name="root", renderer="templates/index.html")
 def root_view(request):
     return {}
 
 
-@view_config(name="game", context=IApplication, 
+@view_config(route_name="traversal", name="game", context=IApplication,
              renderer="templates/game.launchpage.html")
 def game_view(context, request):
     return {}

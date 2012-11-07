@@ -79,8 +79,7 @@ class game_config(object):
                     basename = os.path.basename(path)
                     config.add_route(path, "/%s/%s" % (name, basename),
                                      request_method="GET")
-                    config.add_view(static_file(path), route_name=path)
-
+                    config.add_view(route_name=path, view=static_file(path))
                 for path in filter(lambda x: os.path.isdir(x), resources):
                     basename = os.path.basename(path)
                     config.add_static_view("%s/%s" % (name, basename),
