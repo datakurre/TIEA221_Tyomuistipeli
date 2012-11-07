@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-""" Application """
+""" Main application, player management and session code """
 
 import re
 import uuid
@@ -10,7 +10,11 @@ from pyramid.events import (
     subscriber
 )
 
-from zope.interface import implements
+from zope.interface import (
+    implements,
+    alsoProvides
+)
+
 from zope.interface.verify import verifyObject
 
 from webob.headers import ResponseHeaders
@@ -27,7 +31,8 @@ from working_memory_games.datatypes import (
 
 from working_memory_games.interfaces import (
     IApplication,
-    IGame
+    IGame,
+    ISession
 )
 
 import logging
@@ -41,31 +46,21 @@ class Application(object):
     implements(IApplication)
 
     def __init__(self, request, root=None):
-        registry = request.registry
 
-        # Set up the database
-        if root is None:
-            root = get_connection(request).root()
-        if not "players" in root:
-            root["players"] = OOBTree()
-        if not hasattr(root, "guests"):
-            # XXX: Actually, guests should be stored into temporary database,
-            # which would be clean when the server is restarted. I'll refactor
-            # this and add a code to remove old guest-data as soon as I'll
-            # figure out the proper ZEO-configuration... :) --asko
-            root["guests"] = OOBTree()
-        self.root = root
+        # Set up the root
+        self.root = self.get_root(request, root)
 
-        # Continue to look up the current players
-        players = root["players"]
-
+        # Get browser session data
         player_id = request.cookies.get("player_id")
         player_ids = request.cookies.get("player_ids", "").split(",")
 
-        self.player = players.get(player_id)
-        self.players = dict([(player_id, players.get(player_id))
-                             for player_id in set(player_ids + [player_id])
-                             if player_id in players])
+        # Look up the current players on the base of the browser session data
+        self.player = self.root["players"].get(player_id)
+        self.players = dict([
+            (player_id, self.root["players"].get(player_id))
+            for player_id in set([player_id] + player_ids)
+            if player_id in self.root["players"]
+        ])
 
         # Refresh cookies to give them more lifetime
         if self.player is not None:
@@ -73,12 +68,36 @@ class Application(object):
             request.response.set_cookie("player_ids", ",".join(player_ids),
                                         max_age=(60 * 60 * 24 * 365))
 
-        # Player not selected. Try guest:
+        # When player is not found, try to find a guest:
         if self.player is None:
-            guests = root["guests"]
-            self.player = guests.get(player_id)
+            self.player = self.root["guests"].get(player_id)
+            # and make it walk like it had a session
+            alsoProvides(self.player, ISession)
+            self.session = self.player
 
-        self.games = dict(registry.getAdapters((self.player,), IGame))
+        # Otherwise, wrap the player under session
+        else:
+            self.session = ISession(self.player)
+
+        # Finally, look up the games
+        self.games = dict(request.registry.getAdapters((self.session,), IGame))
+
+    def get_root(self, request, root=None):
+        """ Set up the database and return the root object """
+
+        root = get_connection(request).root() if not root else root
+
+        if not "players" in root:
+            root["players"] = OOBTree()
+
+        if not hasattr(root, "guests"):
+            # XXX: Actually, guests should be stored into temporary database,
+            # which would be clean when the server is restarted. I'll refactor
+            # this and add a code to remove old guest-data as soon as I'll
+            # figure out the proper ZEO-configuration... :) --asko
+            root["guests"] = OOBTree()
+
+        return root
 
     def __getitem__(self, name):
         """ Returns the game registered with name """
@@ -86,6 +105,11 @@ class Application(object):
             return self.games[name]
         else:
             raise KeyError
+
+
+def get_session(player):
+    alsoProvides(player, ISession)
+    return player
 
 
 @subscriber(BeforeRender)

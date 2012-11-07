@@ -25,27 +25,27 @@ class Game(object):
 
     start_level = 3.0
 
-    def __init__(self, player):
+    def __init__(self, session):
         name = self.name
 
-        if not name in player:
-            player[name] = OOBTree()
+        if not name in session:
+            session[name] = OOBTree()
 
-        if not "level" in player[name]:
-            player[name]["level"] = Length(self.start_level)
+        if not "level" in session[name]:
+            session[name]["level"] = Length(self.start_level)
 
-        self.player = player
-        self.player_data = player[name]
+        self.session = session
+        self.session_data = session[name]
 
-    def get_player_level(self):
-        return self.player_data["level"]()
+    def get_session_level(self):
+        return self.session_data["level"]()
 
-    def set_player_level(self, value):
-        current = self.player_level
+    def set_session_level(self, value):
+        current = self.session_level
         delta = value - current
-        self.player_data["level"].change(delta)
+        self.session_data["level"].change(delta)
 
-    player_level = property(get_player_level, set_player_level)
+    session_level = property(get_session_level, set_session_level)
 
 
 @view_config(route_name="traversal",
@@ -55,7 +55,7 @@ def new_game(context, request):
 
     assert verifyObject(IGame, context)
 
-    level = int(context.player_level)
+    level = int(context.session_level)
 
     count = 6
     if level <= count:
@@ -78,12 +78,12 @@ def save_pass(context, request):
     assert verifyObject(IGame, context)
 
     key = str(datetime.datetime.now())
-    context.player_data[key] = {
-        "level": context.player_level,
+    context.session_data[key] = {
+        "level": context.session_level,
         "pass": True
     }
 
-    context.player_level += 0.5
+    context.session_level += 0.5
 
     return {}
 
@@ -97,12 +97,12 @@ def save_fail(context, request):
     assert verifyObject(IGame, context)
 
     key = str(datetime.datetime.now())
-    context.player_data[key] = {
-        "level": context.player_level,
+    context.session_data[key] = {
+        "level": context.session_level,
         "pass": False
     }
 
-    context.player_level = max(context.player_level - 0.5, 2.0)
+    context.session_level = max(context.session_level - 0.5, 2.0)
 
     return {}
 
@@ -110,8 +110,8 @@ def save_fail(context, request):
 @view_config(route_name="traversal",
              name="dump", context=IGame, renderer="json", xhr=False)
 def dump_saved_data(context, request):
-    """ Return current player data """
+    """ Return current session data """
 
     assert verifyObject(IGame, context)
 
-    return dict(context.player_data.items())
+    return dict(context.session_data.items())

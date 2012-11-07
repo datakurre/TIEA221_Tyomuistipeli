@@ -12,7 +12,11 @@ import venusian
 from pyramid.config import Configurator
 
 from working_memory_games.app import Application
-from working_memory_games.interfaces import IPlayer, IGame
+
+from working_memory_games.interfaces import (
+    ISession,
+    IGame
+)
 
 import logging
 logger = logging.getLogger("working_memory_games")
@@ -47,7 +51,7 @@ class game_config(object):
 
             # Register game so that sessions will be able to find it
             config.registry.registerAdapter(ob, name=ob.name,
-                                            required=(IPlayer,),
+                                            required=(ISession,),
                                             provided=IGame)
 
             # Register main template for the game

@@ -6,14 +6,18 @@ from zope.interface import implements
 from BTrees.OOBTree import OOBTree as OOBTreeBase
 from BTrees.Length import Length as LengthBase
 
-from working_memory_games.interfaces import IPlayer
+from working_memory_games.interfaces import (
+    IPlayer,
+    ISession
+)
 
 import logging
 logger = logging.getLogger("working_memory_games")
 
 
 class OOBTree(OOBTreeBase):
-    """ JSON-serializable OOBTree """
+    """ OOBTree, which can also hold direct persistent attributes and can be
+    JSON-serialized """
 
     ###
     # Add persistent attribute support for OOBTree
@@ -46,17 +50,24 @@ class OOBTree(OOBTreeBase):
 
 
 class Length(LengthBase):
-    """ JSON-serializable Length (a numeric value with conflict resolution) """
+    """ Generic integer based length, which handles conflict resolutiosn and
+    can be JSON-serialized """
 
     def __json__(self, request):
         return self()
 
 
 class Player(OOBTree):
-    """ Player """
+    """ Player, which contains player metadata and game sessions """
 
     implements(IPlayer)
 
     def __init__(self, name):
         super(Player, self).__init__()
         self.name = name
+
+
+class Session(OOBTree):
+    """ Session, which contains detailed gaming data """
+
+    implements(ISession)

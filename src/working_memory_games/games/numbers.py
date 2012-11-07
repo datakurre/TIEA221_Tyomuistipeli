@@ -27,7 +27,7 @@ def new_game(context, request):
 
     assert verifyObject(IGame, context)
 
-    level = int(context.player_level)
+    level = int(context.session_level)
 
     items = [random.sample(range(1, 10), 1)[0]
              for i in range(level)]
