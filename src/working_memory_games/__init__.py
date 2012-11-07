@@ -98,11 +98,10 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     # Register robots.txt, humans.txt  and favicon.ico
-    config.include("pyramid_assetviews")
-    config.add_asset_views(
-        "working_memory_games:",  # requires package name
-        filenames=["robots.txt", "humans.txt", "favicon.ico"]
-    )
+    for filename in ["robots.txt", "humans.txt", "favicon.ico"]:
+        path = os.path.join(os.path.dirname(__file__), filename)
+        config.add_route(path, "/%s" % filename)
+        config.add_view(route_name=path, view=static_file(path))
 
     # Configure common static resources
     config.add_static_view(name="css", path="css")
