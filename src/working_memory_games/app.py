@@ -1,8 +1,8 @@
 #-*- coding: utf-8 -*-
 """ Application """
 
-import re
 import uuid
+import urlparse
 
 from pyramid.view import view_config
 from pyramid.events import (
@@ -96,12 +96,11 @@ def add_base_template(event):
         get_renderer("templates/base_template.html").implementation()
 
     request = event["request"]
-    path = re.sub("/*$", "", request.path)
 
     event.update({
         "base_template": base_template,
         "base_url": request.application_url,
-        "current_url": "%s%s" % (request.application_url, path),
+        "current_url": urlparse.urljoin(request.application_url, request.path)
     })
 
 

@@ -22,7 +22,8 @@ $(document).ready(function() {
     });
 
     // load player buttons
-    $.get("list_players", function(data) {
+    $.get($('meta[name=context]').attr("content")
+          + "/list_players", function(data) {
         $("#majorRow .center").prepend(data);
     });
 
