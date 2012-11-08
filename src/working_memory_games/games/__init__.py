@@ -18,6 +18,9 @@ from working_memory_games.datatypes import (
 from working_memory_games import game_config
 from working_memory_games.interfaces import IGame
 
+import logging
+logger = logging.getLogger("working_memory_games")
+
 
 class Game(object):
     """ Game base class """
@@ -156,4 +159,40 @@ def new_numbers_game(context, request):
     return {
         "level": level,
         "items": items
+    }
+
+@view_config(route_name="traversal",
+             name="new", context=Story, renderer="json", xhr=True)
+def new_story_game(context, request):
+    """ Return new game data """
+
+    assert verifyObject(IGame, context)
+
+    level = int(context.player_level)
+
+    story_parts = ('auto helikopteri kaivinkone kivi lehma linna '+
+                   'luola majakka maki meri mokki pelle prinsessa '+
+                   'puu pyora ranta rautatie teltta tie '+
+                   'yksisarvinen').split(' ')
+
+    items = random.sample(story_parts, level)
+    logging.debug(items)
+    order = items[1:]
+    random.shuffle(order)
+    logging.debug(order)
+
+    # let's have 6 pictures where one is correct answer
+    # TODO jvk, is this enough or too much?
+    other_selections = {}
+    for item in order:
+        other_selections[item] = \
+            [item] + random.sample(filter(lambda x: x!=item, story_parts), 5)
+        random.shuffle(other_selections[item])
+    logging.debug(other_selections)
+
+    return {
+        "level": level,
+        "items": items,
+        "query": order,
+        "other_candidates": other_selections
     }
