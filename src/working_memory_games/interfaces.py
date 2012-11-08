@@ -6,14 +6,23 @@ from zope.interface import Interface, Attribute
 
 class IApplication(Interface):
     """ Application, which is a dynamically instantiated transient object
-    with pointer to real persistent data """
+    with pointers to real persistent data """
 
-    root = Attribute("Database root object")
+    request = Attribute("Active request")
+    root = Attribute("Database root")
 
-    player = Attribute("Current player. Player can be registered or a guest.")
-    players = Attribute("Available players (for the current browser session)")
+    def get_current_player():
+        """ Return the current player (or guest) """
 
-    games = Attribute("Available games")
+    def get_available_players():
+        """ Return a dict of available players for the current browser session
+        """
+
+    def get_available_games():
+        """ Return a dict of available games """
+
+    def get_current_session():
+        """ Return the current session for the current player """
 
 
 class IPlayer(Interface):
@@ -25,12 +34,13 @@ class IPlayer(Interface):
 class ISession(Interface):
     """ Session, which holds detailed gaming data """
 
+    order = Attribute("Game play order during this session.")
+
 
 class IGame(Interface):
     """ Game, which is a dynamically instantiated transient object """
 
-#     name = Attribute("Game id")
-#     title = Attribute("Game title")
+    app = Attribute("Application object")
 
     start_level = Attribute("Game start level")
 

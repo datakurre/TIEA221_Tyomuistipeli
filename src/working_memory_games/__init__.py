@@ -17,7 +17,7 @@ from pyramid.response import FileResponse
 from working_memory_games.app import Application
 
 from working_memory_games.interfaces import (
-    ISession,
+    IApplication,
     IGame
 )
 
@@ -62,7 +62,7 @@ class game_config(object):
 
             # Register game so that sessions will be able to find it
             config.registry.registerAdapter(
-                ob, name=name, required=(ISession,), provided=IGame)
+                ob, name=name, required=(IApplication,), provided=IGame)
 
             # Register main template for the game
             if settings.get("add_view", True):

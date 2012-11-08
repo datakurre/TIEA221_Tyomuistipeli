@@ -26,8 +26,13 @@ class Game(object):
 
     start_level = 3.0
 
-    def __init__(self, session):
-        name = self.__class__.__name__.lower()
+    def __init__(self, app, name=None):
+        self.app = app
+        self.name = name or self.__class__.__name__.lower()
+        self.session = None
+
+    def set_session(self, session):
+        name = self.name
 
         if not name in session:
             session[name] = OOBTree()
@@ -39,9 +44,15 @@ class Game(object):
         self.session_data = session[name]
 
     def get_session_level(self):
+        assert self.session, (u"Session has not been set yet. "
+                              u"Call ``set_session`` to set session.")
+
         return self.session_data["level"]()
 
     def set_session_level(self, value):
+        assert self.session, (u"Session has not been set yet. "
+                              u"Call ``set_session`` to set session")
+
         current = self.session_level
         delta = value - current
         self.session_data["level"].change(delta)
