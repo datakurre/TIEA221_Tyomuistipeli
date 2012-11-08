@@ -8,21 +8,20 @@ class IApplication(Interface):
     """ Application, which is a dynamically instantiated transient object
     with pointers to real persistent data """
 
-    request = Attribute("Active request")
-    root = Attribute("Database root")
+    request = Attribute("Current request")
+
+    data = Attribute("Database root")
+    games = Attribute("Available games")
 
     def get_current_player():
         """ Return the current player (or guest) """
 
+    def get_current_session():
+        """ Return the current session for the current player """
+
     def get_available_players():
         """ Return a dict of available players for the current browser session
         """
-
-    def get_available_games():
-        """ Return a dict of available games """
-
-    def get_current_session():
-        """ Return the current session for the current player """
 
 
 class IPlayer(Interface):
@@ -42,11 +41,13 @@ class IGame(Interface):
 
     app = Attribute("Application object")
 
-    start_level = Attribute("Game start level")
-
     session = Attribute("The current session")
-    session_data = Attribute("Game data for the current session")
+
+    start_level = Attribute("Game start level")
     session_level = Attribute("The current level in the current session")
 
-    def __init__(session):
-        """ Game initialization requires a session object """
+    def __init__(app):
+        """ Game initialization requires an app """
+
+    def set_session(session):
+        """ Sets the current session for the game """

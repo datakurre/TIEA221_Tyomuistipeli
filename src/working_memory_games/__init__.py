@@ -48,6 +48,21 @@ class game_config(object):
     add_asset_views
         which accepts a boolean value and triggers registering the game
         related static resource directory at  ``/gamename/static``
+
+    The decorator also registers some view defaults for the possible
+    view methods within the class:
+
+    context
+        the current game
+    route_name
+        traversal
+    renderer
+        json
+    xhr
+        True
+
+    Please, note that it's not possible to use Pyramid's @view_defaults
+    together with @game_config (the latest one in chain will prevail).
     """
 
     def __init__(self, **settings):
@@ -55,6 +70,16 @@ class game_config(object):
 
     def __call__(self, wrapped):
         settings = self.__dict__.copy()
+
+        ##
+        # Register view method defaults for the game class
+        wrapped.__view_defaults__ = {
+            "context": wrapped,
+            "route_name": "traversal",
+            "renderer": "json",
+            "xhr": True
+        }
+        ##
 
         def callback(context, name, ob):
             name = name.lower()  # game id is its class name in lowercase

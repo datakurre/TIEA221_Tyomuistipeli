@@ -6,7 +6,11 @@ import uuid
 import datetime
 import random
 
-from pyramid.view import view_config
+from pyramid.view import (
+    view_config,
+    view_defaults
+)
+
 from pyramid.events import (
     BeforeRender,
     subscriber
@@ -36,41 +40,67 @@ import logging
 logger = logging.getLogger("working_memory_games")
 
 
+@view_defaults(context=IApplication, route_name="traversal")
 class Application(object):
     """ Dynamic application root object, which provides access to the
     database and enables traverse for available games """
 
     implements(IApplication)
 
-    def __init__(self, request, root=None):
+    def __init__(self, context, request=None):
+        # Support initialization as root object instance
+        if request is None:
+            request = context
+            context = None
 
+        # Support initialization as view class instance
+        if issubclass(context.__class__, self.__class__):
+            self.__dict__.update(context.__dict__)
+            return
+
+        # Continue initialization as root object instance
         self.request = request
-        self.root = root
+        self.data = context
 
         # Get database root from ZODB
-        if self.root is None:
-            self.root = get_connection(request).root()
+        if self.data is None:
+            self.data = get_connection(request).root()
+
+        self.migrate()  # I love to move things around...
 
         # Prepare (and possibly, migrate) database
-        if not "players" in self.root:
-            self.root["players"] = OOBTree()
+        if not hasattr(self.data, "players"):
+            self.data.players = OOBTree()
 
-        if not "guests" in self.root:
+        if not hasattr(self.data, "guests"):
             # XXX: Eventually, guests should be stored into temporary database,
             # which would be cleaned when the server is restarted.  I'll fix
             # this, once I figure out the proper ZEO-configuration... -Asko
-            self.root["guests"] = OOBTree()
+            self.data.guests = OOBTree()
+
+        self.games = dict(self.request.registry.getAdapters((self,), IGame))
+
+    def migrate(self):
+        """" Migrates database structure between versions """
+
+        if "players" in self.data:
+            self.data.players = self.data["players"]
+            del self.data["players"]
+
+        if "guests" in self.data:
+            self.data.guests = self.data["guests"]
+            del self.data["guests"]
 
     def get_current_player(self):
         # Read cookie
         player_id = self.request.cookies.get("player_id")
 
         # Look up the current player using the cookie data
-        player = self.root["players"].get(player_id)
+        player = self.data.players.get(player_id)
 
         # When player is not found, try to look up a guest
         if player is None:
-            player = self.root["guests"].get(player_id)
+            player = self.data.guests.get(player_id)
 
         return player  # player may be None
 
@@ -81,9 +111,9 @@ class Application(object):
 
         # Look up the available players using the cookie data
         players = dict([
-            (x, self.root["players"].get(x))
+            (x, self.data.players.get(x))
             for x in set([player_id] + player_ids)
-            if x in self.root["players"]
+            if x in self.data.players
         ])
 
         # Do implicit cookie-refresh
@@ -95,23 +125,20 @@ class Application(object):
 
         return players  # players may be an empty {}
 
-    def get_available_games(self):
-        return dict(self.request.registry.getAdapters((self,), IGame))
-
     def get_current_session(self):
         player = self.get_current_player()
 
         if player is None:
             return None
 
-        today = datetime.datetime.utcnow().date()
+        today = str(datetime.datetime.utcnow().date())
         session = player.get(today)
 
         if session is None:
             session = player[today] = Session()
 
         if not hasattr(session, "order"):
-            session.order = self.get_available_games().keys()
+            session.order = self.games.keys()
             random.shuffle(session.order)
 
         return session
@@ -123,15 +150,13 @@ class Application(object):
         if session is None:
             raise KeyError
 
-        all_games = self.get_available_games()
-        selected_game = all_games[name]  # raising a KeyError is allowed
+        selected_game = self.games[name]  # raising a KeyError is allowed
         selected_game.set_session(session)
 
         return selected_game
 
-    @view_config(name="list_players", context=IApplication,
-                 renderer="templates/list_players.html",
-                 route_name="traversal", request_method="GET", xhr="True")
+    @view_config(name="list_players", renderer="templates/list_players.html",
+                 request_method="GET", xhr=True)
     def list_available_players(self):
         current_player = self.get_current_player()
         available_players = self.get_available_players()
@@ -154,9 +179,8 @@ class Application(object):
             "players": sorted(players, cmp=cmp_by_name),
         }
 
-    @view_config(name="liity", context=IApplication,
-                 renderer="templates/register_player.html",
-                 route_name="traversal", request_method="POST")
+    @view_config(name="liity", renderer="templates/register_player.html",
+                 request_method="POST", xhr=False)
     def create_new_player(self):
         name = self.request.params.get("name", "").strip()
         logging.debug(self.request.params)
@@ -166,7 +190,7 @@ class Application(object):
 
         player_id = str(uuid.uuid4())
 
-        self.root["players"][player_id] = Player(name=name)
+        self.data.players[player_id] = Player(name=name)
         self.request.response.set_cookie(
             "player_id", player_id,
             max_age=(60 * 60 * 24 * 365)
@@ -178,13 +202,13 @@ class Application(object):
         return HTTPFound(location=self.request.application_url,
                          headers=headers)
 
-    @view_config(name="select_player", context=IApplication,
-                 route_name="traversal", request_method="POST")
+    @view_config(name="select_player",
+                 request_method="POST", xhr=False)
     def select_player(self):
 
         player_id = self.request.params.get("player_id", "").strip()
 
-        if not player_id in self.root["players"]:
+        if not player_id in self.data.players:
             return self.request.params
 
         self.request.response.set_cookie(
@@ -199,12 +223,12 @@ class Application(object):
                          headers=headers)
 
 
-    @view_config(name="select_guest", context=IApplication,
-                 route_name="traversal", request_method="POST")
+    @view_config(name="select_guest",
+                 request_method="POST", xhr=False)
     def select_guest(self):
 
         player_id = str(uuid.uuid4())
-        self.root["guests"][player_id] = Player(name=u"Guest")
+        self.data.guests[player_id] = Player(name=u"Guest")
 
         self.request.response.set_cookie(
             "player_id", player_id,
@@ -217,11 +241,9 @@ class Application(object):
         return HTTPFound(location=self.request.application_url,
                          headers=headers)
 
-
-    @view_config(name="dump", self=IApplication,
-                 route_name="traversal", renderer="json")
+    @view_config(name="dump", renderer="json", xhr=False)
     def dump_saved_data(self):
-        return dict(self.get_current_player.items())
+        return dict(self.get_current_player().items())
 
 
 @subscriber(BeforeRender)
