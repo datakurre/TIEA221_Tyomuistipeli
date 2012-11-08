@@ -25,6 +25,7 @@ $.getDocHeight = function(){
 /* items = [ numbers ]
  */
 function GameInitialize(items, callbacks) {
+  // TODO remove this
   $("body").off("click", "#next");
 
   global.gameItems = items;
