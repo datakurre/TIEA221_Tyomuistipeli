@@ -39,3 +39,11 @@ Nollataan tietokanta::
 Ja koskus ajetaan testit::
 
     bin/test
+
+Myöhemmin voidaan pakata tietokantaa (ZEOn ollessa päällä)::
+
+    bin/zeopack -u var/zeo.sock
+
+Ja koska tahansa saada karkea yhteenveto sen sisältämistä olioista::
+
+    bin/python parts/analyze.py
