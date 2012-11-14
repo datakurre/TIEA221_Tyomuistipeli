@@ -28,10 +28,9 @@ class IGame(Interface):
     """ Game is a dynamically instantiated transient controller object for a
     single game with pointers to real persistent data """
 
-    app = Attribute("Application object")
-
     start_level = Attribute("Game start level")
 
+    app = Attribute("Application object")
     player = Attribute("The current player")
     session = Attribute("The current session")
 
