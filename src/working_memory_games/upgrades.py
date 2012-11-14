@@ -55,9 +55,11 @@ def from2to3(data):
 
     if not isinstance(data.players, Players):
         data.players.__class__ = Players
+        data.players._p_changed = True  # force to commit the class change
 
     if not isinstance(data.guests, Players):
         data.guests.__class__ = Players
+        data.guests._p_changed = True  # force to commit the class change
 
     for player_id in data.players:
         player = data.players[player_id]
@@ -66,3 +68,15 @@ def from2to3(data):
             for game_id in session:
                 game_session = session[game_id]
                 game_session.__class__ = GameSession
+                game_session._p_changed = True
+                session._p_changed = True
+
+    for player_id in data.guests:
+        player = data.players[player_id]
+        for session_id in player:
+            session = player[session_id]
+            for game_id in session:
+                game_session = session[game_id]
+                game_session.__class__ = GameSession
+                game_session._p_changed = True
+                session._p_changed = True
