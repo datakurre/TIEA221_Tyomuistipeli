@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 """ Main application, player management and session code """
 
+import re
 import uuid
 import datetime
 import urlparse
@@ -239,11 +240,16 @@ def add_base_template(event):
         get_renderer("templates/base_template.html").implementation()
 
     request = event["request"]
+    base_url = request.application_url
+    current_url = urlparse.urljoin(request.application_url, request.path)
 
     event.update({
         "base_template": base_template,
-        "base_url": request.application_url,
-        "current_url": urlparse.urljoin(request.application_url, request.path)
+        "base_url": re.sub("/$", "", base_url),
+        "current_url": re.sub("/$", "", current_url),
+        # ^^ We always strip the ending slash so that we can always use these
+        # variables like ${base_url}/something without ending up with double
+        # slashes in URLs.
     })
 
 

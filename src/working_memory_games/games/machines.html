@@ -3,16 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="context" content="${current_url}" />
-    <meta metal:use-macro="base_template.macros['viewport']" />
+    <meta name="viewport" content="width=device-width,
+                                   initial-scale=1.0,maximum-scale=1.0">
+    <link rel="shortcut icon" href="${base_url}/favicon.ico">
 
     <title>Työkonepeli</title>
 
     <link rel="stylesheet" href="${base_url}/css/bootstrap.min.css" />
     <link rel="stylesheet" href="${base_url}/css/common.css" />
-
     <link rel="stylesheet" href="${current_url}/machines.css" />
-
-    <link rel="shortcut icon" href="${base_url}/favicon.ico">
+    <script src="${base_url}/lib/jquery.min.js"></script>
+    <script src="${base_url}/lib/bootstrap.min.js"></script>
+    <script src="${base_url}/js/game.js"></script>
+    <script src="${current_url}/machines.js"></script>
   </head>
   <body>
 
@@ -41,10 +44,5 @@
       <img id="b8" class="blink" src="${current_url}/img/blink.png" alt=""/>
     </div>
 
-    <script src="${base_url}/lib/jquery.min.js"></script>
-    <script src="${base_url}/lib/bootstrap.min.js"></script>
-    <script src="${base_url}/js/game.js"></script>
-
-    <script src="${current_url}/machines.js"></script>
   </body>
 </html>
