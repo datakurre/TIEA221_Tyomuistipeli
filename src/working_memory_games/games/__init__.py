@@ -11,7 +11,7 @@ from pyramid.view import (
 from zope.interface import implements
 
 from working_memory_games.datatypes import (
-    OOBTree,
+    GameSession,
     Length
 )
 
@@ -47,7 +47,7 @@ class Game(object):
     def set_session(self, player_session):
         game_session = player_session.get(self.name)
         if game_session is None:
-            game_session = player_session[self.name] = OOBTree()
+            game_session = player_session[self.name] = GameSession()
 
         if not hasattr(game_session, "level"):
             game_session.level = Length(self.start_level)
