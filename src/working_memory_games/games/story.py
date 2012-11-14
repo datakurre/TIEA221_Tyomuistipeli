@@ -20,7 +20,7 @@ class Story(Game):
     def new_story_game(self):
         """ Return new game data """
 
-        level = int(self.session_level)
+        level = int(self.session.level)
 
         story_parts = ('auto helikopteri kaivinkone kivi lehma linna '+
                        'luola majakka maki meri mokki pelle prinsessa '+

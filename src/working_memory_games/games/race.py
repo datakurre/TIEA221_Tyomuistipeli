@@ -20,7 +20,7 @@ class Race(Game):
     def new_game(self):
         """ Returns new game data """
 
-        level = int(self.session_level)
+        level = int(self.session.level)
 
         count = 6
         if level <= count:

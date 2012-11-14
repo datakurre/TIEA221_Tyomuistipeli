@@ -20,7 +20,7 @@ class Numbers(Game):
     def new_numbers_game(self):
         """ Returns new game data """
 
-        level = int(self.player_level)
+        level = int(self.session.level)
 
         items = [random.sample(range(1, 10), 1)[0]
                  for i in range(level)]

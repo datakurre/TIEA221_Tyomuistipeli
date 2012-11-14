@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Migration steps for database model upgrades """
 
-CURRENT_VERSION = 3  # simply an incrementing integer value
+CURRENT_VERSION = 4  # simply an incrementing integer value
 
 import logging
 logger = logging.getLogger("working_memory_games")
@@ -80,3 +80,30 @@ def from2to3(data):
                 game_session.__class__ = GameSession
                 game_session._p_changed = True
                 session._p_changed = True
+
+
+def from3to4(data):
+    """ Replace session level Length-objects with simple int values (conflict
+    resolution aware Length didn't make sense after all) """
+
+    from working_memory_games.datatypes import Length
+
+    for player_id in data.players:
+        player = data.players[player_id]
+        for session_id in player:
+            session = player[session_id]
+            for game_id in session:
+                game_session = session[game_id]
+                if isinstance(game_session.level, Length):
+                    print game_session.level
+                    game_session.level = game_session.level()
+
+    for player_id in data.guests:
+        player = data.players[player_id]
+        for session_id in player:
+            session = player[session_id]
+            for game_id in session:
+                game_session = session[game_id]
+                if isinstance(game_session.level, Length):
+                    print game_session.level
+                    game_session.level = game_session.level()

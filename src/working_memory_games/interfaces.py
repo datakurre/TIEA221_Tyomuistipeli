@@ -30,16 +30,12 @@ class IGame(Interface):
 
     app = Attribute("Application object")
 
-    session = Attribute("The current session")
-
     start_level = Attribute("Game start level")
-    session_level = Attribute("The current level in the current session")
+
+    session = Attribute("The current session")
 
     def __init__(app):
         """ Game initialization requires an app """
-
-    def set_session(session):
-        """ Sets the current session for the game """
 
 
 class IPlayers(Interface):

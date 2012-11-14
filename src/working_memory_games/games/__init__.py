@@ -10,12 +10,8 @@ from pyramid.view import (
 
 from zope.interface import implements
 
-from working_memory_games.datatypes import (
-    GameSession,
-    Length
-)
-
 from working_memory_games.interfaces import IGame
+from working_memory_games.datatypes import GameSession
 
 import logging
 logger = logging.getLogger("working_memory_games")
@@ -66,23 +62,12 @@ class Game(object):
                 previous_game_session = previous_session.get(self.name)
                 if previous_game_session is not None:
                     if hasattr(previous_game_session, "level"):
-                        previous_level = previous_game_session.level()
-                        game_session.level = Length(previous_level)
+                        game_session.level = previous_game_session.level
 
         if not hasattr(game_session, "level"):
-            game_session.level = Length(self.start_level)
+            game_session.level = self.start_level
 
         return game_session
-
-    def get_session_level(self):
-        return self.session.level()
-
-    def set_session_level(self, value):
-        current = self.session_level
-        delta = value - current
-        self.session.level.change(delta)
-
-    session_level = property(get_session_level, set_session_level)
 
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
@@ -90,11 +75,11 @@ class Game(object):
 
         key = str(datetime.datetime.utcnow())
         self.session[key] = {
-            "level": self.session_level,
+            "level": self.session.level,
             "pass": True
         }
 
-        self.session_level += 0.5
+        self.session.level += 0.5
 
         return {}
 
@@ -104,11 +89,11 @@ class Game(object):
 
         key = str(datetime.datetime.utcnow())
         self.session[key] = {
-            "level": self.session_level,
+            "level": self.session.level,
             "pass": False
         }
 
-        self.session_level = max(self.session_level - 0.5, 2.0)
+        self.session.level = max(self.session.level - 0.5, 2.0)
 
         return {}
 
