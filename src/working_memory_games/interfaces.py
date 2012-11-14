@@ -32,6 +32,7 @@ class IGame(Interface):
 
     start_level = Attribute("Game start level")
 
+    player = Attribute("The current player")
     session = Attribute("The current session")
 
     def __init__(app):

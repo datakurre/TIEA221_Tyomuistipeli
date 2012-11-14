@@ -40,6 +40,10 @@ class Game(object):
         self.app = context
 
     @property
+    def player(self):
+        return self.app.get_current_player()
+
+    @property
     def session(self):
         player_session = self.app.get_current_session()
 
