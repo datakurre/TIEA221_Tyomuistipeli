@@ -13,6 +13,7 @@ import venusian
 
 from pyramid.config import Configurator
 from pyramid.response import FileResponse
+from pyramid.httpexceptions import HTTPNotFound
 
 from working_memory_games.app import Application
 
@@ -91,7 +92,7 @@ class game_config(object):
 
             # Register main template for the game
             if settings.get("add_view", True):
-                config.add_route(name, "/%s" % name, request_method="GET")
+                config.add_route(name, "/%s/" % name, request_method="GET")
                 config.add_view(route_name=name, renderer="%s.html" % name)
 
             # Register game specific static assets
@@ -124,6 +125,9 @@ def main(global_config, **settings):
 
     # Create Pyramid configurator
     config = Configurator(settings=settings)
+
+    # Auto append ending slash when not found would turn to found with it
+    config.add_notfound_view(lambda request: HTTPNotFound(), append_slash=True)
 
     # Register robots.txt, humans.txt  and favicon.ico
     for filename in ["robots.txt", "humans.txt", "favicon.ico"]:
