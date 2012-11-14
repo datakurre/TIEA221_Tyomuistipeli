@@ -50,23 +50,19 @@ class Application(object):
     implements(IApplication)
 
     def __init__(self, context, request=None):
-        # Support initialization as root object instance
-        if request is None:
-            request = context
-            context = None
 
-        # Support initialization as view class instance
+        # Support initialization as a view class instance
         if issubclass(context.__class__, self.__class__):
             self.__dict__.update(context.__dict__)
             return
 
-        # Continue initialization as root object instance
-        self.request = request
-        self.data = context
+        # Continue initialization as a root object instance
+        self.data = request  # 'request' is either None or a mock up db like {}
+        self.request = context  # 'context' is the request for root_factory
 
         # Get database root from ZODB
         if self.data is None:
-            self.data = get_connection(request).root()
+            self.data = get_connection(self.request).root()
 
         # Migrate data over possible schema changes
         migrate(self.data)
@@ -119,6 +115,9 @@ class Application(object):
         return players  # players may be an empty {}
 
     def get_current_session(self):
+        """ Return the current (today's) session or creates a new one and
+        returns it """
+
         player = self.get_current_player()
 
         if player is None:
@@ -138,15 +137,8 @@ class Application(object):
 
     def __getitem__(self, name):
         """ Traverse to the given game """
-        session = self.get_current_session()
 
-        if session is None:
-            raise KeyError
-
-        selected_game = self.games[name]  # raising a KeyError is allowed
-        selected_game.set_session(session)
-
-        return selected_game
+        return self.games[name]  # raising a KeyError is allowed
 
     @view_config(name="list_players", renderer="templates/list_players.html",
                  request_method="GET", xhr=True)

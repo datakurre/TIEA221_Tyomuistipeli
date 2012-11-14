@@ -42,32 +42,42 @@ class Game(object):
         # Continue initialization as game class instance
         self.name = unicode(self.__class__.__name__.lower(), "ascii")
         self.app = context
-        self.session = None
 
-    def set_session(self, player_session):
+    @property
+    def session(self):
+        player_session = self.app.get_current_session()
+
+        if player_session is None:
+            # TODO: Create implicit guest player here!
+            from pyramid.httpexceptions import HTTPNotFound
+            raise HTTPNotFound
+
         game_session = player_session.get(self.name)
         if game_session is None:
             game_session = player_session[self.name] = GameSession()
 
+        # Look up the previous game session with the same game and
+        # use the previous level as the start level for this game session.
+        if not hasattr(game_session, "level"):
+            player = self.app.get_current_player()
+            session_keys = sorted(player.keys())
+            for i in range(len(session_keys) - 2, -1, -1):
+                previous_session = player[session_keys[i]]
+                previous_game_session = previous_session.get(self.name)
+                if previous_game_session is not None:
+                    if hasattr(previous_game_session, "level"):
+                        previous_level = previous_game_session.level()
+                        game_session.level = Length(previous_level)
+
         if not hasattr(game_session, "level"):
             game_session.level = Length(self.start_level)
 
-        self.session = game_session
+        return game_session
 
     def get_session_level(self):
-        assert self.session is not None, (
-            u"Session has not been set yet. "
-            u"Call ``set_session`` to set session."
-        )
-
         return self.session.level()
 
     def set_session_level(self, value):
-        assert self.session is not None, (
-            u"Session has not been set yet. "
-            u"Call ``set_session`` to set session."
-        )
-
         current = self.session_level
         delta = value - current
         self.session.level.change(delta)
