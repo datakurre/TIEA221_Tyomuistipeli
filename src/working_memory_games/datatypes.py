@@ -7,8 +7,10 @@ from BTrees.OOBTree import OOBTree as OOBTreeBase
 from BTrees.Length import Length as LengthBase
 
 from working_memory_games.interfaces import (
+    IPlayers,
     IPlayer,
-    ISession
+    ISession,
+    IGameSession
 )
 
 import logging
@@ -57,8 +59,15 @@ class Length(LengthBase):
         return self()
 
 
+class Players(OOBTree):
+    """ Players container, which contains individual player data objects """
+
+    implements(IPlayers)
+
+
 class Player(OOBTree):
-    """ Player, which contains player metadata and game sessions """
+    """ Player container, which holds details and game sessions for a single
+    player """
 
     implements(IPlayer)
 
@@ -68,6 +77,14 @@ class Player(OOBTree):
 
 
 class Session(OOBTree):
-    """ Session, which contains detailed gaming data """
+    """ Session container, which holds daily gaming data for a single player
+    for a single day """
 
     implements(ISession)
+
+
+class GameSession(OOBTree):
+    """ Game session container, which holds daily gaming data for a single
+    player in a single game (for a single day) """
+
+    implements(IGameSession)

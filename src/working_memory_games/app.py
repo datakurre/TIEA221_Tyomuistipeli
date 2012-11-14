@@ -26,10 +26,12 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid_zodbconn import get_connection
 
 from working_memory_games.datatypes import (
-    OOBTree,
+    Players,
     Player,
     Session
 )
+
+from working_memory_games.upgrades import migrate
 
 from working_memory_games.interfaces import (
     IApplication,
@@ -66,30 +68,21 @@ class Application(object):
         if self.data is None:
             self.data = get_connection(request).root()
 
-        self.migrate()  # I love to move things around...
+        # Migrate data over possible schema changes
+        migrate(self.data)
 
-        # Prepare (and possibly, migrate) database
+        # Prepare database
         if not hasattr(self.data, "players"):
-            self.data.players = OOBTree()
+            self.data.players = Players()
 
         if not hasattr(self.data, "guests"):
             # XXX: Eventually, guests should be stored into temporary database,
             # which would be cleaned when the server is restarted.  I'll fix
             # this, once I figure out the proper ZEO-configuration... -Asko
-            self.data.guests = OOBTree()
+            self.data.guests = Players()
 
+        # Get registered games
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
-
-    def migrate(self):
-        """" Migrates database structure between versions """
-
-        if "players" in self.data:
-            self.data.players = self.data["players"]
-            del self.data["players"]
-
-        if "guests" in self.data:
-            self.data.guests = self.data["guests"]
-            del self.data["guests"]
 
     def get_current_player(self):
         # Read cookie

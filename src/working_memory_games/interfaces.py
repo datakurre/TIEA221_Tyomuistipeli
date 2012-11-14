@@ -5,7 +5,7 @@ from zope.interface import Interface, Attribute
 
 
 class IApplication(Interface):
-    """ Application, which is a dynamically instantiated transient object
+    """ Application is a dynamically instantiated transient controller object
     with pointers to real persistent data """
 
     request = Attribute("Current request")
@@ -24,20 +24,9 @@ class IApplication(Interface):
         """
 
 
-class IPlayer(Interface):
-    """ Player, which holds player's details and game sessions """
-
-    name = Attribute("Player name")
-
-
-class ISession(Interface):
-    """ Session, which holds detailed gaming data """
-
-    order = Attribute("Game play order during this session.")
-
-
 class IGame(Interface):
-    """ Game, which is a dynamically instantiated transient object """
+    """ Game is a dynamically instantiated transient controller object for a
+    single game with pointers to real persistent data """
 
     app = Attribute("Application object")
 
@@ -51,3 +40,26 @@ class IGame(Interface):
 
     def set_session(session):
         """ Sets the current session for the game """
+
+
+class IPlayers(Interface):
+    """ Players container, which contains individual player data objects """
+
+
+class IPlayer(Interface):
+    """ Player container, which holds details and game sessions for a single
+    player """
+
+    name = Attribute("Player name")
+
+
+class ISession(Interface):
+    """ Session container, which holds daily gaming data for a single player
+    for a single day """
+
+    order = Attribute("Game play order during this session.")
+
+
+class IGameSession(Interface):
+    """ Game session container, which holds daily gaming data for a single
+    player in a single game (for a single day) """
