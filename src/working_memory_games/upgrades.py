@@ -38,10 +38,13 @@ def from1to2(data):
 
     for player_id in data.players:
         player = data.players[player_id]
+        rm = []
         for session_id in player:
             session = player[session_id]
             if not ISession.providedBy(session):
-                del data.players[player_id][session_id]  # Sorry!
+                rm.append(session_id)
+        for session_id in rm:
+            del data.players[player_id][session_id]  # Sorry!
 
 
 def from2to3(data):
