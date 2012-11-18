@@ -65,9 +65,6 @@ class Application(object):
         if self.data is None:
             self.data = get_connection(self.request).root()
 
-        # Migrate data over possible schema changes
-        migrate(self.data)
-
         # Prepare database
         if not hasattr(self.data, "players"):
             self.data.players = Players()
@@ -77,6 +74,9 @@ class Application(object):
             # which would be cleaned when the server is restarted.  I'll fix
             # this, once I figure out the proper ZEO-configuration... -Asko
             self.data.guests = Players()
+
+        # Migrate data over possible schema changes
+        migrate(self.data)
 
         # Get registered games
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
