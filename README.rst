@@ -47,3 +47,16 @@ Myöhemmin voidaan pakata tietokantaa (ZEOn ollessa päällä)::
 Ja koska tahansa saada karkea yhteenveto sen sisältämistä olioista::
 
     bin/python parts/analyze.py
+
+Lopuksi, tietokannan visuaalinen selaaminen onnistuu käynnistämällä ``eye``,
+joko
+
+    1. ZEOn ollessa päällä::
+
+        bin/eye -p 8070 zeo://`pwd`/var/zeo.sock
+
+    2. ZEOn ollessa sammutettuna::
+
+        bin/eye -p 8070 var/filestorage/Data.fs
+
+Molemmissa tapauksissa tietokanta löytyy osoitteesta http://localhost:8070/
