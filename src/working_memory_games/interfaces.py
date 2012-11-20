@@ -59,3 +59,8 @@ class ISession(Interface):
 class IGameSession(Interface):
     """ Game session container, which holds daily gaming data for a single
     player in a single game (for a single day) """
+
+    last_start = Attribute("Last datetime on when a new game has been started")
+
+    duration = Attribute("Datetime delta on how much the game has been "
+                         "played during today's game session.")

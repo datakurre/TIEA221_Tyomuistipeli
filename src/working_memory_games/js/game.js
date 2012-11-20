@@ -38,8 +38,8 @@ function GameInitialize(items, callbacks) {
 
 function GameCheckUserPress(item) {
   var currentIdx = global.userItems.length;
+  global.userItems.push(item)
   if (global.gameItems[currentIdx] == item) {
-    global.userItems.push(item)
     global.callbacks.answerRight(item);
   } else {
     global.callbacks.answerWrong(global.gameItems[currentIdx], item);
@@ -67,9 +67,21 @@ function createDialog(data){
 }
 
 function GameCorrectAnswer() {
-  $.get(global.ctx + '/pass', function(data) { createDialog(data); });
+  $.ajax({
+    type: 'POST',
+    url: global.ctx + '/pass',
+    data: JSON.stringify({game: global.gameItems, user: global.userItems}),
+    contentType: 'application/json; charset=utf-8',
+    success: function(data) { createDialog(data); }
+  });
 }
 
 function GameIncorrectAnswer() {
-  $.get(global.ctx + '/fail', function(data) { createDialog(data); });
+  $.ajax({
+    type: 'POST',
+    url: global.ctx + '/fail',
+    data: JSON.stringify({game: global.gameItems, user: global.userItems}),
+    contentType: 'application/json; charset=utf-8',
+    success: function(data) { createDialog(data); }
+  });
 }

@@ -71,6 +71,9 @@ class Game(object):
         if not hasattr(game_session, "level"):
             game_session.level = self.start_level
 
+        if not hasattr(game_session, "duration"):
+            game_session.duration = datetime.timedelta(0)
+
         return game_session
 
     @view_config(name="pass", renderer="../templates/save_pass.html")
@@ -78,11 +81,16 @@ class Game(object):
         """ Saves successful game """
 
         key = str(datetime.datetime.utcnow())
+        items = self.app.request.json_body
+        duration = datetime.datetime.utcnow() - self.session.last_start
+
         self.session[key] = {
             "level": self.session.level,
-            "pass": True
+            "pass": True,
+            "items": items,
+            "duration": duration
         }
-
+        self.session.duration += duration
         self.session.level += 0.5
 
         return {}
@@ -92,11 +100,16 @@ class Game(object):
         """ Saves failed game """
 
         key = str(datetime.datetime.utcnow())
+        items = self.app.request.json_body
+        duration = datetime.datetime.utcnow() - self.session.last_start
+
         self.session[key] = {
             "level": self.session.level,
-            "pass": False
+            "pass": False,
+            "items": items,
+            "duration": duration
         }
-
+        self.session.duration += duration
         self.session.level = max(self.session.level - 0.5, 2.0)
 
         return {}

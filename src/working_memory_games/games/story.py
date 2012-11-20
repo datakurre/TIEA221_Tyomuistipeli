@@ -2,6 +2,7 @@
 """ Tarinapeli """
 
 import random
+import datetime
 
 from pyramid.view import view_config
 
@@ -19,6 +20,8 @@ class Story(Game):
     @view_config(name="new")
     def new_story_game(self):
         """ Return new game data """
+
+        self.session.last_start = datetime.datetime.utcnow()
 
         level = int(self.session.level)
 

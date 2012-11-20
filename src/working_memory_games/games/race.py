@@ -2,6 +2,7 @@
 """ Rallipeli """
 
 import random
+import datetime
 
 from pyramid.view import view_config
 
@@ -19,6 +20,8 @@ class Race(Game):
     @view_config(name="new")
     def new_game(self):
         """ Returns new game data """
+
+        self.session.last_start = datetime.datetime.utcnow()
 
         level = int(self.session.level)
 
