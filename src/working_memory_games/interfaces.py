@@ -54,6 +54,7 @@ class ISession(Interface):
     for a single day """
 
     order = Attribute("Game play order during this session.")
+    duration = Attribute("Total game play time during this session.")
 
 
 class IGameSession(Interface):

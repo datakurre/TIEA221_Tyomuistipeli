@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """ Persistent types """
 
+import datetime
+
 from zope.interface import implements
 
 from BTrees.OOBTree import OOBTree as OOBTreeBase
@@ -81,6 +83,13 @@ class Session(OOBTree):
     for a single day """
 
     implements(ISession)
+
+    @property
+    def duration(self):
+        total = datetime.timedelta(0)
+        for game in self.values():
+            total += getattr(game, "duration", datetime.timedelta(0))
+        return total
 
 
 class GameSession(OOBTree):
