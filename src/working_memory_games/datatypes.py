@@ -77,6 +77,13 @@ class Player(OOBTree):
         super(Player, self).__init__()
         self.name = name
 
+    @property
+    def duration(self):
+        total = datetime.timedelta(0)
+        for session in self.values():
+            total += getattr(session, "duration", datetime.timedelta(0))
+        return total
+
 
 class Session(OOBTree):
     """ Session container, which holds daily gaming data for a single player

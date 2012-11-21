@@ -48,6 +48,8 @@ class IPlayer(Interface):
 
     name = Attribute("Player name")
 
+    duration = Attribute("Total game play during all sessions.")
+
 
 class ISession(Interface):
     """ Session container, which holds daily gaming data for a single player
