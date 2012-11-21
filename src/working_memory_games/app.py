@@ -227,6 +227,34 @@ class Application(object):
         return HTTPFound(location=self.request.application_url,
                          headers=headers)
 
+    @view_config(name="pelaa", renderer="templates/game_iframe.html",
+                 request_method="GET", xhr=False)
+    def get_next_game(self):
+        daily_playtime = datetime.timedelta(1. / 24 / 4)  # 15 minutes
+
+        session = self.get_current_session()
+        games = session.order
+
+        game_playtime = daily_playtime / len(games)
+
+        for game in games:
+            # a) game has not been played yet
+            if not game in session:
+                break
+
+            # b) game has not been played enough yet
+            playtime = session[game].duration
+            if playtime < game_playtime:
+                break
+
+            # c) all games have been played enough
+            if game == games[-1]:
+                game = None
+
+        return {
+            "game": game
+        }
+
     @view_config(name="dump", renderer="json", xhr=False)
     def dump_saved_data(self):
         return dict(self.get_current_player().items())
