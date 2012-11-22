@@ -76,6 +76,45 @@ class Game(object):
 
         return game_session
 
+    def get_last_levels(self, n=None, pass_only=False):
+        """ Return last n levels for the game for the current player
+        in reverse chronological order """
+
+        if n is None:
+            n = 10  # or some class property
+
+        levels = []
+
+        player = self.app.get_current_player()
+
+        session_keys = sorted(player.keys())
+        session_keys.reverse()
+
+        for session_key in session_keys:
+
+            session = player[session_key]
+            game = session.get(self.name)
+
+            if game is None:
+                continue
+
+            play_keys = sorted(game.keys())
+            play_keys.reverse()
+
+            for play_key in play_keys:
+                play = game[play_key]
+
+                if play["pass"] or not pass_only:
+                    levels.append(play["level"])
+
+                if len(levels) == n:
+                    break
+
+            if len(levels) == n:
+                break
+
+        return levels
+
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """

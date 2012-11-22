@@ -37,6 +37,10 @@ class IGame(Interface):
     def __init__(app):
         """ Game initialization requires an app """
 
+    def get_last_levels(self, n=None, pass_only=False):
+        """ Return last n levels for the game for the current player
+        in reverse chronological order """
+
 
 class IPlayers(Interface):
     """ Players container, which contains individual player data objects """
