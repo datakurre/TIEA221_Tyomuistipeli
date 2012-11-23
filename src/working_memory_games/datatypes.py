@@ -16,6 +16,8 @@ from working_memory_games.interfaces import (
 )
 
 import logging
+import random
+import uuid
 logger = logging.getLogger("working_memory_games")
 
 
@@ -66,6 +68,15 @@ class Players(OOBTree):
 
     implements(IPlayers)
 
+    def get_player(self, player_id):
+        """ Returns player or None if not found."""
+        return get(player_id)
+
+    def create_player(self, name):
+        """ Creates a new Player """
+        player_id = str(uuid.uuid4())
+        self[player_id] = Player(name)
+
 
 class Player(OOBTree):
     """ Player container, which holds details and game sessions for a single
@@ -84,12 +95,29 @@ class Player(OOBTree):
             total += getattr(session, "duration", datetime.timedelta(0))
         return total
 
+    def session(self, games):
+        """ Creates a new Session for today if needed. Always returns
+        a session with games shuffled in random order."""
+        today = str(datetime.datetime.utcnow().date())
+        if not self.has_key(today):
+            self[today] = Session(games)
+        return self[today]
+
+    def get_sessions(self):
+        return map(lambda x: self[x], sorted(self.keys()))
+
 
 class Session(OOBTree):
     """ Session container, which holds daily gaming data for a single player
     for a single day """
 
     implements(ISession)
+
+    def __init__(self, games):
+        super(Session, self).__init__()
+        self.order = games
+        random.shuffle(self.order)
+
 
     @property
     def duration(self):
@@ -98,9 +126,31 @@ class Session(OOBTree):
             total += getattr(game, "duration", datetime.timedelta(0))
         return total
 
+    def get_game(self, name):
+        if not self.has_key(name):
+            self[name] = GameSession()
+        return self[name]
+
 
 class GameSession(OOBTree):
     """ Game session container, which holds daily gaming data for a single
     player in a single game (for a single day) """
 
     implements(IGameSession)
+
+    def __init__(self):
+        super(GameSession, self).__init__()
+        self.duration = datetime.timedelta(0)
+
+    def get_plays(self):
+        """ Return all game plays (tries) of this game on today."""
+        return map(lambda x: self[x], sorted(self.keys()))
+
+    def save_pass(self, gameinfo):
+        time_key = str(datetime.datetime.utcnow())
+        self[time_key] = gameinfo
+
+    def save_fail(self, gameinfo):
+        time_key = str(datetime.datetime.utcnow())
+        self[time_key] = gameinfo
+

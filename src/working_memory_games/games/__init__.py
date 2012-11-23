@@ -52,9 +52,7 @@ class Game(object):
             from pyramid.httpexceptions import HTTPNotFound
             raise HTTPNotFound
 
-        game_session = player_session.get(self.name)
-        if game_session is None:
-            game_session = player_session[self.name] = GameSession()
+        game_session = player_session.get_game(self.name)
 
         # Look up the previous game session with the same game and
         # use the previous level as the start level for this game session.
@@ -87,22 +85,14 @@ class Game(object):
 
         player = self.app.get_current_player()
 
-        session_keys = sorted(player.keys())
-        session_keys.reverse()
+        for session in reversed(player.get_sessions()):
 
-        for session_key in session_keys:
-
-            session = player[session_key]
-            game = session.get(self.name)
+            game = session.get_game(self.name)
 
             if game is None:
                 continue
 
-            play_keys = sorted(game.keys())
-            play_keys.reverse()
-
-            for play_key in play_keys:
-                play = game[play_key]
+            for play in reversed(game.get_plays()):
 
                 if play["pass"] or not pass_only:
                     levels.append(play["level"])
@@ -118,39 +108,30 @@ class Game(object):
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """
-
-        key = str(datetime.datetime.utcnow())
         items = self.app.request.json_body
         duration = datetime.datetime.utcnow() - self.session.last_start
-
-        self.session[key] = {
+        self.session.duration += duration
+        self.session.save_pass({
             "level": self.session.level,
             "pass": True,
             "items": items,
             "duration": duration
-        }
-        self.session.duration += duration
-        self.session.level += 0.5
-
+        })
         return {}
 
     @view_config(name="fail", renderer="../templates/save_fail.html")
     def save_fail(self):
         """ Saves failed game """
 
-        key = str(datetime.datetime.utcnow())
         items = self.app.request.json_body
         duration = datetime.datetime.utcnow() - self.session.last_start
-
-        self.session[key] = {
+        self.session.duration += duration
+        self.session.save_fail({
             "level": self.session.level,
             "pass": False,
             "items": items,
             "duration": duration
-        }
-        self.session.duration += duration
-        self.session.level = max(self.session.level - 0.5, 2.0)
-
+        })
         return {}
 
     @view_config(name="dump", renderer="json", xhr=False)

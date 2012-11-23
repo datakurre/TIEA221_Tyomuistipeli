@@ -124,17 +124,7 @@ class Application(object):
         if player is None:
             return None
 
-        today = str(datetime.datetime.utcnow().date())
-        session = player.get(today)
-
-        if session is None:
-            session = player[today] = Session()
-
-        if not hasattr(session, "order"):
-            session.order = self.games.keys()
-            random.shuffle(session.order)
-
-        return session
+        return player.session(self.games.keys())
 
     def __getitem__(self, name):
         """ Traverse to the given game """
@@ -174,9 +164,7 @@ class Application(object):
         if not name:  # does not validate
             return self.request.params
 
-        player_id = str(uuid.uuid4())
-
-        self.data.players[player_id] = Player(name=name)
+        self.data.players.create_player(name)
         self.request.response.set_cookie(
             "player_id", player_id,
             max_age=(60 * 60 * 24 * 365)
