@@ -72,11 +72,11 @@ class Players(OOBTree):
         """ Returns player or None if not found."""
         return get(player_id)
 
-    def create_player(self, name):
+    def create_player(self, name, info):
         """ Creates a new Player """
         player_id = str(uuid.uuid4())
-        self[player_id] = Player(name)
-
+        self[player_id] = Player(name, info)
+        return { 'id': player_id }
 
 class Player(OOBTree):
     """ Player container, which holds details and game sessions for a single
@@ -84,9 +84,10 @@ class Player(OOBTree):
 
     implements(IPlayer)
 
-    def __init__(self, name):
+    def __init__(self, name, info):
         super(Player, self).__init__()
         self.name = name
+        self.info = info
 
     @property
     def duration(self):

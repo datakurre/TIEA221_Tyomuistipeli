@@ -23,6 +23,7 @@ from webob.headers import ResponseHeaders
 
 from pyramid.renderers import get_renderer
 from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPBadRequest
 
 from pyramid_zodbconn import get_connection
 
@@ -83,7 +84,7 @@ class Application(object):
 
     def get_current_player(self):
         # Read cookie
-        player_id = self.request.cookies.get("player_id")
+        player_id = self.request.cookies.get("active_player")
 
         # Look up the current player using the cookie data
         player = self.data.players.get(player_id)
@@ -155,26 +156,17 @@ class Application(object):
             "players": sorted(players, cmp=cmp_by_name),
         }
 
-    @view_config(name="liity", renderer="templates/register_player.html",
-                 request_method="POST", xhr=False)
+    @view_config(name="liity", renderer="json",
+                 request_method="POST")
     def create_new_player(self):
         name = self.request.params.get("name", "").strip()
         logging.debug(self.request.params)
 
         if not name:  # does not validate
-            return self.request.params
+            return HTTPBadRequest()
 
-        self.data.players.create_player(name)
-        self.request.response.set_cookie(
-            "player_id", player_id,
-            max_age=(60 * 60 * 24 * 365)
-        )
-        headers = ResponseHeaders({
-            "Set-Cookie": self.request.response.headers.get("Set-Cookie")
-        })
-
-        return HTTPFound(location=self.request.application_url,
-                         headers=headers)
+        return self.data.players.create_player(name, 
+                                               {}.update(self.request.params))
 
     @view_config(name="select_player",
                  request_method="POST", xhr=False)

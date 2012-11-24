@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One" />
 
     <script src="${base_url}/lib/jquery.min.js"></script>
+    <script src="${base_url}/lib/jquery.cookie.js"></script>
     <script type="text/javascript" src="${base_url}/js/mainpage.js"></script>
   </head>
 
@@ -89,16 +90,21 @@
           <div id="infoText">
             Antamianne tietoja käytetään ainoastaan <a href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>.
           </div>
-	  <!--
-          <a id="join" class="gameBtn btn-2" href="#">
-            <div class="middle">Liity pelaajaksi</div>
-          </a>
-          -->
           <input type="submit" name="submit" hidden="true" /><br/>
-          <button type="submit" class="btn">Liity pelaajaksi</button>
+          <a id="join" class="gameBtn btn-2" href="#">
+            <div class="middle">Liity!</div>
+          </a>
+	  <!--
+            <button type="submit" class="btn">Liity pelaajaksi</button>
+          -->
       </div>
 
       <div id="mainView">
+        <div id="buttonTemplate" style="display:none" >
+          <a class="gameBtn btn-2 player" href="pelaa">
+            <div class="middle"><span id="name"/></div>
+          </a>
+        </div>
         <div id="majorRow">
           <div class="center">
             <a class="gameBtn btn-2" href="#liity">

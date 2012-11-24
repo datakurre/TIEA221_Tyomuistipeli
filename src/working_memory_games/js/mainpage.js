@@ -5,9 +5,7 @@ if (typeof String.prototype.startsWith != 'function') {
   };
 }
 
-$(document).ready(function() {
-
-    // Animate title
+function animateTitle() {
     var title = $('h1').text(), idx;
     var newTitle = '';
     for (idx=0; idx<title.length; idx+=1) {
@@ -20,13 +18,33 @@ $(document).ready(function() {
             .animate({'top':'-80px'}, 300)
             .animate({'top':'0px'}, 400+idx*50);
     });
+}
 
-    // load player buttons
-    $.get($('meta[name=context]').attr("content")
-          + "/list_players", function(data) {
-        $("#majorRow .center").prepend(data);
-    });
+function addPlayerButtons() {
+    
+    $('#majorRow .player').remove();
 
+    var players = $.cookie('players');
+    if (players == null) return;
+    players = $.parseJSON(players).reverse();
+    for (idx in players) {
+	var btn = $('#buttonTemplate a').clone();
+	btn.find('#name').text(players[idx].name);
+	btn.attr('player', players[idx].id);
+	$("#majorRow .center").prepend(btn);
+	btn.show();
+	btn.click(function(event){
+	    $.cookie('active_player', $(this).attr('player'));
+	});
+    }
+}
+
+$(document).ready(function() {
+
+    animateTitle();
+
+    addPlayerButtons();
+    
     // show current view
     $(window).bind('hashchange', function(){
         var hash = location.hash.toString();
@@ -36,11 +54,36 @@ $(document).ready(function() {
         } else {
             $('#joinView').slideUp();
             $('#mainView').slideDown();
+	    addPlayerButtons();
         }
         $('#join').click(function(event){
             event.preventDefault();
-            // post data, create player id to cookie based on json
-            // object returned for the req.
+
+	    $.post('liity',
+                $('#joinData').serialize(),
+                function(data){
+		    // Store information to server and create local 
+		    // data in cookie.
+		    var players = $.cookie('players');
+
+		    if (players == null || players === undefined)
+			players = [];
+		    else
+			players = $.parseJSON(players);
+
+		    players.push({ 
+			'name': $('#joinData input[name="name"]').val(),
+			'id': data.id 
+		    });
+
+		    $.cookie('players', 
+			     JSON.stringify(players), 
+			     { expires: 365 });
+
+		    location.hash = '';
+                }
+              );
+
         });
     });
 
