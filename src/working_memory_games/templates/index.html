@@ -5,7 +5,7 @@
     <meta name="context" content="${current_url}" />
     <meta metal:use-macro="base_template.macros['viewport']" />
 
-    <title>Liity pelaamaan</title>
+    <title>Työmuistipeli</title>
 
     <link rel="author" href="${base_url}/humans.txt" />
     <link rel="stylesheet" href="${base_url}/css/reset.css" />
@@ -40,26 +40,54 @@
             </label>
           </label><br/>
           <label>
-            <input type="checkbox" name="adhd" id="adhd" value="true" >
             Epäillään tai on todettu ADHD
+            <label>
+              <input type="radio" name="adhd" id="adhd" value="true" >
+              kyllä
+            </label>
+            <label>
+              <input type="radio" name="adhd" id="adhd" value="false" >
+              ei
+            </label>
           </label><br/>
           <label>
-            <input type="checkbox" name="delay" id="delay" value="true" >
             Epäillään tai on todettu kehitysviivettä
-          </label><br/>
+            <label>
+              <input type="radio" name="delayed_development" value="true" >
+              kyllä
+            </label>
+            <label>
+              <input type="radio" name="delayed_development" value="false" >
+	      ei
+            </label><br/>
+          </label>
           <label>
-            <input type="checkbox" name="wm" id="wm" value="true" >
             Epäillään tai on todettu kapea työmuisti
-          </label><br/>
+            <label>
+              <input type="radio" name="narrow_wm" value="true" >
+              kyllä
+            </label>
+            <label>
+              <input type="radio" name="narrow_wm" value="false" >
+	      ei
+            </label><br/>
+          </label>
           <label>
-            <input type="checkbox" name="wm" id="wm" value="true" >
             Epäillään tai on todettu keskittymisvaikeutta
-          </label><br/>
+            <label>
+              <input type="radio" name="concentration_difficulties" value="true" >
+              kyllä
+            </label>
+            <label>
+              <input type="radio" name="concentration_difficulties" value="false" >
+	      ei
+            </label><br/>
+          </label>
           <label>Sähköposti</label>
           <input type="email" name="email" /><br/>
 
           <div id="infoText">
-            Antamianne tietoja käytetään vain ja ainoastaan tutkimustarkoitukseen.
+            Antamianne tietoja käytetään ainoastaan <a href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>.
           </div>
 	  <!--
           <a id="join" class="gameBtn btn-2" href="#">
