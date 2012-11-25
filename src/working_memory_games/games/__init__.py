@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 """ Base implementation for games """
 
+from __future__ import division
+from numpy import *
+from numpy.random import random
+
+
 import datetime
 
 from pyramid.view import (
@@ -54,34 +59,19 @@ class Game(object):
 
         game_session = player_session.get_game(self.name)
 
-        # Look up the previous game session with the same game and
-        # use the previous level as the start level for this game session.
-        if not hasattr(game_session, "level"):
-            player = self.app.get_current_player()
-            session_keys = sorted(player.keys())
-            for i in range(len(session_keys) - 2, -1, -1):
-                previous_session = player[session_keys[i]]
-                previous_game_session = previous_session.get(self.name)
-                if previous_game_session is not None:
-                    if hasattr(previous_game_session, "level"):
-                        game_session.level = previous_game_session.level
-
-        if not hasattr(game_session, "level"):
-            game_session.level = self.start_level
-
         if not hasattr(game_session, "duration"):
             game_session.duration = datetime.timedelta(0)
 
         return game_session
 
-    def get_last_levels(self, n=None, pass_only=False):
+    def get_last_plays(self, n=None):
         """ Return last n levels for the game for the current player
         in reverse chronological order """
 
         if n is None:
             n = 10  # or some class property
 
-        levels = []
+        ret = []
 
         player = self.app.get_current_player()
 
@@ -93,17 +83,111 @@ class Game(object):
                 continue
 
             for play in reversed(game.get_plays()):
+                ret.append(play)
 
-                if play["pass"] or not pass_only:
-                    levels.append(play["level"])
-
-                if len(levels) == n:
+                if len(ret) == n:
                     break
 
-            if len(levels) == n:
+            if len(ret) == n:
                 break
 
-        return levels
+        return ret
+
+    def calculate_level(self, choises_N):
+        """ Use jvk's adaptation to calculate the next level """
+        
+        # Mahdolliset tuntemattoman arvot
+        kvals = arange(1,21)
+
+        # Mahdolliset n:n arvot
+        nvals = arange(2,20)
+
+        def psi(k,n):
+            # Todenmukaisessa mallissa on aina oltava pieni todennäköisyys
+            # saada vahingossa väärin vaikka osaisi.  Kaavassa on hihasta
+            # ravistettuna 5% vahinkotodennäköisyys ja lisäksi hatusta vedetty
+            # 5% arvaustodennäköisyys, eli todennäköisyys jolla huonoinkin
+            # pelaaja saa tehtävän oikein (tämän voi useimmiten päätellä
+            # tehtävästä, esimerkiksi jos valitaan n:stä vaihtoehdosta, on
+            # arvaustodennäköisyys 1/n).
+            
+            # 5% muistivirheitä (ref Memory book)
+            p_err = 1 / float(choises_N)
+            p_corr = 1 - 0.05 - p_err
+            return p_err + p_corr/(1+exp(n-k))
+
+        p0 = ones(shape(kvals),float)
+        p0 *= 1 / sum(p0)
+
+        def update(p,n,res):
+            if res:
+                p = p * psi(kvals, n)
+            else:
+                p = p * (1 - psi(kvals, n))
+            return p * (1 / sum(p))
+
+        def entropy(p):
+            return -sum(p * log(p + 1e-100))/log(2)
+
+        def simulate_result(n):
+            p_succ = psi(true_k,n)
+            return random() < p_succ
+
+        def expected_gain(p, n, child_friendly=False):
+            # oikean vastauksen estimoitu todennäköisyys
+            p_succ = sum( p * psi(kvals,n) )
+
+            # väärän vastauksen estimoitu todennäköisyys
+            p_fail = 1 - p_succ
+
+            # entropian odotusarvo vastauksen jälkeen
+            expected_entropy = (  p_succ * entropy(update(p,n,1))
+                                  + p_fail * entropy(update(p,n,0)))
+
+            # entropian pieneniminen  = saatu informaatio
+            gain = entropy(p) - expected_entropy
+
+            if child_friendly:
+                # lapsiystävällinen versio:
+                # mitataan saadun informaatiomäärän odotusarvo
+                # suhteessa "hinnan" odotusarvoon, missä hinta
+                # on määritelty siten, että väärä vastaus
+                # maksaa yhden yksikön
+                gain /= p_fail
+
+            return gain
+
+
+        # simuloitu todellinen pelaajan parametri
+        true_k = 7
+
+        # käytetäänkö "lapsiystävällistä versiota"
+        child_friendly = False
+
+
+        p = p0
+        i = 0
+        #n = 3 # defualt if not games yet
+        for play in self.get_last_plays(20):
+            print play
+            n = play['level']
+            res = play['pass']
+            p = update(p,n,res)
+            print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
+
+        print 
+        print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
+        gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
+
+        print 'Expected gains in bits for n = %s:' % nvals
+        print '[%s]' % (' '.join('%.3f' % g for g in gains))
+
+        n = nvals[argmax(gains)]
+        print 'Best n to present next:', n
+
+        self.session.level = n
+        return int(n) #remove numpy-reperesentation
+
 
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):

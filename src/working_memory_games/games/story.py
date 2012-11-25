@@ -23,7 +23,7 @@ class Story(Game):
 
         self.session.last_start = datetime.datetime.utcnow()
 
-        level = int(self.session.level)
+        level = self.calculate_level(6)#int(self.session.level)
 
         story_parts = ('auto helikopteri kaivinkone kivi lehma linna '+
                        'luola majakka maki meri mokki pelle prinsessa '+

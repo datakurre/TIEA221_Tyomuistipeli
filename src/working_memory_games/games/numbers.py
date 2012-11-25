@@ -23,7 +23,7 @@ class Numbers(Game):
 
         self.session.last_start = datetime.datetime.utcnow()
 
-        level = int(self.session.level)
+        level = self.calculate_level(9)#int(self.session.level)
 
         items = [random.sample(range(1, 10), 1)[0]
                  for i in range(level)]

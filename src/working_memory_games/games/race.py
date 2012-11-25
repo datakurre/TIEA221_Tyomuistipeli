@@ -22,8 +22,8 @@ class Race(Game):
         """ Returns new game data """
 
         self.session.last_start = datetime.datetime.utcnow()
-
-        level = int(self.session.level)
+        level = self.calculate_level(6)#int(self.session.level)
+        print level.__class__
 
         count = 6
         if level <= count:

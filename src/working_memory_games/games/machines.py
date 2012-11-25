@@ -23,7 +23,7 @@ class Machines(Game):
 
         self.session.last_start = datetime.datetime.utcnow()
 
-        level = int(self.session.level)
+        level = self.calculate_level(9)#int(self.session.level)
 
         count = 6
         if level <= count:

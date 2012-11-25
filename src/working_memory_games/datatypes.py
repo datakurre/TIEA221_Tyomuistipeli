@@ -142,6 +142,7 @@ class GameSession(OOBTree):
     def __init__(self):
         super(GameSession, self).__init__()
         self.duration = datetime.timedelta(0)
+        #self.level = 3
 
     def get_plays(self):
         """ Return all game plays (tries) of this game on today."""
