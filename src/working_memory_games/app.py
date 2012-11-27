@@ -163,8 +163,10 @@ class Application(object):
         if not name:  # does not validate
             return HTTPBadRequest()
 
-        return self.data.players.create_player(name, 
-                                               {}.update(self.request.params))
+        info = {}
+        info.update(self.request.params)
+
+        return self.data.players.create_player(name, info)
 
     @view_config(name="select_player",
                  request_method="POST", xhr=False)
@@ -185,7 +187,6 @@ class Application(object):
 
         return HTTPFound(location=self.request.application_url,
                          headers=headers)
-
 
     @view_config(name="select_guest",
                  request_method="POST", xhr=False)
