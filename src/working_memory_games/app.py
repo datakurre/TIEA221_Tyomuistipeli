@@ -193,10 +193,10 @@ class Application(object):
     def select_guest(self):
 
         player_id = str(uuid.uuid4())
-        self.data.guests[player_id] = Player(name=u"Guest")
+        self.data.guests[player_id] = Player(name=u"Guest", info={})
 
         self.request.response.set_cookie(
-            "player_id", player_id,
+            "active_player", player_id,
             max_age=(60 * 60 * 24 * 365)
         )
         headers = ResponseHeaders({
