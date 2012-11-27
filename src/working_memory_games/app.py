@@ -5,7 +5,6 @@ import re
 import uuid
 import datetime
 import urlparse
-import random
 
 from pyramid.view import (
     view_config,
@@ -30,7 +29,6 @@ from pyramid_zodbconn import get_connection
 from working_memory_games.datatypes import (
     Players,
     Player,
-    Session
 )
 
 from working_memory_games.upgrades import migrate
