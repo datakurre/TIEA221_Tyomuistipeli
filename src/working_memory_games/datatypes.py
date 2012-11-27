@@ -70,13 +70,16 @@ class Players(OOBTree):
 
     def get_player(self, player_id):
         """ Returns player or None if not found."""
-        return get(player_id)
+        return self.get(player_id)
 
     def create_player(self, name, info):
         """ Creates a new Player """
         player_id = str(uuid.uuid4())
         self[player_id] = Player(name, info)
-        return { 'id': player_id }
+        return {
+            'id': player_id
+        }
+
 
 class Player(OOBTree):
     """ Player container, which holds details and game sessions for a single
@@ -100,7 +103,7 @@ class Player(OOBTree):
         """ Creates a new Session for today if needed. Always returns
         a session with games shuffled in random order."""
         today = str(datetime.datetime.utcnow().date())
-        if not self.has_key(today):
+        if not today in self:
             self[today] = Session(games)
         return self[today]
 
@@ -119,7 +122,6 @@ class Session(OOBTree):
         self.order = games
         random.shuffle(self.order)
 
-
     @property
     def duration(self):
         total = datetime.timedelta(0)
@@ -128,7 +130,7 @@ class Session(OOBTree):
         return total
 
     def get_game(self, name):
-        if not self.has_key(name):
+        if not name in self:
             self[name] = GameSession()
         return self[name]
 
@@ -155,4 +157,3 @@ class GameSession(OOBTree):
     def save_fail(self, gameinfo):
         time_key = str(datetime.datetime.utcnow())
         self[time_key] = gameinfo
-
