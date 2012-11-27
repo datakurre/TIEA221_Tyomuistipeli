@@ -23,6 +23,8 @@ setup(
     install_requires=[
         "zope.interface",
 
+        "numpy",
+
         "pyramid",
         "pyramid-zodbconn",
         "pyramid-tm",  # (transaction manager)
