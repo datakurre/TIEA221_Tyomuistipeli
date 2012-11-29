@@ -168,7 +168,8 @@ class Game(object):
         p = p0
         i = 0
         #n = 3 # defualt if not games yet
-        for play in self.get_last_plays(20):
+        last_plays = self.get_last_plays(20)
+        for play in last_plays:
             print play
             n = play['level']
             res = play['pass']
@@ -183,6 +184,8 @@ class Game(object):
         print '[%s]' % (' '.join('%.3f' % g for g in gains))
 
         n = nvals[argmax(gains)]
+        if len(last_plays) == 0: 
+            n = 3
         print 'Best n to present next:', n
 
         self.session.level = n
