@@ -17,6 +17,8 @@ logger = logging.getLogger("working_memory_games")
 class Eyewitness(Game):
     """ Silminnäkijä """
 
+    plateChars = "abcefghijklmnorstuvxyz".upper()
+
     @view_config(name="new")
     def new_witness_game(self):
         """ Return new game data """
