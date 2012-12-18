@@ -8,6 +8,7 @@ syntax:glob
 
 .installed.cfg
 .mr.developer.cfg
+develop.cfg
 
 bin
 parts
