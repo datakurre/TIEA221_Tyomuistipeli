@@ -56,7 +56,7 @@ $(document).ready(function() {
             $('#mainView').slideDown();
 	    addPlayerButtons();
         }
-        $('#join').click(function(event){
+        var handleSubmit = function(event) {
             event.preventDefault();
 
 	    $.post('liity',
@@ -83,7 +83,13 @@ $(document).ready(function() {
 		    location.hash = '';
                 }
               );
-
+        };
+        $('#join').click(handleSubmit);
+        $('#joinData').keypress(function(event) {
+            if (event.which == 13) {
+                handleSubmit(event);
+                return false;
+            }
         });
     });
 
