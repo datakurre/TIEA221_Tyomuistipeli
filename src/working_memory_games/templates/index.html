@@ -9,6 +9,7 @@
 
     <link rel="author" href="${base_url}/humans.txt" />
     <link rel="stylesheet" href="${base_url}/css/reset.css" />
+    <link rel="stylesheet" href="${base_url}/css/bootstrap-prefixed.min.css" />
     <link rel="stylesheet" href="${base_url}/css/common.css" />
     <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One" />
@@ -36,90 +37,134 @@
         <h1>Työmuistipeli</h1>
       </div>
 
-      <div id="joinView" class="center" style="display:none;">
-        <form id="joinData" action="${base_url}/liity" method="POST">
-          <label>Nimi</label>
-          <input type="text" name="name" placeholder="Etunimi" /><br/>
-          <label>Ikä</label>
-          <input type="number" name="age" placeholder="6" /><br/>
-          <label>Sukupuoli
-            <label>
-              <input type="radio" name="gender" id="gender1" value="f" >
-              Tyttö
-            </label><br/>
-            <label>
-              <input type="radio" name="gender" id="gender2" value="m">
-              Poika
-            </label>
-          </label><br/>
-          <label>
-            Epäillään tai on todettu ADHD
-            <label>
-              <input type="radio" name="adhd" id="adhd" value="true" >
-              kyllä
-            </label>
-            <label>
-              <input type="radio" name="adhd" id="adhd" value="false" >
-              ei
-            </label>
-          </label><br/>
-          <label>
-            Epäillään tai on todettu asperger (tai sen piirteitä)
-            <label>
-              <input type="radio" name="adhd" id="adhd" value="true" >
-              kyllä
-            </label>
-            <label>
-              <input type="radio" name="adhd" id="adhd" value="false" >
-              ei
-            </label>
-          </label><br/>
-          <label>
-            Epäillään tai on todettu kehitysviivettä
-            <label>
-              <input type="radio" name="delayed_development" value="true" >
-              kyllä
-            </label>
-            <label>
-              <input type="radio" name="delayed_development" value="false" >
-	      ei
-            </label><br/>
-          </label>
-          <label>
-            Epäillään tai on todettu kapea työmuisti
-            <label>
-              <input type="radio" name="narrow_wm" value="true" >
-              kyllä
-            </label>
-            <label>
-              <input type="radio" name="narrow_wm" value="false" >
-	      ei
-            </label><br/>
-          </label>
-          <label>
-            Epäillään tai on todettu keskittymisvaikeutta
-            <label>
-              <input type="radio" name="concentration_difficulties" value="true" >
-              kyllä
-            </label>
-            <label>
-              <input type="radio" name="concentration_difficulties" value="false" >
-	      ei
-            </label><br/>
-          </label>
-          <label>Sähköposti</label>
-          <input type="email" name="email" /><br/>
-
-          <div id="infoText">
-            Antamianne tietoja käytetään ainoastaan <a href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>.
-          </div>
-          <input type="submit" name="submit" hidden="true" /><br/>
-          <a id="join" class="gameBtn btn-2" href="#">
-            <div class="middle">Liity!</div>
-          </a>
-	  <!--
-            <button type="submit" class="btn">Liity pelaajaksi</button>
-          -->
+      <div id="joinView" class="bootstrap"
+           style="display:none; width: 40em;
+                  margin-left: auto; margin-right: auto;">
+        <form id="joinData" class="form-horizontal"
+              action="${base_url}/liity" method="POST">
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="name">Nimi</label>
+              <div class="controls">
+                <input type="text" name="name" placeholder="Etunimi" /><br/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="age">Ikä</label>
+              <div class="controls">
+                <input type="number" name="age" placeholder="6" /><br/>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>Sukupuoli
+                  <label class="radio">
+                    <input type="radio" name="gender" id="gender1" value="f" >
+                    Tyttö
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="gender" id="gender2" value="m">
+                    Poika
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>Epäillään tai on todettu ADHD
+                <label class="radio">
+                  <input type="radio" name="adhd" id="adhd" value="true" >
+                  kyllä
+                </label>
+                <label class="radio">
+                  <input type="radio" name="adhd" id="adhd" value="false" >
+                  ei
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>
+                  Epäillään tai on todettu asperger (tai sen piirteitä)
+                  <label class="radio">
+                    <input type="radio" name="adhd" id="adhd" value="true" >
+                    kyllä
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="adhd" id="adhd" value="false" >
+                    ei
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>
+                  Epäillään tai on todettu kehitysviivettä
+                  <label class="radio">
+                    <input type="radio" name="delayed_development" value="true" >
+                    kyllä
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="delayed_development" value="false" >
+                    ei
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>
+                  Epäillään tai on todettu kapea työmuisti
+                  <label class="radio">
+                    <input type="radio" name="narrow_wm" value="true" >
+                    kyllä
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="narrow_wm" value="false" >
+                    ei
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label>
+                  Epäillään tai on todettu keskittymisvaikeutta
+                  <label class="radio">
+                    <input type="radio" name="concentration_difficulties" value="true" >
+                    kyllä
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="concentration_difficulties" value="false" >
+                    ei
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="email">Sähköposti</label>
+              <div class="controls">
+                <input type="email" name="email" /><br/>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <p id="infoText">
+                  Antamianne tietoja käytetään ainoastaan <a href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>.
+                </p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <input type="submit" name="submit" hidden="true"
+                       style="display: none;" />
+                <a id="join" class="gameBtn btn-2" href="#">
+                  <div class="middle">Liity!</div>
+                </a>
+              </div>
+            </div>
+          </fieldset>
         </form>
       </div>
 
