@@ -20,6 +20,18 @@
 
   <body>
     <div id="game">
+
+      <!-- AddThis Button BEGIN -->
+      <div id="addthis" class="addthis_toolbox addthis_default_style addthis_32x32_style">
+	<a class="addthis_button_preferred_1" ></a>
+	<a class="addthis_counter addthis_bubble_style"></a>
+      </div>
+
+      <script type="text/javascript">
+	var addthis_config = {"data_track_addressbar":true};</script>
+      <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50cdc10e0038ed98"></script>
+      <!-- AddThis Button END -->
+
       <div id="rootHeader">
         <h1>Työmuistipeli</h1>
       </div>
@@ -42,6 +54,17 @@
           </label><br/>
           <label>
             Epäillään tai on todettu ADHD
+            <label>
+              <input type="radio" name="adhd" id="adhd" value="true" >
+              kyllä
+            </label>
+            <label>
+              <input type="radio" name="adhd" id="adhd" value="false" >
+              ei
+            </label>
+          </label><br/>
+          <label>
+            Epäillään tai on todettu asperger (tai sen piirteitä)
             <label>
               <input type="radio" name="adhd" id="adhd" value="true" >
               kyllä
@@ -103,7 +126,10 @@
       <div id="mainView">
         <div id="buttonTemplate" style="display:none" >
           <a class="gameBtn btn-2 player" href="pelaa">
-            <div class="middle"><span id="name"/></div>
+            <div class="middle">
+              <img src="${base_url}/img/player.png" alt="player"><br/>
+              <span id="name"/>
+            </div>
           </a>
         </div>
         <div id="majorRow">
