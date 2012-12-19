@@ -68,7 +68,7 @@ h1 div {
   background-color: #F6E2CE;
 }
 
-.gameBtn {
+.gameBtn, a.gameBtn {
   height: 170px;
   width: 170px;
   display: inline-block;
@@ -116,8 +116,7 @@ h1 div {
   -moz-border-radius:    35px;
   border-radius: 35px;
 }
-
-.gameBtn:hover {
+.gameBtn:hover, a.gameBtn:hover {
   background-color: #c9ccd8;
   background: -moz-linear-gradient(-45deg, #c9ccd8 0%, #e3e4ea 34%, #fcfcfc 49%, #dddfe3 68%, #c9ccd8 100%);
   background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#c9ccd8), color-stop(34%,#e3e4ea), color-stop(49%,#fcfcfc), color-stop(68%,#dddfe3), color-stop(100%,#c9ccd8));
@@ -128,8 +127,9 @@ h1 div {
 
   border-top-color: #a2a2a2;
   border-left-color: #a2a2a2;
-}
 
+  text-decoration: none;
+}
 #rootHeader {
   height: 200px;
   padding-top: 100px;
