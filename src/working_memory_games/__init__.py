@@ -97,8 +97,7 @@ class game_config(object):
 
             # Register game specific static assets
             if settings.get("add_asset_views", True):
-                dirname = os.path.join(
-                    os.path.dirname(info.module.__file__), name)
+                dirname = os.path.dirname(info.module.__file__)
                 try:
                     resources = map(lambda x: os.path.join(dirname, x),
                                     os.listdir(dirname))
