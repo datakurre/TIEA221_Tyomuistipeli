@@ -8,11 +8,15 @@ pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
 #
 
 import os
+import datetime
 
 import venusian
 
+from zope.interface import providedBy
+
 from pyramid.config import Configurator
 from pyramid.response import FileResponse
+from pyramid.renderers import JSON
 from pyramid.httpexceptions import HTTPNotFound
 
 from working_memory_games.app import Application
@@ -30,6 +34,19 @@ logger = logging.getLogger("working_memory_games")
 # Static file view factory
 static_file = lambda filename: lambda request:\
     FileResponse(filename, request=request)
+###
+
+###
+# JSON adapter with support for datetime.timedelta and numpy.int
+json_renderer = JSON()
+
+def datetime_timedelta_adapter(obj, request):
+    return float(obj.total_seconds())
+json_renderer.add_adapter(datetime.timedelta, datetime_timedelta_adapter)
+
+def int_adapter(obj, request):
+    return int(obj)
+json_renderer.add_adapter(int, int_adapter)
 ###
 
 
@@ -160,6 +177,9 @@ def main(global_config, **settings):
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse", factory=Application)
+
+    # Register custom JSON renderer with timedelta adapter
+    config.add_renderer("json", json_renderer)
 
     # Make WSGI app
     return config.make_wsgi_app()
