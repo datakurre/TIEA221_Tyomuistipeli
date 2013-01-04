@@ -30,11 +30,11 @@ function addPlayerButtons() {
     for (idx in players) {
 	var btn = $('#buttonTemplate a').clone();
 	btn.find('#name').text(players[idx].name);
-	btn.attr('player', players[idx].id);
+	btn.attr('data-player', players[idx].id);
 	$("#majorRow .center").prepend(btn);
 	btn.show();
 	btn.click(function(event){
-	    $.cookie('active_player', $(this).attr('player'));
+	    $.cookie('active_player', $(this).data('player'));
 	});
     }
 }
