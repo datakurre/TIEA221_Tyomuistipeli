@@ -262,6 +262,10 @@ def add_base_template(event):
 
 @view_config(route_name="root", renderer="templates/index.html")
 def root_view(request):
+    # Enforce that the application root is called with ending slash
+    if not request.path.endswith("/"):
+        url = urlparse.urljoin(request.application_url, request.path)
+        raise HTTPFound(location=url + "/")
     return {}
 
 
