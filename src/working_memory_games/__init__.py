@@ -129,7 +129,7 @@ def main(global_config, **settings):
     config.add_notfound_view(lambda request: HTTPNotFound(), append_slash=True)
 
     # Register robots.txt, humans.txt  and favicon.ico
-    for filename in ["robots.txt", "humans.txt", "favicon.ico", 
+    for filename in ["robots.txt", "humans.txt", "favicon.ico",
                      "tutkimussuunnitelma.pdf"]:
         path = os.path.join(os.path.dirname(__file__), filename)
         config.add_route(path, "/%s" % filename)
