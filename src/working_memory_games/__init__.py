@@ -155,6 +155,7 @@ def main(global_config, **settings):
     # Configure common static resources
     config.add_static_view(name="css", path="css")
     config.add_static_view(name="img", path="img")
+    config.add_static_view(name="snd", path="snd")
     config.add_static_view(name="js", path="js")
     config.add_static_view(name="lib", path="lib")
 

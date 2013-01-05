@@ -5,6 +5,15 @@ if (typeof String.prototype.startsWith != 'function') {
   };
 }
 
+function startMusic() {
+    $.preload('sudit', 
+	      global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
+    $('body').on('preloaded', function(){
+	console.log("ah");
+	$('<div></div>').play('sudit');
+    });
+}
+
 function animateTitle() {
     var title = $('h1').text(), idx;
     var newTitle = '';
@@ -39,7 +48,11 @@ function addPlayerButtons() {
     }
 }
 
+
+
 $(document).ready(function() {
+
+    startMusic();
 
     animateTitle();
 
