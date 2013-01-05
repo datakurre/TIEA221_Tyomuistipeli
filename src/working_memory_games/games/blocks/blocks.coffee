@@ -1,5 +1,5 @@
 # This will set the FPS for Box2D animation
-FPS = 25
+FPS = 15
 
 # This will scale Box2D physics model to pixels
 SCALE = 30
