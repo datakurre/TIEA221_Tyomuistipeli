@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="context" content="${current_url}" />
+    <meta name="viewport" content="width=device-width,
+                                   initial-scale=1.0,maximum-scale=1.0">
+    <link rel="shortcut icon" href="${base_url}/favicon.ico">
+
+    <title>Palikkatorni</title>
+
+    <link rel="stylesheet" href="${base_url}/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${base_url}/css/common.css" />
+    <link rel="stylesheet" href="${current_url}/blocks.css" />
+    <script src="${base_url}/lib/jquery.min.js"></script>
+    <script src="${base_url}/lib/bootstrap.min.js"></script>
+    <script src="${base_url}/lib/Box2dWeb.min.js"></script>
+    <script src="${base_url}/js/game.js"></script>
+    <script src="${current_url}/blocks.js"></script>
+  </head>
+  <body>
+
+    <div id="game">
+      <div id="level" class="btn disabled">
+          Taso: <span>3.0</span>
+      </div>
+      <div id="board">
+        <div id="tower"></div>
+      </div>
+      <div id="dialer"></div>
+    </div>
+
+  </body>
+</html>

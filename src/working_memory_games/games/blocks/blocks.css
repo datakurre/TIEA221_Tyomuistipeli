@@ -1,0 +1,144 @@
+body {
+  font-size: 0.625em;
+  overflow: hidden;
+}
+
+body .modal {
+  font-size: 1.4em;
+}
+
+#game {
+  bottom: 2em;
+  overflow: visible;
+  background: white;
+}
+
+#board, #tower {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+
+#dialer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 5em:
+  overflow: visible;
+}
+
+#bg-floor, #fg-floor, #dialer-floor {
+  border: none;
+  background: none;
+  border-radius: 0;
+}
+
+.number {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 1em;
+}
+
+#board .number {
+  font-size: 10em;
+}
+
+#dialer .number {
+}
+
+#tower .box2d.placeholder {
+  border: 0.1em dashed lightgrey;
+}
+
+#tower .box2d.placeholder .number {
+  display: none;
+}
+
+#dialer .box2d .number {
+  font-size: 5em;
+  cursor: pointer;
+}
+
+.box2d.rectangle {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 0.1em solid black;
+  /* border-radius: 1em; */
+}
+
+.box2d.circle {
+  box-sizing: border-box;
+  border: 0.1em solid black;
+}
+
+/* .color-0 { */
+/*   background: olive; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-1 { */
+/*   background: olive; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-2 { */
+/*   background: green; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-3 { */
+/*   background: green; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-4 { */
+/*   background: teal; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-5 { */
+/*   background: teal; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-6 { */
+/*   background: navy; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-7 { */
+/*   background: navy; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-8 { */
+/*   background: maroon; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
+/* .color-9 { */
+/*   background: maroon; */
+/*   text-shadow: 1px 1px black; */
+/*   color: white; */
+/* } */
+/*  */
