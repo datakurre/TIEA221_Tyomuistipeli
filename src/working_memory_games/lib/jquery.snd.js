@@ -21,7 +21,7 @@
     $.fn.extend({
         play: function(id) {
 	    if (id === undefined) {
-		//console.trace();
+		console.trace();
 		return;
 	    }
 
@@ -80,11 +80,12 @@
 		    $.get(url).complete(function(data){
 			console.log($._preload.processing);
 			delete $._preload.processing[id];
-			if (jQuery.isEmptyObject($._preload.processing))
-			    $('body').trigger('preloaded');
 			
 			var audio = $('<audio src="'+url+'"></audio>');
 			$._preload.loaded[id] = audio;
+
+			if (jQuery.isEmptyObject($._preload.processing))
+			    $('body').trigger('preloaded');
 
 			// XXX todo, should we also wait for canplaythrough?
 			$(audio).bind('canplaythrough', function(event){
