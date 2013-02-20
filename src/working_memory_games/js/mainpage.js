@@ -1,3 +1,6 @@
+var global = global || {};
+
+
 // TODO move to library.
 if (typeof String.prototype.startsWith != 'function') {
   String.prototype.startsWith = function (str){
@@ -9,7 +12,6 @@ function startMusic() {
     $.preload('sudit', 
 	      global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
     $('body').on('preloaded', function(){
-	console.log("ah");
 	$('<div></div>').play('sudit');
     });
 }
@@ -22,10 +24,11 @@ function animateTitle() {
     }
     $('h1').html(newTitle);
     $('h1').children().each(function(idx){
+	var x = Math.PI * (idx-(title.length-1)/2)/title.length;
         $(this)
-            .delay(idx*100)
+            .delay(400+idx*300)
             .animate({'top':'-80px'}, 300)
-            .animate({'top':'0px'}, 400+idx*50);
+            .animate({'top':(30*Math.cos(x))+'px'}, 400+idx*50);
     });
 }
 
@@ -53,7 +56,6 @@ function addPlayerButtons() {
 $(document).ready(function() {
 
     startMusic();
-
     animateTitle();
 
     addPlayerButtons();
