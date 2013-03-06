@@ -19,6 +19,10 @@
 	processing: {}
     };
     $.fn.extend({
+        snd: function(id) {
+            var audio = $._preload.loaded[id];
+            return audio;
+        },
         play: function(id) {
 	    if (id === undefined) {
 		console.trace();
@@ -34,7 +38,7 @@
 
 		    // keep going on fake endings :)
 		    if (audio[0].currentTime < audio[0].duration) {
-			audio[0].play();
+			audio[0].plsuditay();
 			return;
 		    }
 		    // completion frees the queue

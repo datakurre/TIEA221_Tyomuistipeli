@@ -30,3 +30,15 @@
 
         Pelimusiikki: "Pelit ja Pensselit" Ahti Laine
 
+        Silminnäkijä-kentän ääni: Marko Mäkinen
+
+        Matkalle-kentän ääni: Erkki Häkkinen
+
+        Alku/loppu/autot/koneet/ostoslista äänet: Telle-Tiia Pitkänen
+
+        Työkalut-kentän ääni: anonyymi
+
+        Numerot-kentän ääni: Anu Parviainen
+
+
+
