@@ -112,11 +112,10 @@ class Game(object):
             # arvaustodennäköisyys 1/n).
             
             # 5% muistivirheitä (ref Memory book)
-            p_err = 1 / float(choises_N)
-            p_corr = 1 - 0.05 - p_err
-            return p_err + p_corr/(1+exp(n-k))
+            gamma = 1./4.**n
+            return gamma + (1 - gamma - 0.05)/(1+exp(n-k))
 
-        p0 = ones(shape(kvals),float)
+        p0 = 1.0 / where(kvals>2,kvals,3)**2
         p0 *= 1 / sum(p0)
 
         def update(p,n,res):
@@ -153,7 +152,7 @@ class Game(object):
                 # suhteessa "hinnan" odotusarvoon, missä hinta
                 # on määritelty siten, että väärä vastaus
                 # maksaa yhden yksikön
-                gain /= p_fail
+                gain /= n #p_fail
 
             return gain
 
@@ -162,7 +161,7 @@ class Game(object):
         true_k = 7
 
         # käytetäänkö "lapsiystävällistä versiota"
-        child_friendly = False
+        child_friendly = True
 
 
         p = p0
@@ -170,22 +169,23 @@ class Game(object):
         #n = 3 # defualt if not games yet
         last_plays = self.get_last_plays(20)
         for play in last_plays:
-            print play
+            #print play
             n = play['level']
             res = play['pass']
             p = update(p,n,res)
-            print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
+            #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
 
-        print 
-        print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
+        #print 
+        #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
         gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
 
-        print 'Expected gains in bits for n = %s:' % nvals
-        print '[%s]' % (' '.join('%.3f' % g for g in gains))
-
+        #print 'Expected gains in bits for n = %s:' % nvals
+        #print '[%s]' % (' '.join('%.3f' % g for g in gains))
         n = nvals[argmax(gains)]
         if len(last_plays) == 0: 
             n = 3
+        elif n > last_plays[0]['level'] + 2:
+            n = last_plays[0]['level'] + 2
         print 'Best n to present next:', n
 
         self.session.level = n
