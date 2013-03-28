@@ -12,13 +12,13 @@ function startMusic() {
     var mois = 'hei heippa moikka moi morjens'.split(' ');
     var moi = mois[Math.floor(Math.random()*mois.length)];
     $.preload('moi',
-	      global.ctx + '/snd/'+moi+'.[mp3,ogg]');
-    $.preload('sudit', 
-	      global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
+          global.ctx + '/snd/'+moi+'.[mp3,ogg]');
+    $.preload('sudit',
+          global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
     $('body').on('preloaded', function(){
-	console.log($('<div></div>').snd('moi'));
-	$('<div></div>').snd('sudit')[0].volume = 0.5;
-	$('<div></div>').play('moi').play('sudit');
+    console.log($('<div></div>').snd('moi'));
+    $('<div></div>').snd('sudit')[0].volume = 0.5;
+    $('<div></div>').play('moi').play('sudit');
     });
 }
 
@@ -30,7 +30,7 @@ function animateTitle() {
     }
     $('h1').html(newTitle);
     $('h1').children().each(function(idx){
-	var x = Math.PI * (idx-(title.length-1)/2)/title.length;
+    var x = Math.PI * (idx-(title.length-1)/2)/title.length;
         $(this)
             .delay(400+idx*300)
             .animate({'top':'-80px'}, 300)
@@ -39,21 +39,21 @@ function animateTitle() {
 }
 
 function addPlayerButtons() {
-    
+
     $('#majorRow .player').remove();
 
     var players = $.cookie('players');
     if (players == null) return;
     players = $.parseJSON(players).reverse();
     for (idx in players) {
-	var btn = $('#buttonTemplate a').clone();
-	btn.find('#name').text(players[idx].name);
-	btn.attr('data-player', players[idx].id);
-	$("#majorRow .center").prepend(btn);
-	btn.show();
-	btn.click(function(event){
-	    $.cookie('active_player', $(this).data('player'));
-	});
+    var btn = $('#buttonTemplate a').clone();
+    btn.find('#name').text(players[idx].name);
+    btn.attr('data-player', players[idx].id);
+    $("#majorRow .center").prepend(btn);
+    btn.show();
+    btn.click(function(event){
+        $.cookie('active_player', $(this).data('player'));
+    });
     }
 }
 
@@ -65,7 +65,7 @@ $(document).ready(function() {
     animateTitle();
 
     addPlayerButtons();
-    
+
     // show current view
     $(window).bind('hashchange', function(){
         var hash = location.hash.toString();
@@ -75,33 +75,33 @@ $(document).ready(function() {
         } else {
             $('#joinView').slideUp();
             $('#mainView').slideDown();
-	    addPlayerButtons();
+        addPlayerButtons();
         }
         var handleSubmit = function(event) {
             event.preventDefault();
 
-	    $.post('liity',
+        $.post('liity',
                 $('#joinData').serialize(),
                 function(data){
-		    // Store information to server and create local 
-		    // data in cookie.
-		    var players = $.cookie('players');
+            // Store information to server and create local
+            // data in cookie.
+            var players = $.cookie('players');
 
-		    if (players == null || players === undefined)
-			players = [];
-		    else
-			players = $.parseJSON(players);
+            if (players == null || players === undefined)
+            players = [];
+            else
+            players = $.parseJSON(players);
 
-		    players.push({ 
-			'name': $('#joinData input[name="name"]').val(),
-			'id': data.id 
-		    });
+            players.push({
+            'name': $('#joinData input[name="name"]').val(),
+            'id': data.id
+            });
 
-		    $.cookie('players', 
-			     JSON.stringify(players), 
-			     { expires: 365 });
+            $.cookie('players',
+                 JSON.stringify(players),
+                 { expires: 365 });
 
-		    location.hash = '';
+            location.hash = '';
                 }
               );
         };
