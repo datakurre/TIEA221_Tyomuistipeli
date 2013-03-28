@@ -40,20 +40,22 @@ function animateTitle() {
 
 function addPlayerButtons() {
 
-    $('#majorRow .player').remove();
+    $('#mainView > .player').remove();
 
     var players = $.cookie('players');
     if (players == null) return;
     players = $.parseJSON(players).reverse();
     for (idx in players) {
-    var btn = $('#buttonTemplate a').clone();
-    btn.find('#name').text(players[idx].name);
-    btn.attr('data-player', players[idx].id);
-    $("#majorRow .center").prepend(btn);
-    btn.show();
-    btn.click(function(event){
-        $.cookie('active_player', $(this).data('player'));
-    });
+        if (players[idx].name != "Vieras") {
+            var btn = $('#buttonTemplate a').clone();
+            btn.find('#name').text(players[idx].name);
+            btn.attr('data-player', players[idx].id);
+            $("#mainView").prepend(btn);
+            btn.show();
+            btn.click(function(event){
+                $.cookie('active_player', $(this).data('player'));
+            });
+        }
     }
 }
 
@@ -107,9 +109,40 @@ $(document).ready(function() {
         $('#join').click(handleSubmit);
         $('#joinData').keypress(function(event) {
             if (event.which == 13) {
+                event.preventDefault();
                 handleSubmit(event);
                 return false;
             }
+        });
+        $('#kokeile').click(function(event) {
+            event.preventDefault();
+            // TODO: Read 'players' cookie and if player with name "Vieras" is
+            // found, activate it instead of creating new guest.
+            $.post('kokeile', function(data) {
+                // Store information to server and create local
+                // data in cookie.
+                var players = $.cookie('players');
+
+                if (players == null || players === undefined)
+                    players = [];
+                else
+                    players = $.parseJSON(players);
+
+                players.push({
+                    'name': 'Vieras',
+                    'id': data.id
+                });
+
+                $.cookie('players',
+                         JSON.stringify(players),
+                         { expires: 365 });
+
+                $.cookie('active_player',
+                         data.id,
+                         { expires: 365 });
+
+                window.location.href += 'pelaa';
+            });
         });
     });
 

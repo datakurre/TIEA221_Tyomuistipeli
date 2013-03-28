@@ -2,7 +2,7 @@
 """ Main application, player management and session code """
 
 import re
-import uuid
+# import uuid
 import random
 import datetime
 import urlparse
@@ -31,7 +31,7 @@ from persistent.list import PersistentList
 
 from working_memory_games.datatypes import (
     Players,
-    Player,
+    # Player,
 )
 
 from working_memory_games.upgrades import migrate
@@ -193,24 +193,36 @@ class Application(object):
         return HTTPFound(location=self.request.application_url,
                          headers=headers)
 
-    @view_config(name="select_guest",
-                 request_method="POST", xhr=False)
-    def select_guest(self):
+    @view_config(name="kokeile", renderer="json",
+                 request_method="POST")
+    def create_new_guest(self):
+        name = u"Guest"
 
-        player_id = str(uuid.uuid4())
-        details = {"registered": False, "assisted": self.get_assistance_flag()}
-        self.data.players[player_id] = Player(name=u"Guest", details=details)
+        details = {
+            "registered": False,
+            "assisted": self.get_assistance_flag()
+        }
+        details.update(self.request.params)
+        return self.data.players.create_player(name, details)
 
-        self.request.response.set_cookie(
-            "active_player", player_id,
-            max_age=(60 * 60 * 24 * 365)
-        )
-        headers = ResponseHeaders({
-            "Set-Cookie": self.request.response.headers.get("Set-Cookie")
-        })
+    # @view_config(name="select_guest",
+    #              request_method="POST", xhr=False)
+    # def select_guest(self):
 
-        return HTTPFound(location=self.request.application_url,
-                         headers=headers)
+    #     player_id = str(uuid.uuid4())
+    #     details = {"registered": False, "assisted": self.get_assistance_flag()}
+    #     self.data.players[player_id] = Player(name=u"Guest", details=details)
+
+    #     self.request.response.set_cookie(
+    #         "active_player", player_id,
+    #         max_age=(60 * 60 * 24 * 365)
+    #     )
+    #     headers = ResponseHeaders({
+    #         "Set-Cookie": self.request.response.headers.get("Set-Cookie")
+    #     })
+
+    #     return HTTPFound(location=self.request.application_url,
+    #                      headers=headers)
 
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
                  request_method="GET", xhr=False)

@@ -229,34 +229,21 @@
         </form>
       </div>
 
-      <div id="mainView">
+      <div id="mainView" class="center">
+        <a class="gameBtn" href="#liity">
+          <div class="middle">Liity<br/>pelaajaksi</div>
+        </a>
+        <a class="gameBtn" id="kokeile" href="#">
+          <div class="middle">Kokeile<br/>peliä</div>
+        </a>
         <div id="buttonTemplate" style="display:none" >
-          <a class="gameBtn btn-2 player" href="pelaa">
+          <a class="gameBtn player" href="pelaa">
             <div class="middle">
               <img src="${base_url}/img/player.png" alt="player"><br/>
               <span id="name"/>
             </div>
           </a>
         </div>
-        <div id="majorRow">
-          <div class="center">
-            <a class="gameBtn btn-2" href="#liity">
-              <div class="middle">Liity pelaajaksi</div>
-            </a>
-          </div>
-        </div>
-
-        <div id="minorRow">
-          <div class="center">
-            <form action="${base_url}/select_guest" method="POST"
-                class="" style="display: inline-block;">
-              <button type="submit" id="try" class="gameBtn btn-3">
-                <div class="middle">Kokeile peliä</div>
-              </button>
-            </form>
-          </div>
-        </div>
-
       </div>
       <a href="${base_url}/humans.txt">
         <img id="humans" src="${base_url}/img/humanstxt-transparent-color.png" />
