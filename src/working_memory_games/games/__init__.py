@@ -16,7 +16,6 @@ from pyramid.view import (
 from zope.interface import implements
 
 from working_memory_games.interfaces import IGame
-from working_memory_games.datatypes import GameSession
 
 import logging
 logger = logging.getLogger("working_memory_games")
@@ -95,7 +94,7 @@ class Game(object):
 
     def calculate_level(self, choises_N):
         """ Use jvk's adaptation to calculate the next level """
-        
+
         # Mahdolliset tuntemattoman arvot
         kvals = arange(1,21)
 
@@ -110,7 +109,7 @@ class Game(object):
             # pelaaja saa tehtävän oikein (tämän voi useimmiten päätellä
             # tehtävästä, esimerkiksi jos valitaan n:stä vaihtoehdosta, on
             # arvaustodennäköisyys 1/n).
-            
+
             # 5% muistivirheitä (ref Memory book)
             gamma = 1./4.**n
             return gamma + (1 - gamma - 0.05)/(1+exp(n-k))
@@ -175,14 +174,14 @@ class Game(object):
             p = update(p,n,res)
             #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
 
-        #print 
+        #print
         #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
         gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
 
         #print 'Expected gains in bits for n = %s:' % nvals
         #print '[%s]' % (' '.join('%.3f' % g for g in gains))
         n = nvals[argmax(gains)]
-        if len(last_plays) == 0: 
+        if len(last_plays) == 0:
             n = 3
         elif n > last_plays[0]['level'] + 2:
             n = last_plays[0]['level'] + 2
