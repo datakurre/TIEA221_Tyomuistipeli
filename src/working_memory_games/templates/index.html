@@ -20,6 +20,7 @@
     <script src="${base_url}/lib/jquery.min.js"></script>
     <script src="${base_url}/lib/jquery.snd.js"></script>
     <script src="${base_url}/lib/jquery.cookie.js"></script>
+    <script src="${base_url}/lib/bootstrap.min.js"></script>
     <script src="${base_url}/js/game.js"></script>
     <script type="text/javascript" src="${base_url}/js/mainpage.js"></script>
   </head>
@@ -64,6 +65,8 @@
               <label class="control-label" for="name">Nimi</label>
               <div class="controls">
                 <input type="text" name="name" placeholder="Etunimi" />
+                <span class="help-inline"><i class="icon-exclamation-sign"></i>
+                pakollinen tieto</span>
               </div>
             </div>
             <div class="control-group">
@@ -86,76 +89,78 @@
               </div>
             </div>
             <div class="control-group">
+              <label class="control-label">Diagnoosi tai epäillään:</label>
               <div class="controls">
-                <label>Epäillään tai on todettu ADHD<br/>
-                  <label class="radio inline">
-                    <input type="radio" name="adhd" id="adhd" value="true">
-                    kyllä
-                  </label>
-                  <label class="radio inline">
-                    <input type="radio" name="adhd" id="adhd" value="false">
-                    ei
-                  </label>
+                <label class="radio inline sublabel">
+                  ADHD
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="adhd" id="adhd" value="true">
+                  kyllä
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="adhd" id="adhd" value="false">
+                  ei
                 </label>
               </div>
             </div>
             <div class="control-group">
               <div class="controls">
-                <label>
-                  Epäillään tai on todettu asperger (tai sen piirteitä)<br/>
-                  <label class="radio inline">
-                    <input type="radio" name="asperger" id="asperger" value="true">
-                    kyllä
-                  </label>
-                  <label class="radio inline">
-                    <input type="radio" name="asperger" id="asperger" value="false">
-                    ei
-                  </label>
+                <label class="radio inline sublabel">
+                  Asperger
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="asperger" id="asperger" value="true">
+                  kyllä
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="asperger" id="asperger" value="false">
+                  ei
                 </label>
               </div>
             </div>
             <div class="control-group">
               <div class="controls">
-                <label>
-                  Epäillään tai on todettu kehitysviivettä<br/>
-                  <label class="radio inline">
-                    <input type="radio" name="delayed_development" value="true">
-                    kyllä
-                  </label>
-                  <label class="radio inline">
-                    <input type="radio" name="delayed_development" value="false">
-                    ei
-                  </label>
+                <label class="radio inline sublabel">
+                  Kehitysviive
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="delayed_development" value="true">
+                  kyllä
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="delayed_development" value="false">
+                  ei
                 </label>
               </div>
             </div>
             <div class="control-group">
               <div class="controls">
-                <label>
-                  Epäillään tai on todettu kapea työmuisti<br/>
-                  <label class="radio inline">
-                    <input type="radio" name="narrow_wm" value="true">
-                    kyllä
-                  </label>
-                  <label class="radio inline">
-                    <input type="radio" name="narrow_wm" value="false">
-                    ei
-                  </label>
+                <label class="radio inline sublabel">
+                  Kapea työmuisti
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="narrow_wm" value="true">
+                  kyllä
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="narrow_wm" value="false">
+                  ei
                 </label>
               </div>
             </div>
             <div class="control-group">
               <div class="controls">
-                <label>
-                  Epäillään tai on todettu keskittymisvaikeutta<br/>
-                  <label class="radio inline">
-                    <input type="radio" name="concentration_difficulties" value="true">
-                    kyllä
-                  </label>
-                  <label class="radio inline">
-                    <input type="radio" name="concentration_difficulties" value="false">
-                    ei
-                  </label>
+                <label class="radio inline sublabel">
+                  Keskittymisvaikeus
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="concentration_difficulties" value="true">
+                  kyllä
+                </label>
+                <label class="radio inline">
+                  <input type="radio" name="concentration_difficulties" value="false">
+                  ei
                 </label>
               </div>
             </div>
@@ -167,31 +172,46 @@
             </div>
             <div class="control-group">
               <div class="controls">
-                <div id="infoText">
-                  Antamianne tietoja käytetään
-                  ainoastaan <a href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>
+                <label>
+                  Antamianne tietoja käytetään ainoastaan
+                  <a target="_blank" href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>
                   henkilötietolain mukaisesti
-                  (<a id="rekisteriseloste">rekisteriseloste</a>).
-                  <div id="rekisteriseloste" style="display:none;">
-                    Henkilötietolaki sallii arkaluonteisten tietojen, kuten
-                    henkilön terveydentilaa, sairautta tai vammaisuutta
-                    koskevien tietojen keräämisen tutkimustarkoituksiin.
-                    Tässä tutkimuksessa näitä tietoja hyödynnetään
-                    mahdollisesti tulosten ryhmittelyssä. Tietojen
-                    luovuttaminen tutkimuskäyttöön on vapaaehtoista.
-
-                    Sivustolla käytetään evästeitä, joilla mahdollistetaan
-                    pelin pelaaminen ilman kirjautumista sekä ylläpidetään
-                    pelaajan tasoa.
-
-                    Tietoja edelleenluovutetaan ainoastaan tieteellisiin
-                    tutkimuksiin, kuten tutkimustulosten tarkistamista
-                    varten tai toisen tutkimuksen osaksi.
-
-                    Tiedot on varastoitu koneelle, johon pääsy on rajoitettu
-                    muutamaan henkilöön ja kirjautuminen varmennetaan
-                    vahvalla salauksella. Mahdolliset yhteydenotot
-                    matti.katila gmail.com, +358400637289.
+                  (<a href="#rekisteriseloste" data-toggle="modal">rekisteriseloste</a>).
+                </label>
+                <div class="modal hide" id="rekisteriseloste">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Tietosuoja- ja rekisteriseloste</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Henkilötietolaki sallii arkaluonteisten tietojen, kuten
+                      henkilön terveydentilaa, sairautta tai vammaisuutta
+                      koskevien tietojen keräämisen tutkimustarkoituksiin.
+                      Tässä tutkimuksessa näitä tietoja hyödynnetään
+                      mahdollisesti tulosten analysoinnissa. Tietojen
+                      luovuttaminen tutkimuskäyttöön on vapaaehtoista.
+                    </p>
+                    <p>
+                      Sivustolla käytetään evästeitä, joilla mahdollistetaan
+                      pelin pelaaminen ilman kirjautumista sekä ylläpidetään
+                      pelaajan tasoa.
+                    </p>
+                    <p>
+                      Tietoja edelleenluovutetaan ainoastaan tieteellisiin
+                      tutkimuksiin, kuten tutkimustulosten tarkistamista
+                      varten tai toisen tutkimuksen osaksi.
+                    </p>
+                    <p>
+                      Tiedot on varastoitu koneelle, johon pääsy on rajoitettu
+                      muutamaan henkilöön ja kirjautuminen varmennetaan
+                      vahvalla salauksella. Mahdolliset yhteydenotot
+                      rekisterinpitäjään:
+                      matti.katila@gmail.com, +358400637289.
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
                   </div>
                 </div>
               </div>
