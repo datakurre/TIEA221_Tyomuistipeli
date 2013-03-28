@@ -12,8 +12,6 @@ import datetime
 
 import venusian
 
-from zope.interface import providedBy
-
 from pyramid.config import Configurator
 from pyramid.response import FileResponse
 from pyramid.renderers import JSON
