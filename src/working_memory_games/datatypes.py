@@ -8,6 +8,8 @@ from zope.interface import implements
 from BTrees.OOBTree import OOBTree as OOBTreeBase
 from BTrees.Length import Length as LengthBase
 
+from persistent.mapping import PersistentMapping
+
 from working_memory_games.interfaces import (
     IPlayers,
     IPlayer,
@@ -72,10 +74,10 @@ class Players(OOBTree):
         """ Returns player or None if not found."""
         return self.get(player_id)
 
-    def create_player(self, name, info):
+    def create_player(self, name, details):
         """ Creates a new Player """
         player_id = str(uuid.uuid4())
-        self[player_id] = Player(name, info)
+        self[player_id] = Player(name, details)
         return {
             'id': player_id
         }
@@ -87,10 +89,10 @@ class Player(OOBTree):
 
     implements(IPlayer)
 
-    def __init__(self, name, info):
+    def __init__(self, name, details={}):
         super(Player, self).__init__()
         self.name = name
-        self.info = info
+        self.details = PersistentMapping(details.items())
 
     @property
     def duration(self):

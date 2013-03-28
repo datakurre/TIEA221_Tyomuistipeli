@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Migration steps for database model upgrades """
 
-CURRENT_VERSION = 4  # simply an incrementing integer value
+CURRENT_VERSION = 5  # simply an incrementing integer value
 
 import logging
 logger = logging.getLogger("working_memory_games")
@@ -110,3 +110,43 @@ def from3to4(data):
                 if isinstance(game_session.level, Length):
                     print game_session.level
                     game_session.level = game_session.level()
+
+
+def from4to5(data):
+    """Remove guests, update player data
+    """
+    import random
+
+    from working_memory_games.datatypes import Players
+
+    from persistent.mapping import PersistentMapping
+    from persistent.list import PersistentList
+
+    if not hasattr(data, "assistance_flags"):
+        data.assistance_flags = PersistentList()
+    if len(data.assistance_flags) <= 0:
+        data.assistance_flags.extend([True] * 50 + [False] * 50)
+        random.shuffle(data.assistance_flags)
+
+    if hasattr(data, "guests") and len(getattr(data, "guests", ())):
+        if not hasattr(data, "players"):
+            data.players = Players()
+        for key, value in data.guests.items():
+            data.players[key] = value
+        delattr(data, "guests")
+
+    if hasattr(data, "players"):
+        for player_id in data.players:
+            player = data.players[player_id]
+            if hasattr(player, "info"):
+                details = getattr(player, "info", {})
+                delattr(player, "info")
+            else:
+                details = {}
+            player.details = PersistentMapping(details.items())
+            if player.name == u"Guest":
+                player.details["registered"] = False
+            else:
+                player.details["registered"] = True
+            if not "assisted" in player.details:
+                player.details["assisted"] = data.assistance_flags.pop()

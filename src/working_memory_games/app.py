@@ -3,6 +3,7 @@
 
 import re
 import uuid
+import random
 import datetime
 import urlparse
 
@@ -25,6 +26,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPBadRequest
 
 from pyramid_zodbconn import get_connection
+
+from persistent.list import PersistentList
 
 from working_memory_games.datatypes import (
     Players,
@@ -68,12 +71,6 @@ class Application(object):
         if not hasattr(self.data, "players"):
             self.data.players = Players()
 
-        if not hasattr(self.data, "guests"):
-            # XXX: Eventually, guests should be stored into temporary database,
-            # which would be cleaned when the server is restarted.  I'll fix
-            # this, once I figure out the proper ZEO-configuration... -Asko
-            self.data.guests = Players()
-
         # Migrate data over possible schema changes
         migrate(self.data)
 
@@ -86,10 +83,6 @@ class Application(object):
 
         # Look up the current player using the cookie data
         player = self.data.players.get(player_id)
-
-        # When player is not found, try to look up a guest
-        if player is None:
-            player = self.data.guests.get(player_id)
 
         return player  # player may be None
 
@@ -124,6 +117,16 @@ class Application(object):
             return None
 
         return player.session(self.games.keys())
+
+    def get_assistance_flag(self):
+        """Return the next available value for assistance
+        """
+        if not hasattr(self.data, "assistance_flags"):
+            self.data.assistance_flags = PersistentList()
+        if len(self.data.assistance_flags) <= 0:
+            self.data.assistance_flags.extend([True] * 50 + [False] * 50)
+            random.shuffle(self.data.assistance_flags)
+        return self.data.assistance_flags.pop()
 
     def __getitem__(self, name):
         """ Traverse to the given game """
@@ -163,10 +166,12 @@ class Application(object):
         if not name:  # does not validate
             return HTTPBadRequest()
 
-        info = {}
-        info.update(self.request.params)
-
-        return self.data.players.create_player(name, info)
+        details = {
+            "registered": True,
+            "assisted": self.get_assistance_flag()
+        }
+        details.update(self.request.params)
+        return self.data.players.create_player(name, details)
 
     @view_config(name="select_player",
                  request_method="POST", xhr=False)
@@ -193,7 +198,8 @@ class Application(object):
     def select_guest(self):
 
         player_id = str(uuid.uuid4())
-        self.data.guests[player_id] = Player(name=u"Guest", info={})
+        details = {"registered": False, "assisted": self.get_assistance_flag()}
+        self.data.players[player_id] = Player(name=u"Guest", details=details)
 
         self.request.response.set_cookie(
             "active_player", player_id,
