@@ -58,7 +58,6 @@ function addPlayerButtons() {
 }
 
 
-
 $(document).ready(function() {
 
     startMusic();
@@ -67,7 +66,7 @@ $(document).ready(function() {
     addPlayerButtons();
 
     // show current view
-    $(window).bind('hashchange', function(){
+    $(window).bind('hashchange', function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
             $('#joinView').slideDown();
@@ -75,35 +74,35 @@ $(document).ready(function() {
         } else {
             $('#joinView').slideUp();
             $('#mainView').slideDown();
-        addPlayerButtons();
+            addPlayerButtons();
         }
+
         var handleSubmit = function(event) {
+
             event.preventDefault();
+            $.post('liity',
+                    $('#joinData').serialize(),
+                    function(data) {
+                // Store information to server and create local
+                // data in cookie.
+                var players = $.cookie('players');
 
-        $.post('liity',
-                $('#joinData').serialize(),
-                function(data){
-            // Store information to server and create local
-            // data in cookie.
-            var players = $.cookie('players');
+                if (players == null || players === undefined)
+                    players = [];
+                else
+                    players = $.parseJSON(players);
 
-            if (players == null || players === undefined)
-            players = [];
-            else
-            players = $.parseJSON(players);
+                players.push({
+                    'name': $('#joinData input[name="name"]').val(),
+                    'id': data.id
+                });
 
-            players.push({
-            'name': $('#joinData input[name="name"]').val(),
-            'id': data.id
+                $.cookie('players',
+                         JSON.stringify(players),
+                         { expires: 365 });
+
+                location.hash = '';
             });
-
-            $.cookie('players',
-                 JSON.stringify(players),
-                 { expires: 365 });
-
-            location.hash = '';
-                }
-              );
         };
         $('#join').click(handleSubmit);
         $('#joinData').keypress(function(event) {
