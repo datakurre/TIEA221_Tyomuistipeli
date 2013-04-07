@@ -1,5 +1,6 @@
 
 #game {
+  display: block;
 
 background: #d2eff7;
 background: -moz-radial-gradient(center, ellipse cover, #d2eff7 0%, #73d2ef 52%, #05abe0 100%);
