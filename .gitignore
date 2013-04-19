@@ -8,6 +8,7 @@ syntax:glob
 
 .installed.cfg
 .mr.developer.cfg
+.ropeproject
 develop.cfg
 
 bin
