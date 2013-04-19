@@ -60,29 +60,32 @@ def from2to3(data):
         data.players.__class__ = Players
         data.players._p_changed = True  # force to commit the class change
 
-    if not isinstance(data.guests, Players):
-        data.guests.__class__ = Players
-        data.guests._p_changed = True  # force to commit the class change
+    if "guests" in data:
+        if not isinstance(data.guests, Players):
+            data.guests.__class__ = Players
+            data.guests._p_changed = True  # force to commit the class change
 
-    for player_id in data.players:
-        player = data.players[player_id]
-        for session_id in player:
-            session = player[session_id]
-            for game_id in session:
-                game_session = session[game_id]
-                game_session.__class__ = GameSession
-                game_session._p_changed = True
-                session._p_changed = True
+    if "players" in data:
+        for player_id in data.players:
+            player = data.players[player_id]
+            for session_id in player:
+                session = player[session_id]
+                for game_id in session:
+                    game_session = session[game_id]
+                    game_session.__class__ = GameSession
+                    game_session._p_changed = True
+                    session._p_changed = True
 
-    for player_id in data.guests:
-        player = data.players[player_id]
-        for session_id in player:
-            session = player[session_id]
-            for game_id in session:
-                game_session = session[game_id]
-                game_session.__class__ = GameSession
-                game_session._p_changed = True
-                session._p_changed = True
+    if "guests" in data:
+        for player_id in data.guests:
+            player = data.players[player_id]
+            for session_id in player:
+                session = player[session_id]
+                for game_id in session:
+                    game_session = session[game_id]
+                    game_session.__class__ = GameSession
+                    game_session._p_changed = True
+                    session._p_changed = True
 
 
 def from3to4(data):
@@ -91,25 +94,27 @@ def from3to4(data):
 
     from working_memory_games.datatypes import Length
 
-    for player_id in data.players:
-        player = data.players[player_id]
-        for session_id in player:
-            session = player[session_id]
-            for game_id in session:
-                game_session = session[game_id]
-                if isinstance(game_session.level, Length):
-                    print game_session.level
-                    game_session.level = game_session.level()
+    if "players" in data:
+        for player_id in data.players:
+            player = data.players[player_id]
+            for session_id in player:
+                session = player[session_id]
+                for game_id in session:
+                    game_session = session[game_id]
+                    if isinstance(game_session.level, Length):
+                        print game_session.level
+                        game_session.level = game_session.level()
 
-    for player_id in data.guests:
-        player = data.players[player_id]
-        for session_id in player:
-            session = player[session_id]
-            for game_id in session:
-                game_session = session[game_id]
-                if isinstance(game_session.level, Length):
-                    print game_session.level
-                    game_session.level = game_session.level()
+    if "guests" in data:
+        for player_id in data.guests:
+            player = data.players[player_id]
+            for session_id in player:
+                session = player[session_id]
+                for game_id in session:
+                    game_session = session[game_id]
+                    if isinstance(game_session.level, Length):
+                        print game_session.level
+                        game_session.level = game_session.level()
 
 
 def from4to5(data):
