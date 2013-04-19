@@ -1,32 +1,29 @@
 # -*- coding: utf-8 -*-
-""" Persistent types """
-
 import datetime
+import logging
+import random
+import uuid
 
-from zope.interface import implements
-
-from BTrees.OOBTree import OOBTree as OOBTreeBase
 from BTrees.Length import Length as LengthBase
-
+from BTrees.OOBTree import OOBTree as OOBTreeBase
 from persistent.mapping import PersistentMapping
-
 from working_memory_games.interfaces import (
     IPlayers,
     IPlayer,
     ISession,
     IGameSession
 )
+from zope.interface import implements
 
-import logging
-import random
-import uuid
+
 logger = logging.getLogger("working_memory_games")
 
 
 class OOBTree(OOBTreeBase):
-    """ OOBTree, which can also hold direct persistent attributes and can be
-    JSON-serialized """
+    """OOBTree, which can also hold direct persistent attributes and can be
+    JSON-serialized
 
+    """
     ###
     # Add persistent attribute support for OOBTree
     #
@@ -58,24 +55,28 @@ class OOBTree(OOBTreeBase):
 
 
 class Length(LengthBase):
-    """ Generic integer based length, which handles conflict resolutiosn and
-    can be JSON-serialized """
+    """Generic integer based length, which handles conflict resolutiosn and can
+    be JSON-serialized
 
+    """
     def __json__(self, request):
         return self()
 
 
 class Players(OOBTree):
-    """ Players container, which contains individual player data objects """
+    """Players container, which contains individual player data objects
+    """
 
     implements(IPlayers)
 
     def get_player(self, player_id):
-        """ Returns player or None if not found."""
+        """Return player or None if player is not not found
+        """
         return self.get(player_id)
 
     def create_player(self, name, details):
-        """ Creates a new Player """
+        """Creates a new Player
+        """
         player_id = str(uuid.uuid4())
         self[player_id] = Player(name, details)
         return {
@@ -84,9 +85,10 @@ class Players(OOBTree):
 
 
 class Player(OOBTree):
-    """ Player container, which holds details and game sessions for a single
-    player """
+    """Player container, which holds details and game sessions for a single
+    player
 
+    """
     implements(IPlayer)
 
     def __init__(self, name, details={}):
@@ -102,8 +104,10 @@ class Player(OOBTree):
         return total
 
     def session(self, games):
-        """ Creates a new Session for today if needed. Always returns
-        a session with games shuffled in random order."""
+        """Create a new Session for today if needed. Always returns a session
+        with games shuffled in random order.
+
+        """
         today = str(datetime.datetime.utcnow().date())
         if not today in self:
             self[today] = Session(games)
@@ -114,9 +118,10 @@ class Player(OOBTree):
 
 
 class Session(OOBTree):
-    """ Session container, which holds daily gaming data for a single player
-    for a single day """
+    """Session container, which holds daily gaming data for a single player for
+    a single day
 
+    """
     implements(ISession)
 
     def __init__(self, games):
@@ -138,9 +143,10 @@ class Session(OOBTree):
 
 
 class GameSession(OOBTree):
-    """ Game session container, which holds daily gaming data for a single
-    player in a single game (for a single day) """
+    """Game session container, which holds daily gaming data for a single
+    player in a single game (for a single day)
 
+    """
     implements(IGameSession)
 
     def __init__(self):
@@ -149,7 +155,8 @@ class GameSession(OOBTree):
         #self.level = 3
 
     def get_plays(self):
-        """ Return all game plays (tries) of this game on today."""
+        """Return all game plays (tries) of this game on today.
+        """
         return map(lambda x: self[x], sorted(self.keys()))
 
     def save_pass(self, gameinfo):
