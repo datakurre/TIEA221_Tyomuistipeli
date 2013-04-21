@@ -31,7 +31,9 @@ class Game(object):
     app = None
     session = None
 
-    start_level = 3.0
+    day_limit = 10      # How many games can be played during a daily session.
+    can_assist = False  # Can the game assist player.
+    start_level = 3.0   # Start level.
 
     def __init__(self, context, request=None):
         # Support initialization as view class instance

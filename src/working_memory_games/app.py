@@ -116,7 +116,7 @@ class Application(object):
         if player is None:
             return None
 
-        return player.session(self.games.keys())
+        return player.session(self.games)
 
     def get_assistance_flag(self):
         """Return the next available value for assistance
@@ -227,6 +227,8 @@ class Application(object):
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
                  request_method="GET", xhr=False)
     def get_next_game(self):
+        # TODO: daily_playtime is being replaced with game trials...
+        # XXX: actually, this is almost broken now...
         daily_playtime = datetime.timedelta(1. / 24 / 4)  # 15 minutes
 
         session = self.get_current_session()
@@ -234,7 +236,10 @@ class Application(object):
 
         game_playtime = daily_playtime / len(games)
 
-        for game in games:
+        for game_item in games:
+            game = game_item['game']
+            assisted = game_item['assisted']
+
             # a) game has not been played yet
             if not game in session:
                 break
@@ -248,8 +253,10 @@ class Application(object):
             if game == games[-1]:
                 game = None
 
+        import pdb; pdb.set_trace()
         return {
-            "game": game
+            "game": game,
+            "assisted": assisted
         }
 
     @view_config(name="dump", renderer="json", xhr=False)

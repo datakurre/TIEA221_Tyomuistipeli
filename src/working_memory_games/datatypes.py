@@ -110,7 +110,10 @@ class Player(OOBTree):
         """
         today = str(datetime.datetime.utcnow().date())
         if not today in self:
-            self[today] = Session(games)
+            if self.details.get("assisted", False):
+                self[today] = Session(games, 0.30)
+            else:
+                self[today] = Session(games)
         return self[today]
 
     def get_sessions(self):
@@ -124,9 +127,32 @@ class Session(OOBTree):
     """
     implements(ISession)
 
-    def __init__(self, games):
+    def __init__(self, games, assisted_cut=0):
         super(Session, self).__init__()
-        self.order = games
+        game_items = games.items()
+
+        trials_total = sum(map(lambda game: game[1].day_limit, game_items))
+        trials_assisted = int(trials_total * assisted_cut)
+
+        normal_games = filter(lambda game: not game[1].can_assist, game_items)
+        assistable_games = filter(lambda game: game[1].can_assist, game_items)
+
+        self.order = []
+        for name, game in assistable_games:
+            self.order.extend([{
+                "game": name,
+                "assisted": False
+            }] * game.day_limit)
+        random.shuffle(self.order)
+
+        for i in range(trials_assisted):
+            self.order[0]["assisted"] = True
+
+        for name, game in normal_games:
+            self.order.extend([{
+                "game": name,
+                "assisted": False
+            }] * game.day_limit)
         random.shuffle(self.order)
 
     @property

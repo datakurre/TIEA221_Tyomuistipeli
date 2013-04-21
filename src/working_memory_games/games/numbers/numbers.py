@@ -20,6 +20,7 @@ class Numbers(Game):
     @view_config(name="new")
     def new_numbers_game(self):
         """ Returns new game data """
+        import pdb; pdb.set_trace()
 
         self.session.last_start = datetime.datetime.utcnow()
 
