@@ -192,7 +192,6 @@ class Game(object):
         self.session.level = n
         return int(n) #remove numpy-reperesentation
 
-
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """
@@ -205,6 +204,7 @@ class Game(object):
             "items": items,
             "duration": duration
         })
+        self.session.order.pop(0)  # Remove played game form the session.
         return {}
 
     @view_config(name="fail", renderer="../templates/save_fail.html")
@@ -220,6 +220,7 @@ class Game(object):
             "items": items,
             "duration": duration
         })
+        self.session.order.pop(0)  # Remove played game form the session.
         return {}
 
     @view_config(name="dump", renderer="json", xhr=False)
