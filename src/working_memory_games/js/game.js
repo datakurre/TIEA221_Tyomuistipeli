@@ -54,14 +54,14 @@ function createDialog(data){
   var dialog;
   if ($('.modal').length === 0) {
     dialog = $('body').append($(data).filter('.modal')).find('.modal');
-    dialog.find('.btn').click(function(event) {
-      event.preventDefault();
-      dialog.modal('hide');
-    });
-    dialog.on('hidden', function(event) {
-      dialog.remove();
-      global.callbacks.newGame();
-    });
+    // dialog.find('.btn').click(function(event) {
+    //   event.preventDefault();
+    //   dialog.modal('hide');
+    // });
+    // dialog.on('hidden', function(event) {
+    //   dialog.remove();
+    //   global.callbacks.newGame();
+    // });
     dialog.modal('show');
   }
 }

@@ -213,8 +213,8 @@ class Application(object):
             u"Päivän session päättymistä ei ole vielä toteutettu."
 
         return {
-            "game": session.order[0].game,
-            "assisted": session.order[0].assisted
+            "game": session.order[0]["game"],
+            "assisted": session.order[0]["assisted"]
         }
 
     @view_config(name="dump", renderer="json", xhr=False)
