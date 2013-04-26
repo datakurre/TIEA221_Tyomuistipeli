@@ -131,29 +131,42 @@ class Session(OOBTree):
         super(Session, self).__init__()
         game_items = games.items()
 
+        # Kaikkien pelien kaikki pelikerrat yhteensä
         trials_total = sum(map(lambda game: game[1].day_limit, game_items))
+        # Avustettavat pelit kaikista pelikerroista
         trials_assisted = int(trials_total * assisted_cut)
 
-        normal_games = filter(lambda game: not game[1].can_assist, game_items)
+        # Avustettavissa olevat pelioliot
         assistable_games = filter(lambda game: game[1].can_assist, game_items)
+        # Muut pelioliot
+        normal_games = filter(lambda game: not game[1].can_assist, game_items)
 
-        self.order = []
+        trials = []
         for name, game in assistable_games:
-            self.order.extend([{
-                "game": name,
-                "assisted": False
-            }] * game.day_limit)
-        random.shuffle(self.order)
+            for i in range(game.day_limit):
+                trials.append({
+                    "game": name,
+                    "assisted": False
+                })
+        random.shuffle(trials)
 
-        for i in range(trials_assisted):
-            self.order[0]["assisted"] = True
+        for i in range(min(trials_assisted, len(trials))):
+            trials[i]["assisted"] = True
 
         for name, game in normal_games:
-            self.order.extend([{
-                "game": name,
-                "assisted": False
-            }] * game.day_limit)
-        random.shuffle(self.order)
+            for i in range(game.day_limit):
+                trials.append({
+                    "game": name,
+                    "assisted": False
+                })
+        random.shuffle(trials)
+
+        game_order = games.keys()
+        random.shuffle(game_order)
+
+        self.order = sorted(trials, cmp=lambda x, y, game_order=game_order:
+                            cmp(game_order.index(x["game"]),
+                                game_order.index(y["game"])))
 
     @property
     def duration(self):
