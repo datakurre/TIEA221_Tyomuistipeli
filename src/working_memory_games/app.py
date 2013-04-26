@@ -2,9 +2,7 @@
 """ Main application, player management and session code """
 
 import re
-# import uuid
 import random
-import datetime
 import urlparse
 
 from pyramid.view import (
@@ -205,58 +203,18 @@ class Application(object):
         details.update(self.request.params)
         return self.data.players.create_player(name, details)
 
-    # @view_config(name="select_guest",
-    #              request_method="POST", xhr=False)
-    # def select_guest(self):
-
-    #     player_id = str(uuid.uuid4())
-    #     details = {"registered": False, "assisted": self.get_assistance_flag()}
-    #     self.data.players[player_id] = Player(name=u"Guest", details=details)
-
-    #     self.request.response.set_cookie(
-    #         "active_player", player_id,
-    #         max_age=(60 * 60 * 24 * 365)
-    #     )
-    #     headers = ResponseHeaders({
-    #         "Set-Cookie": self.request.response.headers.get("Set-Cookie")
-    #     })
-
-    #     return HTTPFound(location=self.request.application_url,
-    #                      headers=headers)
-
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
                  request_method="GET", xhr=False)
     def get_next_game(self):
-        # TODO: daily_playtime is being replaced with game trials...
-        # XXX: actually, this is almost broken now...
-        daily_playtime = datetime.timedelta(1. / 24 / 4)  # 15 minutes
 
         session = self.get_current_session()
-        games = session.order
 
-        game_playtime = daily_playtime / len(games)
+        assert len(session.order),\
+            u"Päivän session päättymistä ei ole vielä toteutettu."
 
-        for game_item in games:
-            game = game_item['game']
-            assisted = game_item['assisted']
-
-            # a) game has not been played yet
-            if not game in session:
-                break
-
-            # b) game has not been played enough yet
-            playtime = session[game].duration
-            if playtime < game_playtime:
-                break
-
-            # c) all games have been played enough
-            if game == games[-1]:
-                game = None
-
-        import pdb; pdb.set_trace()
         return {
-            "game": game,
-            "assisted": assisted
+            "game": session.order[0].game,
+            "assisted": session.order[0].assisted
         }
 
     @view_config(name="dump", renderer="json", xhr=False)
