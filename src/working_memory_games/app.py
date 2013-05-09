@@ -226,10 +226,6 @@ class Application(object):
             "assisted": session.order[0]["assisted"]
         }
 
-    @view_config(name="dump", renderer="json", xhr=False)
-    def dump_saved_data(self):
-        return dict(self.get_current_player().items())
-
 
 @subscriber(BeforeRender)
 def add_base_template(event):

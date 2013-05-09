@@ -236,9 +236,3 @@ class Game(object):
             return {"game": player_session.order[0]["game"]}
         else:
             return {}
-
-    @view_config(name="dump", renderer="json", xhr=False)
-    def dump_saved_data(self):
-        """ Returns current session data """
-
-        return dict(self.session.items())
