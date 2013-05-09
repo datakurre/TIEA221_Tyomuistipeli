@@ -94,13 +94,6 @@ class Application(object):
             if x in self.data.players
         ])
 
-        # Do implicit cookie-refresh
-        if players:
-            self.request.response.set_cookie(
-                "player_ids", ",".join(players.keys()),
-                max_age=(60 * 60 * 24 * 365)
-            )
-
         return players  # players may be an empty {}
 
     def get_current_session(self):
