@@ -143,7 +143,7 @@ class Application(object):
         if not hasattr(self.data, "assistance_flags"):
             self.data.assistance_flags = PersistentList()
         if len(self.data.assistance_flags) <= 0:
-            self.data.assistance_flags.extend([True] * 50 + [False] * 50)
+            self.data.assistance_flags.extend([True] * 5 + [False] * 5)
             random.shuffle(self.data.assistance_flags)
         return self.data.assistance_flags.pop(0)
 
