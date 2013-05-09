@@ -199,7 +199,7 @@ class GameSession(OOBTree):
     def get_plays(self):
         """Return all game plays (tries) of this game on today.
         """
-        return map(lambda x: self[x], sorted(self.keys()))
+        return map(self.__getitem__, sorted(self.keys()))
 
     def save_pass(self, gameinfo):
         time_key = str(datetime.datetime.utcnow())
