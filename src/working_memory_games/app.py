@@ -187,9 +187,17 @@ class Application(object):
 
         session = self.get_current_session()
 
-        assert len(session.order),\
-            u"Päivän session päättymistä ei ole vielä toteutettu."
+        if session is None:
+            # User friendly version of:
+            # raise HTTPBadRequest(u"No active session found.")
+            raise HTTPFound(location=self.request.application_url + "/")
 
+        if len(session.order) <= 0:
+            # Daily session has ended
+            raise HTTPFound(location=self.request.application_url
+                            + "/#pelataan-taas-huomenna")
+
+        print len(session.order)
         return {
             "game": session.order[0]["game"],
             "assisted": session.order[0]["assisted"]
