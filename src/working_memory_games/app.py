@@ -82,19 +82,19 @@ class Application(object):
 
         return player  # player may be None
 
-    def get_available_players(self):
-        # Read cookies
-        player_id = self.request.cookies.get("player_id")
-        player_ids = self.request.cookies.get("player_ids", "").split(",")
+    # def get_available_players(self):
+    #     # Read cookies
+    #     player_id = self.request.cookies.get("player_id")
+    #     player_ids = self.request.cookies.get("player_ids", "").split(",")
 
-        # Look up the available players using the cookie data
-        players = dict([
-            (x, self.data.players.get(x))
-            for x in set([player_id] + player_ids)
-            if x in self.data.players
-        ])
+    #     # Look up the available players using the cookie data
+    #     players = dict([
+    #         (x, self.data.players.get(x))
+    #         for x in set([player_id] + player_ids)
+    #         if x in self.data.players
+    #     ])
 
-        return players  # players may be an empty {}
+    #     return players  # players may be an empty {}
 
     def get_current_session(self):
         """ Return the current (today's) session or creates a new one and
@@ -122,29 +122,29 @@ class Application(object):
 
         return self.games[name]  # raising a KeyError is allowed
 
-    @view_config(name="list_players", renderer="templates/list_players.html",
-                 request_method="GET", xhr=True)
-    def list_available_players(self):
-        current_player = self.get_current_player()
-        available_players = self.get_available_players()
+    # @view_config(name="list_players", renderer="templates/list_players.html",
+    #              request_method="GET", xhr=True)
+    # def list_available_players(self):
+    #     current_player = self.get_current_player()
+    #     available_players = self.get_available_players()
 
-        players = []
-        counter = 0
-        for player_id, player in available_players.items():
-            css = "gameBtn btn-%s" % counter
-            css += " selected" if player is current_player else ""
-            players.append({
-                "id": player_id,
-                "name": player.name,
-                "css": css
-            })
-            counter += 1
+    #     players = []
+    #     counter = 0
+    #     for player_id, player in available_players.items():
+    #         css = "gameBtn btn-%s" % counter
+    #         css += " selected" if player is current_player else ""
+    #         players.append({
+    #             "id": player_id,
+    #             "name": player.name,
+    #             "css": css
+    #         })
+    #         counter += 1
 
-        cmp_by_name = lambda x, y: cmp(x["name"], y["name"])
+    #     cmp_by_name = lambda x, y: cmp(x["name"], y["name"])
 
-        return {
-            "players": sorted(players, cmp=cmp_by_name),
-        }
+    #     return {
+    #         "players": sorted(players, cmp=cmp_by_name),
+    #     }
 
     @view_config(name="liity", renderer="json",
                  request_method="POST")
