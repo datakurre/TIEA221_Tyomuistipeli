@@ -1,8 +1,10 @@
 #-*- coding: utf-8 -*-
 """ Main application, player management and session code """
 
-import re
+import json
 import random
+import re
+import urllib
 import urlparse
 
 from pyramid.view import (
@@ -27,7 +29,7 @@ from persistent.list import PersistentList
 
 from working_memory_games.datatypes import (
     Players,
-    # Player,
+    Player
 )
 
 from working_memory_games.upgrades import migrate
@@ -80,7 +82,35 @@ class Application(object):
         # Look up the current player using the cookie data
         player = self.data.players.get(player_id)
 
-        return player  # player may be None
+        # Oops, player not found. Let's create one:
+        if player is None:
+            # Let's figure out, what players the browser knows
+            default = urllib.quote(json.dumps([]))
+            players = json.loads(urllib.unquote(
+                self.request.cookies.get("players", default)
+            ))
+            players_by_id = dict(map(
+                lambda x: (x.get('id'), x.get('name')),
+                players
+            ))
+            if player_id in players_by_id:
+                # Re-create named player with a name
+                player = self.data.players[player_id] = Player(
+                    players_by_id[player_id], {
+                        "registered": True,
+                        "assisted": self.get_assistance_flag()
+                    }
+                )
+            else:
+                # Or create just a guest
+                player = self.data.players[player_id] = Player(
+                    u"Guest", {
+                        "registered": False,
+                        "assisted": self.get_assistance_flag()
+                    }
+                )
+
+        return player
 
     # def get_available_players(self):
     #     # Read cookies
