@@ -226,6 +226,14 @@ class Application(object):
             "assisted": session.order[0]["assisted"]
         }
 
+    @view_config(name="game_over", renderer="templates/game_over.html",
+                 request_method="GET", xhr=False)
+    def get_game_over(self):
+		# TODO: calculate last game success.
+        session = self.get_current_session()
+
+        return {
+        }
 
 @subscriber(BeforeRender)
 def add_base_template(event):
