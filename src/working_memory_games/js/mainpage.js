@@ -55,7 +55,7 @@ function addPlayerButtons() {
             btn.click(function(event){
                 $.cookie('active_player',
                          $(this).data('player'),
-                         { expires: 365 });
+                         { expires: 365, path: '/'});
             });
         }
     }
@@ -103,7 +103,7 @@ $(document).ready(function() {
 
                 $.cookie('players',
                          JSON.stringify(players),
-                         { expires: 365 });
+                         { expires: 365, path: '/'});
 
                 location.hash = '';
             });
@@ -122,16 +122,16 @@ $(document).ready(function() {
                     && $.cookie('guest_player') !== undefined) {
                 $.cookie('active_player',
                          $.cookie('guest_player'),
-                         { expires: 365 });
+                         { expires: 365, path: '/'});
                 window.location.href = global.ctx + '/pelaa';
             } else {
                 $.post('kokeile', function(data) {
                     $.cookie('guest_player',
                              data.id,
-                             { expires: 365 });
+                             { expires: 365, path: '/'});
                     $.cookie('active_player',
                              data.id,
-                             { expires: 365 });
+                             { expires: 365, path: '/'});
                     window.location.href = global.ctx + '/pelaa';
                 });
             }
