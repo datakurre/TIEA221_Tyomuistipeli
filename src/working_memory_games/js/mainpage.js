@@ -118,33 +118,23 @@ $(document).ready(function() {
         });
         $('#kokeile').click(function(event) {
             event.preventDefault();
-            // TODO: Read 'players' cookie and if player with name "Vieras" is
-            // found, activate it instead of creating new guest.
-            $.post('kokeile', function(data) {
-                // Store information to server and create local
-                // data in cookie.
-                var players = $.cookie('players');
-
-                if (players == null || players === undefined)
-                    players = [];
-                else
-                    players = $.parseJSON(players);
-
-                players.push({
-                    'name': 'Vieras',
-                    'id': data.id
-                });
-
-                $.cookie('players',
-                         JSON.stringify(players),
-                         { expires: 365 });
-
+            if ($.cookie('guest_player') !== null
+                    && $.cookie('guest_player') !== undefined) {
                 $.cookie('active_player',
-                         data.id,
+                         $.cookie('guest_player'),
                          { expires: 365 });
-
-                window.location.href += 'pelaa';
-            });
+                window.location.href = global.ctx + '/pelaa';
+            } else {
+                $.post('kokeile', function(data) {
+                    $.cookie('guest_player',
+                             data.id,
+                             { expires: 365 });
+                    $.cookie('active_player',
+                             data.id,
+                             { expires: 365 });
+                    window.location.href = global.ctx + '/pelaa';
+                });
+            }
         });
     });
 
