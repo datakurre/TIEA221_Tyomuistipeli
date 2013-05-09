@@ -16,9 +16,9 @@ function startMusic() {
     $.preload('sudit',
           global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
     $('body').on('preloaded', function(){
-    console.log($('<div></div>').snd('moi'));
-    $('<div></div>').snd('sudit')[0].volume = 0.5;
-    $('<div></div>').play('moi').play('sudit');
+	console.log($('<div></div>').snd('moi'));
+	$('<div></div>').snd('sudit')[0].volume = 0.3;
+	$('<div></div>').play('moi').play('sudit');
     });
 }
 
@@ -80,62 +80,62 @@ $(document).ready(function() {
             $('#mainView').slideDown();
             addPlayerButtons();
         }
+    });
 
-        var handleSubmit = function(event) {
+    var handleSubmit = function(event) {
 
+        event.preventDefault();
+        $.post('liity',
+               $('#joinData').serialize(),
+               function(data) {
+                   // Store information to server and create local
+                   // data in cookie.
+                   var players = $.cookie('players');
+		   
+                   if (players == null || players === undefined)
+                       players = [];
+                   else
+                       players = $.parseJSON(players);
+
+                   players.push({
+                       'name': $('#joinData input[name="name"]').val(),
+                       'id': data.id
+                   });
+		   
+                   $.cookie('players',
+                            JSON.stringify(players),
+                            { expires: 365 });
+		   
+                   location.hash = '';
+               });
+    };
+    $('#join').click(handleSubmit);
+    $('#joinData').keypress(function(event) {
+        if (event.which == 13) {
             event.preventDefault();
-            $.post('liity',
-                    $('#joinData').serialize(),
-                    function(data) {
-                // Store information to server and create local
-                // data in cookie.
-                var players = $.cookie('players');
-
-                if (players == null || players === undefined)
-                    players = [];
-                else
-                    players = $.parseJSON(players);
-
-                players.push({
-                    'name': $('#joinData input[name="name"]').val(),
-                    'id': data.id
-                });
-
-                $.cookie('players',
-                         JSON.stringify(players),
-                         { expires: 365, path: '/'});
-
-                location.hash = '';
-            });
-        };
-        $('#join').click(handleSubmit);
-        $('#joinData').keypress(function(event) {
-            if (event.which == 13) {
-                event.preventDefault();
-                handleSubmit(event);
-                return false;
-            }
-        });
-        $('#kokeile').click(function(event) {
-            event.preventDefault();
-            if ($.cookie('guest_player') !== null
-                    && $.cookie('guest_player') !== undefined) {
+            handleSubmit(event);
+            return false;
+        }
+    });
+    $('#kokeile').click(function(event) {
+        event.preventDefault();
+        if ($.cookie('guest_player') !== null
+            && $.cookie('guest_player') !== undefined) {
+            $.cookie('active_player',
+                     $.cookie('guest_player'),
+                     { expires: 365 });
+            window.location.href = global.ctx + '/pelaa';
+        } else {
+            $.post('kokeile', function(data) {
+                $.cookie('guest_player',
+                         data.id,
+                         { expires: 365 });
                 $.cookie('active_player',
-                         $.cookie('guest_player'),
-                         { expires: 365, path: '/'});
+                         data.id,
+                         { expires: 365 });
                 window.location.href = global.ctx + '/pelaa';
-            } else {
-                $.post('kokeile', function(data) {
-                    $.cookie('guest_player',
-                             data.id,
-                             { expires: 365, path: '/'});
-                    $.cookie('active_player',
-                             data.id,
-                             { expires: 365, path: '/'});
-                    window.location.href = global.ctx + '/pelaa';
-                });
-            }
-        });
+            });
+        }
     });
 
     // trigger view!

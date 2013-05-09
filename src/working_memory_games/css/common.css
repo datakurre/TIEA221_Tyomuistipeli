@@ -1,4 +1,5 @@
-#game {
+#animation, #game {
+  display: none; /* after animation bring up the next one */
   position: absolute;
   top: 0; left: 50%; margin-left: -384px;
   width: 768px;

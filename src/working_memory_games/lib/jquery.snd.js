@@ -15,9 +15,12 @@
 
 (function($) {
     $._preload = {
+	iOS: ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false ),
+	audio: document.createElement('audio'),
 	loaded: {},
 	processing: {}
     };
+    
     $.fn.extend({
         snd: function(id) {
             var audio = $._preload.loaded[id];
@@ -34,20 +37,22 @@
 		var audio = $._preload.loaded[id];
 
 		// listen complete signal
-		$(audio).bind('ended', function(event){
+		$($._preload.audio).unbind('ended');
+		$($._preload.audio).bind('ended', function(event){
 
 		    // keep going on fake endings :)
-		    if (audio[0].currentTime < audio[0].duration) {
-			audio[0].plsuditay();
+		    if ($._preload.audio.currentTime < $._preload.audio.duration) {
+			$._preload.audio.play();
 			return;
 		    }
 		    // completion frees the queue
 		    jQuery.dequeue( elem, "fx" );
 		});
 		if (audio !== undefined) {
-		    console.log('Start play');
-		    console.log(audio);
-		    audio[0].play();
+		    //console.log('Start play');
+		    //console.log(audio);
+		    $._preload.audio.src = audio;
+		    $._preload.audio.play();
 		}
 	    });
         }
@@ -85,14 +90,22 @@
 			console.log($._preload.processing);
 			delete $._preload.processing[id];
 			
-			var audio = $('<audio src="'+url+'"></audio>');
-			$._preload.loaded[id] = audio;
+			//var audio = $('<audio src="'+url+'"></audio>');
+			$._preload.loaded[id] = url; //audio;
 
-			if (jQuery.isEmptyObject($._preload.processing))
-			    $('body').trigger('preloaded');
+			if (jQuery.isEmptyObject($._preload.processing)) {
+			    if ($._preload.iOS) {
+				$('body').append('<div id="iOShit" style="position:absolute;top:0%;z-index:500;left:0%;width:100%;height:100%" ></div>');
+				$('#iOShit')[0].ontouchstart = function(event) {
+				    $('#iOShit').remove();
+				    $('body').trigger('preloaded');
+				};
+			    } else 
+				$('body').trigger('preloaded');
+			}
 
 			// XXX todo, should we also wait for canplaythrough?
-			$(audio).bind('canplaythrough', function(event){
+			$($._preload.audio).bind('canplaythrough', function(event){
 			    //console.log(event);
 			});
 		    });

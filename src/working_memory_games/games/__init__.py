@@ -192,6 +192,12 @@ class Game(object):
         self.session.level = n
         return int(n) #remove numpy-reperesentation
 
+    @view_config(name="runanimation")
+    def run_animation(self):
+        return {
+            "animation": len(self.session.get_plays()) == 0
+        }
+
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """
