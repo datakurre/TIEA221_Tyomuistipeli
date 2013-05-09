@@ -53,7 +53,9 @@ function addPlayerButtons() {
             $("#mainView").prepend(btn);
             btn.show();
             btn.click(function(event){
-                $.cookie('active_player', $(this).data('player'));
+                $.cookie('active_player',
+                         $(this).data('player'),
+                         { expires: 365 });
             });
         }
     }
