@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="context" content="${current_url}" />
+    <meta metal:use-macro="base_template.macros['viewport']" />
+
+    <title>Hyvin pelattu</title>
+
+    <link rel="stylesheet" href="${base_url}/css/common.css" />
+    <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
+    <link rel="stylesheet" href="${base_url}/css/game_over.css" />
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One|Tangerine:700|Luckiest+Guy|Bangers" />
+
+    <script src="../lib/jquery.min.js"></script>
+    <script src="${base_url}/lib/jquery.snd.js"></script>
+    <script src="${base_url}/lib/jquery.cookie.js"></script>
+    <script src="${base_url}/js/game.js"></script>
+    <script type="text/javascript" src="../js/mainpage.js"></script>
+  </head>
+
+  <body>
+    <div id="game">
+
+      <div id="edge">
+        <div id="dialog">
+	  <img id="pupu" src="${base_url}/img/etukuva/pupu001.png">
+	  <img id="harakka" src="${base_url}/img/etukuva/harakka2001.png">
+	  <div id="starBox">
+	    <img class="star" src="${base_url}/img/star.png">
+	    <img class="star" src="${base_url}/img/star.png">
+	    <img class="star" src="${base_url}/img/star.png">
+          </div>
+
+	  <a href="#" id="nextGame" class="gameBtn" >
+	    <div class="middle">
+	      Jatka
+	    </div>
+	  </a>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
