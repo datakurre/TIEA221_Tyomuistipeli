@@ -3,6 +3,7 @@
   position: absolute;
   top: 0; left: 50%; margin-left: -384px;
   width: 768px;
+  min-height: 768px;
 }
 
 #level {
