@@ -7,6 +7,7 @@ import uuid
 from BTrees.Length import Length as LengthBase
 from BTrees.OOBTree import OOBTree as OOBTreeBase
 from persistent.mapping import PersistentMapping
+from persistent.list import PersistentList
 from working_memory_games.interfaces import (
     IPlayers,
     IPlayer,
@@ -164,9 +165,11 @@ class Session(OOBTree):
         game_order = games.keys()
         random.shuffle(game_order)
 
-        self.order = sorted(trials, cmp=lambda x, y, game_order=game_order:
-                            cmp(game_order.index(x["game"]),
-                                game_order.index(y["game"])))
+        self.order = PersistentList(
+            sorted(trials, cmp=lambda x, y, game_order=game_order:
+                   cmp(game_order.index(x["game"]),
+                       game_order.index(y["game"])))
+        )
 
     @property
     def duration(self):
