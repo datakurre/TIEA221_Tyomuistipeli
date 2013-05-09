@@ -17,8 +17,6 @@ from pyramid.events import (
 
 from zope.interface import implements
 
-from webob.headers import ResponseHeaders
-
 from pyramid.renderers import get_renderer
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPBadRequest
@@ -170,26 +168,6 @@ class Application(object):
         }
         details.update(self.request.params)
         return self.data.players.create_player(name, details)
-
-    @view_config(name="select_player",
-                 request_method="POST", xhr=False)
-    def select_player(self):
-
-        player_id = self.request.params.get("player_id", "").strip()
-
-        if not player_id in self.data.players:
-            return self.request.params
-
-        self.request.response.set_cookie(
-            "player_id", player_id,
-            max_age=(60 * 60 * 24 * 365)
-        )
-        headers = ResponseHeaders({
-            "Set-Cookie": self.request.response.headers.get("Set-Cookie")
-        })
-
-        return HTTPFound(location=self.request.application_url,
-                         headers=headers)
 
     @view_config(name="kokeile", renderer="json",
                  request_method="POST")
