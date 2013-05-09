@@ -115,7 +115,7 @@ class Application(object):
         if len(self.data.assistance_flags) <= 0:
             self.data.assistance_flags.extend([True] * 50 + [False] * 50)
             random.shuffle(self.data.assistance_flags)
-        return self.data.assistance_flags.pop()
+        return self.data.assistance_flags.pop(0)
 
     def __getitem__(self, name):
         """ Traverse to the given game """
