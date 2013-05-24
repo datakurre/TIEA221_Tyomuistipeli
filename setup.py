@@ -33,6 +33,7 @@ setup(
         'plone.testing',
         'robotframework-selenium2library',
         'robotsuite',
+        'webtest'
     ]},
     entry_points="""\
     [paste.app_factory]
