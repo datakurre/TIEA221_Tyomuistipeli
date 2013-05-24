@@ -12,7 +12,7 @@ from working_memory_games.testing import ACCEPTANCE_TESTING
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([
-        layered(RobotTestSuite('test_new_player.txt'),
-                layer=ACCEPTANCE_TESTING),
+        # layered(RobotTestSuite('test_new_player.txt'),
+        #         layer=ACCEPTANCE_TESTING),
         ])
     return suite
