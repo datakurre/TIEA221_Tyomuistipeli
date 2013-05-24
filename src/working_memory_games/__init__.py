@@ -134,7 +134,7 @@ class game_config(object):
         return wrapped
 
 
-def main(global_config, **settings):
+def main(global_config, testing=False, **settings):
     """ This function returns a Pyramid WSGI application with routing """
 
     # Create Pyramid configurator
@@ -170,9 +170,10 @@ def main(global_config, **settings):
     # Scan games for their configuration
     config.scan(".games")
 
-    # Enable ZODB support
-    config.include("pyramid_zodbconn")
-    config.include("pyramid_tm")
+    if not testing:
+        # Enable ZODB support
+        config.include("pyramid_zodbconn")
+        config.include("pyramid_tm")
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse", factory=Application)
