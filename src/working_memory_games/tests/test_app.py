@@ -49,6 +49,33 @@ class AppFunctionalTesting(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
+
+    def test_missing_active_player(self):
+        """ Test that missing cookie "active_player" will redirect to
+            main page.
+        """
+        self.assertTrue(False)
+
+    def test_stars_two_at_start(self):
+        """ Test first game player has always two stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_three_when_better(self):
+        """ Test second or later game with better result gives three stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_two_when_same(self):
+        """ Test second or later game with same result gives two stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_one_when_worse(self):
+        """ Test second or later game with worse result gives one stars
+        """
+        self.assertTrue(False)
+
     def test_session_order(self):
         """ Testaa, että pelikenttä vaihtuu pelin edetessä
         """
