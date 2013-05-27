@@ -44,6 +44,14 @@ class AppIntegrationTests(unittest.TestCase):
         session = app.get_current_session()
         self.assertGreater(session.order, 0)
 
+    def test_that_information_given_in_registration_form_is_stored(self):
+        """ Test all kind of data input in form of registration is
+            actually stored to zodb.
+        """
+        self.assertTrue(False)
+        
+
+
 
 class AppFunctionalTesting(unittest.TestCase):
 
