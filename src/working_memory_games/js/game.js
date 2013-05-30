@@ -29,6 +29,8 @@ function GameInitialize(items, callbacks) {
   // TODO remove this
   $("body").off("click", "#next");
 
+  $('#game').css('display', 'block');
+
   global.gameItems = items;
   global.userItems = [];
 
