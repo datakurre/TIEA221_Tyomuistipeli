@@ -194,8 +194,11 @@ class Game(object):
 
     @view_config(name="runanimation", renderer="json")
     def run_animation(self):
+        ret = len(self.session.get_plays()) == 0
+        if 'testAnimation' in self.app.request.params:
+            ret = True
         return {
-            "animation": len(self.session.get_plays()) == 0
+            "animation": ret
         }
 
     @view_config(name="pass", renderer="../templates/save_pass.html")
