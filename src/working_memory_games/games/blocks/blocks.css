@@ -142,3 +142,31 @@ body .modal {
 /*   color: white; */
 /* } */
 /*  */
+
+
+/* animation */
+#animation {
+background-color: gray;
+}
+#b1,#b2, #b3,#b4 {
+    position: absolute;
+    left:52px;
+}
+#b1 {
+    top: 400px;
+    width: 400px;
+}
+#b2 {
+    top: 273px;
+    width: 400px;
+}
+#b3 {
+    left: 0px;
+    top: 157px;
+    width: 419px;
+}
+#b4 {
+    left: 4px;
+    top: 128px;
+    width: 311px;
+}

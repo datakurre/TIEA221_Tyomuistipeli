@@ -523,15 +523,15 @@ jQuery ($) ->
 
     runAnimation = -> 
         $('#animation').css('display', 'block')
-        $('#animation img').animate({ left: '123px'}, 5000).promise().done( ->
-            $('#animation').css('display', 'none')
+        $('#animation span').animate({ left: '123px'}, 5000).promise().done( ->
+            #//$('#animation').css('display', 'none')
         )
 
     newOrAnimGame = -> $.get('runanimation', (data) ->
         if data.animation
             runAnimation()
         else
-	    newGame()
+            newGame()
     )
 
     # newGame()
