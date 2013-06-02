@@ -523,11 +523,50 @@ jQuery ($) ->
 
     runAnimation = -> 
         $('#animation').css('display', 'block')
-        $('#animation span').animate({ left: '123px'}, 5000).promise().done( ->
-            #//$('#animation').css('display', 'none')
+
+        $someRight = 1000
+        $('#b3').animate({left:'46px'}, $someRight)
+        $('#b4').animate({left:'85px'}, $someRight)
+        $('#harakka').animate({left:'47px'}, $someRight)
+
+        $someLeft = 900
+        $('#b3').animate({left:'30px'}, $someLeft)
+        $('#b4').animate({left:'14px'}, $someLeft)
+        $('#harakka').animate({left:'-37px'}, $someLeft)
+
+        $someRight = 800
+        $('#b3').animate({left:'46px'}, $someRight)
+        $('#b4').animate({left:'85px'}, $someRight)
+        $('#harakka').animate({left:'47px'}, $someRight)
+
+        $someLeft = 700
+        $('#b3').animate({left:'30px'}, $someLeft)
+        $('#b4').animate({left:'14px'}, $someLeft)
+        $('#harakka').animate({left:'-37px'}, $someLeft)
+
+        $someRight = 600
+        $('#b3').animate({left:'46px'}, $someRight)
+        $('#b4').animate({left:'85px'}, $someRight)
+        $('#harakka').animate({left:'47px'}, $someRight)
+
+        $someLeft = 500
+        $('#b3').animate({left:'30px'}, $someLeft)
+        $('#b4').animate({left:'-14px'}, $someLeft)
+        $('#harakka').animate({left:'-47px'}, $someLeft)
+
+        $someLeft = 1000
+        $('#b3').animate({left:'20px'}, $someLeft)
+        $('#b4').animate({left:'-700px', top: '400px'}, $someLeft)
+        $('#harakka').animate({left:'-337px', top: '800px'}, $someLeft)
+
+        $('#b3,#b4,#harakka').promise().done( ->
+            console.log('asdf')
+            newGame()
         )
 
-    newOrAnimGame = -> $.get('runanimation', (data) ->
+    $query = if location.search != undefined then location.search else ''
+    newOrAnimGame = -> $.get('runanimation'+$query, (data) ->
+        console.log('neoranim', data.animation)
         if data.animation
             runAnimation()
         else

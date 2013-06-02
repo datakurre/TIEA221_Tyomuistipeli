@@ -430,7 +430,7 @@
   })();
 
   jQuery(function($) {
-    var $board, $dialer, $game, $tower, applyCube, applyDialerCube, bg, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeOut, runAnimation;
+    var $board, $dialer, $game, $query, $tower, applyCube, applyDialerCube, bg, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeOut, runAnimation;
     $game = $('#game');
     $board = $('#board');
     $tower = $('#tower');
@@ -594,13 +594,89 @@
       });
     };
     runAnimation = function() {
+      var $someLeft, $someRight;
       $('#animation').css('display', 'block');
-      return $('#animation span').animate({
-        left: '123px'
-      }, 5000).promise().done(function() {});
+      $someRight = 1000;
+      $('#b3').animate({
+        left: '46px'
+      }, $someRight);
+      $('#b4').animate({
+        left: '85px'
+      }, $someRight);
+      $('#harakka').animate({
+        left: '47px'
+      }, $someRight);
+      $someLeft = 900;
+      $('#b3').animate({
+        left: '30px'
+      }, $someLeft);
+      $('#b4').animate({
+        left: '14px'
+      }, $someLeft);
+      $('#harakka').animate({
+        left: '-37px'
+      }, $someLeft);
+      $someRight = 800;
+      $('#b3').animate({
+        left: '46px'
+      }, $someRight);
+      $('#b4').animate({
+        left: '85px'
+      }, $someRight);
+      $('#harakka').animate({
+        left: '47px'
+      }, $someRight);
+      $someLeft = 700;
+      $('#b3').animate({
+        left: '30px'
+      }, $someLeft);
+      $('#b4').animate({
+        left: '14px'
+      }, $someLeft);
+      $('#harakka').animate({
+        left: '-37px'
+      }, $someLeft);
+      $someRight = 600;
+      $('#b3').animate({
+        left: '46px'
+      }, $someRight);
+      $('#b4').animate({
+        left: '85px'
+      }, $someRight);
+      $('#harakka').animate({
+        left: '47px'
+      }, $someRight);
+      $someLeft = 500;
+      $('#b3').animate({
+        left: '30px'
+      }, $someLeft);
+      $('#b4').animate({
+        left: '-14px'
+      }, $someLeft);
+      $('#harakka').animate({
+        left: '-47px'
+      }, $someLeft);
+      $someLeft = 1000;
+      $('#b3').animate({
+        left: '20px'
+      }, $someLeft);
+      $('#b4').animate({
+        left: '-700px',
+        top: '400px'
+      }, $someLeft);
+      $('#harakka').animate({
+        left: '-337px',
+        top: '800px'
+      }, $someLeft);
+      return $('#b3,#b4,#harakka').promise().done(function() {
+        console.log('asdf');
+        return newGame();
+      });
     };
+    $query = location.search !== void 0 ? location.search : '';
     newOrAnimGame = function() {
-      return $.get('runanimation', function(data) {
+      return $.get('runanimation' + $query, function(data) {
+        console.log('neoranim', data.animation);
         if (data.animation) {
           return runAnimation();
         } else {
