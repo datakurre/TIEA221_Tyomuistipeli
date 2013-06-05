@@ -143,12 +143,18 @@ class AppFunctionalTesting(unittest.TestCase):
             redirect = 'http://example.com/#pelataan-taas-huomenna'
             self.assertIn(redirect, e.headers.values())
 
-
     def test_missing_active_player(self):
-        """ Test that missing cookie "active_player" will redirect to
-            main page.
+        """Test that missing cookie "active_player" will redirect to main page.
         """
-        self.assertTrue(False)
+        request = testing.DummyRequest()
+        app = Application(request, PersistentMapping())
+
+        try:
+            app.get_current_session()
+            assert False, u"No HTTPFound exception was raised."
+        except Exception, e:
+            redirect = 'http://example.com/'
+            self.assertIn(redirect, e.headers.values())
 
     def test_stars_two_at_start(self):
         """ Test first game player has always two stars
