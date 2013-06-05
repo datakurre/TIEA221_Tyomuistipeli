@@ -79,7 +79,8 @@ class Application(object):
         # Read cookie
         player_id = self.request.cookies.get("active_player")
 
-        assert player_id is not None, "No player id was given"  # HTTP 500
+        if player_id is None:
+            raise HTTPFound(location=self.request.application_url + "/")
 
         # Look up the current player using the cookie data
         player = self.data.players.get(player_id)
