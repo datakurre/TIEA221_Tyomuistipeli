@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Tests for the main Application """
 
-import unittest
+import unittest, json
 
 from pyramid import testing
 
@@ -51,11 +51,49 @@ class AppFunctionalTesting(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
+    def play_one_session(self, app, player_id):
+        app.request.cookies["active_player"] = player_id
+        session = app.get_current_session(player_id)
+
+        def get_game_method(game, method_name, request):
+            for adapter in request.registry.registeredAdapters():
+                if len(adapter.required) > 2:
+                    if adapter.required[2].providedBy(game):
+                        if adapter.name == method_name:
+                            return adapter.factory.__view_attr__
+
+        n = len(session.order)
+        for i in range(n):
+            next_game = app.get_next_game()
+            self.assertEqual(session.order[0], next_game)
+
+            game = app.games[next_game["game"]]
+            method_name = get_game_method(game, "new", app.request)
+            new_game = getattr(game, method_name)()
+
+            items = new_game.get("items", new_game.get("sample", []))
+            app.request.json_body = items
+            game.save_fail()
+
+        self.assertEqual(len(session.order), 0)
+
     def test_certain_method_gives_session_status_for_main_page(self):
         """ Main page indicates whether user has played the session
             for today. Should check status before, during and after session.
         """
-        self.assertTrue(False)
+        
+        request = testing.DummyRequest()
+        request.cookies["players"] = json.dumps([{'id':'123', 'name':'test'}])
+        app = Application(request, PersistentMapping())
+
+        result = app.get_session_statuses_for_today()
+        self.assertEquals(result, [{'123': { 'session_over': False }}])
+        
+        self.play_one_session(app, '123')
+        
+        result = app.get_session_statuses_for_today()
+        self.assertEquals(result, [{'123': { 'session_over': True }}])
+
 
     def test_after_session_game_redirects_to_main_page(self):
         """ Test for users that try to go to "pelaa" page after session.

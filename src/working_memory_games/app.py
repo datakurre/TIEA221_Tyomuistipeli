@@ -75,9 +75,10 @@ class Application(object):
         # Get registered games
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
 
-    def get_current_player(self):
+    def get_current_player(self, player_id=''):
         # Read cookie
-        player_id = self.request.cookies.get("active_player")
+        if player_id == '':
+            player_id = self.request.cookies.get("active_player")
 
         assert player_id is not None, "No player id was given"  # HTTP 500
 
@@ -128,11 +129,11 @@ class Application(object):
 
     #     return players  # players may be an empty {}
 
-    def get_current_session(self):
+    def get_current_session(self, player_id=''):
         """ Return the current (today's) session or creates a new one and
         returns it """
 
-        player = self.get_current_player()
+        player = self.get_current_player(player_id)
 
         if player is None:
             return None
@@ -222,7 +223,7 @@ class Application(object):
             raise HTTPFound(location=self.request.application_url
                             + "/#pelataan-taas-huomenna")
 
-        print len(session.order)
+        #print len(session.order)
         return {
             "game": session.order[0]["game"],
             "assisted": session.order[0]["assisted"]
@@ -237,6 +238,24 @@ class Application(object):
         return {
             "game": session.order[0]["game"],
         }
+
+    @view_config(name="session_status", renderer="json",
+                 request_method="GET", xhr=True)
+    def get_session_statuses_for_today(self):
+
+        players = self.request.cookies.get("players")
+        ret = []
+        if players != None:
+            players = json.loads(players)
+            for p in players:
+                player_id = p['id'];
+                if id == None: continue
+                session = self.get_current_session(player_id)
+                
+                ret.append({ player_id: { 'session_over': 
+                                          len(session.order) == 0 }})
+        return ret 
+
 
 @subscriber(BeforeRender)
 def add_base_template(event):
