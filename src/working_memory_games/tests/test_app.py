@@ -40,10 +40,54 @@ class AppIntegrationTests(unittest.TestCase):
         session = app.get_current_session()
         self.assertGreater(session.order, 0)
 
+    def test_that_information_given_in_registration_form_is_stored(self):
+        """ Test all kind of data input in form of registration is
+            actually stored to zodb.
+        """
+        self.assertTrue(False)
+
 
 class AppFunctionalTesting(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
+
+    def test_certain_method_gives_session_status_for_main_page(self):
+        """ Main page indicates whether user has played the session
+            for today. Should check status before, during and after session.
+        """
+        self.assertTrue(False)
+
+    def test_after_session_game_redirects_to_main_page(self):
+        """ Test for users that try to go to "pelaa" page after session.
+            Should redirect to main page.
+        """
+        self.assertTrue(False)
+
+    def test_missing_active_player(self):
+        """ Test that missing cookie "active_player" will redirect to
+            main page.
+        """
+        self.assertTrue(False)
+
+    def test_stars_two_at_start(self):
+        """ Test first game player has always two stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_three_when_better(self):
+        """ Test second or later game with better result gives three stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_two_when_same(self):
+        """ Test second or later game with same result gives two stars
+        """
+        self.assertTrue(False)
+
+    def test_stars_one_when_worse(self):
+        """ Test second or later game with worse result gives one stars
+        """
+        self.assertTrue(False)
 
     def test_session_order(self):
         """ Testaa, että pelikenttä vaihtuu pelin edetessä

@@ -235,6 +235,7 @@ class Application(object):
         session = self.get_current_session()
 
         return {
+            "game": session.order[0]["game"],
         }
 
 @subscriber(BeforeRender)

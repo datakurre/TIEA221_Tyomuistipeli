@@ -142,3 +142,54 @@ body .modal {
 /*   color: white; */
 /* } */
 /*  */
+
+
+/* animation */
+#animation {
+background-color: gray;
+}
+#b1,#b2, #b3,#b4,#pupu,#harakka {
+    position: absolute;
+    left:82px;
+}
+#b1 {
+    top: 400px;
+    width: 400px;
+}
+#b2 {
+    top: 273px;
+    width: 400px;
+}
+#b3 {
+    left: 30px;
+    top: 157px;
+    width: 419px;
+}
+#b4 {
+    left: 34px;
+    top: 128px;
+    width: 311px;
+}
+#pupu {
+    left: 214px;
+    top: 344px;
+    width: 447px;
+}
+#harakka {
+    left: -7px;
+    top: 12px;
+    width: 371px;
+}
+
+#animation {
+    overflow: hidden;
+
+    background: #f0f9ff;
+    background: -moz-linear-gradient(top, #f0f9ff 0%, #ceecff 47%, #b7e4ff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f9ff), color-stop(47%,#ceecff), color-stop(100%,#b7e4ff));
+    background: -webkit-linear-gradient(top, #f0f9ff 0%,#ceecff 47%,#b7e4ff 100%);
+    background: -o-linear-gradient(top, #f0f9ff 0%,#ceecff 47%,#b7e4ff 100%);
+    background: -ms-linear-gradient(top, #f0f9ff 0%,#ceecff 47%,#b7e4ff 100%);
+    background: linear-gradient(to bottom, #f0f9ff 0%,#ceecff 47%,#b7e4ff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f9ff', endColorstr='#b7e4ff',GradientType=0 );
+}
