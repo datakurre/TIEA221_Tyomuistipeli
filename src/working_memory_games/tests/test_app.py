@@ -5,6 +5,7 @@
 import unittest
 
 from pyramid import testing
+from pyramid.httpexceptions import HTTPFound
 
 from persistent.mapping import PersistentMapping
 
@@ -91,7 +92,19 @@ class AppFunctionalTesting(unittest.TestCase):
         """ Test for users that try to go to "pelaa" page after session.
             Should redirect to main page.
         """
-        self.assertTrue(False)
+        request = testing.DummyRequest()
+        request.cookies["active_player"] = "123"
+        app = Application(request, PersistentMapping())
+
+        session = app.get_current_session()
+        session.order = []
+        try:
+            app.get_next_game()
+            assert False, u"No HTTPFound exception was raised."
+        except Exception, e:
+            redirect = 'http://example.com/#pelataan-taas-huomenna'
+            self.assertIn(redirect, e.headers.values())
+
 
     def test_missing_active_player(self):
         """ Test that missing cookie "active_player" will redirect to
