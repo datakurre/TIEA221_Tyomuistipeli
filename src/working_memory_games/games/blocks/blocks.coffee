@@ -560,7 +560,6 @@ jQuery ($) ->
         $('#harakka').animate({left:'-337px', top: '800px'}, $someLeft)
 
         $('#b3,#b4,#harakka').promise().done( ->
-            console.log('asdf')
             newGame()
         )
 

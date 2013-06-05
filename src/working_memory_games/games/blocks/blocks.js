@@ -669,7 +669,6 @@
         top: '800px'
       }, $someLeft);
       return $('#b3,#b4,#harakka').promise().done(function() {
-        console.log('asdf');
         return newGame();
       });
     };
