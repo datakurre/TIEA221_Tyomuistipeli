@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-""" Tests for the main Application """
+"""Tests for the main Application
+"""
 
 import unittest
 
@@ -17,7 +18,8 @@ class AppIntegrationTests(unittest.TestCase):
     layer = INTEGRATION_TESTING
 
     def test_guest_player_is_created(self):
-        """Test that non-existing guest player can play game"""
+        """Test that non-existing guest player can play game
+        """
 
         request = testing.DummyRequest()
         request.cookies["active_player"] = "123"
@@ -41,10 +43,38 @@ class AppIntegrationTests(unittest.TestCase):
         self.assertGreater(session.order, 0)
 
     def test_that_information_given_in_registration_form_is_stored(self):
-        """ Test all kind of data input in form of registration is
-            actually stored to zodb.
+        """Test all kind of data input in form of registration is actually
+        stored to zodb.
+
         """
-        self.assertTrue(False)
+
+        request = testing.DummyRequest()
+        app = Application(request, PersistentMapping())
+
+        request.params.update({
+            "name": "John",
+            "age": "10",
+            "gender": "m",  # f/m
+            "adhd": True,
+            "asperger": True,
+            "narrow_wm": True,
+            "concentration_difficulties": True,
+            "email": "john.doe@example.com"
+        })
+
+        resp = app.create_new_player()
+
+        self.assertEqual(type(resp), dict)
+        self.assertIn("id", resp)
+
+        player = app.data.players.get(resp.get("id"))
+        self.assertEqual(player.name, request.params.get("name"))
+
+        for detail in request.params.items():
+            if detail[0] == "name":
+                continue
+            else:
+                self.assertIn(detail, player.details.items())
 
 
 class AppFunctionalTesting(unittest.TestCase):
