@@ -8,12 +8,8 @@ from pyramid import testing
 from persistent.mapping import PersistentMapping
 
 from working_memory_games.app import Application
-from working_memory_games import datatypes
 
-from working_memory_games.testing import (
-    INTEGRATION_TESTING,
-    FUNCTIONAL_TESTING
-)
+from working_memory_games.testing import INTEGRATION_TESTING
 
 
 class AppIntegrationTests(unittest.TestCase):
