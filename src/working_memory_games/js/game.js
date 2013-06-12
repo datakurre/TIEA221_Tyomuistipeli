@@ -39,6 +39,8 @@ function GameInitialize(items, callbacks) {
     }
 }
 
+
+
 function GameCheckUserPress(item) {
   var currentIdx = global.userItems.length;
   global.userItems.push(item)
@@ -47,6 +49,22 @@ function GameCheckUserPress(item) {
   } else {
     global.callbacks.answerWrong(global.gameItems[currentIdx], item);
     GameIncorrectAnswer();
+  }
+
+  if (global.gameItems.length === global.userItems.length)
+    GameCorrectAnswer();
+}
+
+
+function GameCheckUserPressForSet(item) {
+  var currentIdx = global.userItems.length;
+  global.userItems.push(item)
+  if ($.inArray(item, global.gameItems) >= 0) {
+    global.callbacks.answerRight(item);
+  } else {
+    global.callbacks.answerWrong(global.gameItems, item);
+    GameIncorrectAnswer();
+    return
   }
 
   if (global.gameItems.length === global.userItems.length)
