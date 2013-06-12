@@ -243,7 +243,15 @@ class AppFunctionalTesting(unittest.TestCase):
     def test_at_least_95_of_200_of_new_players_are_assisted(self):
         """Test that almost half are assisted of new players.
         """
-        self.assertTrue(False)
+        request = testing.DummyRequest()
+        app = Application(request, PersistentMapping())
+        for i in range(200):
+            app.create_new_guest()
+        is_assisted = [player.details.get('assisted') for player
+                       in app.data.players.values()]
+        n_assisted = len(filter(bool, is_assisted))
+        self.assertGreater(n_assisted, 95)
+        self.assertLess(n_assisted, 105)
 
     # def test_app_no_player(self):
     #     """Test empty application"""
