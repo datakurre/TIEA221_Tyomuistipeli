@@ -179,6 +179,12 @@ class AppFunctionalTesting(unittest.TestCase):
     def test_session_order(self):
         """ Testaa, että pelikenttä vaihtuu pelin edetessä
         """
+        details = {
+            "registered": True,
+            "assisted": self.get_assistance_flag()
+        }
+        details.update(self.request.params)
+        return self.data.players.create_player(name, details)
 
         request = testing.DummyRequest()
         request.cookies["active_player"] = "123"
@@ -219,10 +225,23 @@ class AppFunctionalTesting(unittest.TestCase):
         """ 30% of games should be assisted if assisted flag is set.
             Test that games are marked to be assisted.
         """
-        self.assertTrue(False)
+        request = testing.DummyRequest()
+        app = Application(request, PersistentMapping())
+        player_id = app.data.players.create_player("Guest", {
+            "registered": False,
+            "assisted": True
+        })["id"]
+        request.cookies["active_player"] = player_id
+
+        session = app.get_current_session()
+        n_assisted = len([game for game in session.order
+                          if game.get("assisted") is True])
+        portion_assisted = float(n_assisted) / len(session.order)
+        self.assertGreater(portion_assisted, 0.3)
+        self.assertLess(portion_assisted, 0.4)
 
     def test_at_least_95_of_200_of_new_players_are_assisted(self):
-        """ Test that almost half are assisted of new players.
+        """Test that almost half are assisted of new players.
         """
         self.assertTrue(False)
 

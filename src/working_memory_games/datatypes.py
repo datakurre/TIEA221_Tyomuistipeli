@@ -6,6 +6,7 @@ import uuid
 
 from BTrees.Length import Length as LengthBase
 from BTrees.OOBTree import OOBTree as OOBTreeBase
+import math
 from persistent.mapping import PersistentMapping
 from persistent.list import PersistentList
 from working_memory_games.interfaces import (
@@ -135,7 +136,7 @@ class Session(OOBTree):
         # Kaikkien pelien kaikki pelikerrat yhteensä
         trials_total = sum(map(lambda game: game[1].day_limit, game_items))
         # Avustettavat pelit kaikista pelikerroista
-        trials_assisted = int(trials_total * assisted_cut)
+        trials_assisted = int(math.ceil(trials_total * assisted_cut))
 
         # Avustettavissa olevat pelioliot
         assistable_games = filter(lambda game: game[1].can_assist, game_items)
