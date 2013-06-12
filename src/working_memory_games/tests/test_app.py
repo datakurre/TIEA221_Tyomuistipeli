@@ -166,6 +166,17 @@ class AppFunctionalTesting(unittest.TestCase):
 
         self.assertEqual(len(session.order), 0)
 
+    def test_certain_percent_of_games_are_assisted(self):
+        """ 30% of games should be assisted if assisted flag is set.
+            Test that games are marked to be assisted.
+        """
+        self.assertTrue(False)
+
+    def test_at_least_95_of_200_of_new_players_are_assisted(self):
+        """ Test that almost half are assisted of new players.
+        """
+        self.assertTrue(False)
+
     # def test_app_no_player(self):
     #     """Test empty application"""
     #     request = testing.DummyRequest()
