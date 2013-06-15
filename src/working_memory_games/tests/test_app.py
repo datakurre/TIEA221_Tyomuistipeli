@@ -176,6 +176,13 @@ class AppFunctionalTesting(unittest.TestCase):
         """
         self.assertTrue(False)
 
+
+    def test_interrupted_game_wont_continue_day_later(self):
+        """ If player quits the session before the session has ended
+        the game shall not try to continue the same game on second day
+        but have a new session. """
+        self.assertTrue(False)
+
     def test_session_order(self):
         """ Testaa, että pelikenttä vaihtuu pelin edetessä
         """
