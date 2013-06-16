@@ -7,7 +7,7 @@ global.ctx = $('meta[name=context]').attr("content");
 global.callbacks = {
     newGame: function(){},
     answerRight: function(rightItem){},
-    answerWrong: function(rightItem, wrongItem){}
+    answerWrong: function(rightItem, wrongItem, continueFunc){}
 };
 
 $.getDocHeight = function(){
@@ -47,8 +47,9 @@ function GameCheckUserPress(item) {
   if (global.gameItems[currentIdx] == item) {
     global.callbacks.answerRight(item);
   } else {
-    global.callbacks.answerWrong(global.gameItems[currentIdx], item);
-    GameIncorrectAnswer();
+    global.callbacks.answerWrong(global.gameItems[currentIdx], item, GameIncorrectAnswer);
+    //GameIncorrectAnswer();
+    return;
   }
 
   if (global.gameItems.length === global.userItems.length)
@@ -62,9 +63,9 @@ function GameCheckUserPressForSet(item) {
   if ($.inArray(item, global.gameItems) >= 0) {
     global.callbacks.answerRight(item);
   } else {
-    global.callbacks.answerWrong(global.gameItems, item);
-    GameIncorrectAnswer();
-    return
+    global.callbacks.answerWrong(global.gameItems, item, GameIncorrectAnswer);
+    //GameIncorrectAnswer();
+    return;
   }
 
   if (global.gameItems.length === global.userItems.length)
@@ -88,7 +89,7 @@ function GamePlayFeedback(passed) {
     }
 
     $.preload(name, global.base_ctx + '/snd/' + name + '.[mp3,ogg]');
-    $('body').on('preloaded', function() {
+    $('body').one('preloaded', function() {
 	$('body').play(name).promise().done(function() {});
     });
 }
