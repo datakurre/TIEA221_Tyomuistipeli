@@ -16,3 +16,17 @@
   background-color: transparent;
   border: solid 1em black;
 }
+
+.modal {
+    width: 600px;
+}
+.modal-body {
+    height: 496px;
+    max-height: 496px;
+    overflow: hidden;
+}
+#dlg-saxopupu {
+    left: -122px;
+    position: absolute;
+    z-index: -1;
+}
