@@ -58,7 +58,6 @@ function GameCheckUserPress(item) {
 
 
 function GameCheckUserPressForSet(item) {
-  var currentIdx = global.userItems.length;
   global.userItems.push(item)
   if ($.inArray(item, global.gameItems) >= 0) {
     global.callbacks.answerRight(item);
@@ -72,7 +71,7 @@ function GameCheckUserPressForSet(item) {
     GameCorrectAnswer();
 }
 
-function GamePlayFeedback(passed) {
+function GamePlayFeedback(passed, afterMusicAction) {
     var name = '';
     if (passed) {
 	rights = [];
@@ -90,7 +89,9 @@ function GamePlayFeedback(passed) {
 
     $.preload(name, global.base_ctx + '/snd/' + name + '.[mp3,ogg]');
     $('body').one('preloaded', function() {
-	$('body').play(name).promise().done(function() {});
+	$('body').play(name).promise().done(function() { 
+            afterMusicAction();
+        });
     });
 }
 
@@ -110,6 +111,10 @@ function createDialog(data){
   }
 }
 
+function GameAnswerDialogShowButton() {
+    $('.btn').removeAttr('disabled').animate({opacity: 1}, 500);
+}
+
 function GameCorrectAnswer() {
   $.ajax({
       type: 'POST',
@@ -117,7 +122,7 @@ function GameCorrectAnswer() {
       data: JSON.stringify({game: global.gameItems, user: global.userItems}),
       contentType: 'application/json; charset=utf-8',
       success: function(data) { 
-	  GamePlayFeedback(true);
+	  GamePlayFeedback(true, GameAnswerDialogShowButton);
 	  createDialog(data); 
       }
   });
@@ -130,7 +135,7 @@ function GameIncorrectAnswer() {
       data: JSON.stringify({game: global.gameItems, user: global.userItems}),
       contentType: 'application/json; charset=utf-8',
       success: function(data) {
-	  GamePlayFeedback(false);
+	  GamePlayFeedback(false, GameAnswerDialogShowButton);
 	  createDialog(data);
       }
   });
