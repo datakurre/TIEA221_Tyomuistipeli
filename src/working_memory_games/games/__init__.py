@@ -7,6 +7,7 @@ from numpy.random import random
 
 
 import datetime
+from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import (
     view_config,
@@ -215,10 +216,17 @@ class Game(object):
         })
         player_session = self.app.get_current_session()
         player_session.order.pop(0)  # Remove played game form the session.
+
+        values = {
+            "interlude": "game_over",
+            "game": None
+        }
         if len(player_session.order) > 0:
-            return {"game": player_session.order[0]["game"]}
-        else:
-            return {}
+            values["game"] = player_session.order[0]["game"]
+            if values["game"] == self.name:
+                values["interlude"] = None
+        return values
+
 
     @view_config(name="fail", renderer="../templates/save_fail.html")
     def save_fail(self):
@@ -235,7 +243,13 @@ class Game(object):
         })
         player_session = self.app.get_current_session()
         player_session.order.pop(0)  # Remove played game form the session.
+
+        values = {
+            "interlude": "game_over",
+            "game": None
+        }
         if len(player_session.order) > 0:
-            return {"game": player_session.order[0]["game"]}
-        else:
-            return {}
+            values["game"] = player_session.order[0]["game"]
+            if values["game"] == self.name:
+                values["interlude"] = None
+        return values
