@@ -7,7 +7,9 @@ global.ctx = $('meta[name=context]').attr("content");
 global.callbacks = {
     newGame: function(){},
     answerRight: function(rightItem){},
-    answerWrong: function(rightItem, wrongItem, continueFunc){}
+    answerWrong: function(rightItem, wrongItem, continueFunc) {
+        continueFunc();
+    }
 };
 
 $.getDocHeight = function(){
