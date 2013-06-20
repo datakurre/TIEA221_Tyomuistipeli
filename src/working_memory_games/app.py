@@ -230,20 +230,9 @@ class Application(object):
             "assisted": session.order[0]["assisted"]
         }
 
-    @view_config(name="game_over", renderer="templates/game_over.html",
-                 request_method="GET", xhr=False)
-    def get_game_over(self):
-		# TODO: calculate last game success.
-        session = self.get_current_session()
-
-        return {
-            "game": session.order[0]["game"],
-        }
-
     @view_config(name="session_status", renderer="json",
                  request_method="GET", xhr=True)
     def get_session_statuses_for_today(self):
-
         players = self.request.cookies.get("players")
         ret = []
         if players != None:

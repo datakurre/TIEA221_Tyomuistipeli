@@ -218,13 +218,12 @@ class Game(object):
         player_session.order.pop(0)  # Remove played game form the session.
 
         values = {
-            "interlude": "game_over",
-            "game": None
+            "game": self.name,
+            "game_over": True
         }
         if len(player_session.order) > 0:
-            values["game"] = player_session.order[0]["game"]
-            if values["game"] == self.name:
-                values["interlude"] = None
+            if player_session.order[0]["game"] == self.name:
+                values["game_over"] = False
         return values
 
 
@@ -245,11 +244,20 @@ class Game(object):
         player_session.order.pop(0)  # Remove played game form the session.
 
         values = {
-            "interlude": "game_over",
-            "game": None
+            "game": self.name,
+            "game_over": True
         }
         if len(player_session.order) > 0:
-            values["game"] = player_session.order[0]["game"]
-            if values["game"] == self.name:
-                values["interlude"] = None
+            if player_session.order[0]["game"] == self.name:
+                values["game_over"] = False
         return values
+
+    @view_config(name="game_over", renderer="../templates/game_over.html",
+                 request_method="GET", xhr=False)
+    def get_game_over(self):
+        # TODO: calculate last game success.
+        session = self.app.get_current_session()
+        return {
+            "game": session.order[0]["game"],
+        }
+

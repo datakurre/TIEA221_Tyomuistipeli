@@ -4,14 +4,14 @@
   </div>
   <div class="modal-body" style="text-align: center;">
     <img id="dlg-saxopupu" src="${base_url}/img/saxopupu001.png" />
+    <a href="${base_url}/${game}/game_over" class="btn btn-large btn-primary"
+       style="font-size: 800%; opacity:0;
+              line-height: 1;" disabled="disabled"
+       tal:condition="game_over">Seuraava peli</a>
     <a href="${base_url}/${game}" class="btn btn-large btn-primary"
        style="font-size: 800%; opacity:0;
               line-height: 1;" disabled="disabled"
-       tal:condition="not:interlude|nothing">Kokeile uudelleen</a>
-    <a href="${base_url}/${interlude}?game=${game}" class="btn btn-large btn-primary"
-       style="font-size: 800%; opacity:0;
-              line-height: 1;" disabled="disabled"
-       tal:condition="interlude|nothing">Kokeile uudelleen</a>
+       tal:condition="not:game_over">Kokeile uudelleen</a>
   </div>
   <!-- <div class="modal-footer" style="text-align: left;"> -->
   <!--   <a href="" class="btn btn-large btn-primary">Kokeile uudelleen</a> -->
