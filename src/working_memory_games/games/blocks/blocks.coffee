@@ -568,7 +568,7 @@ jQuery ($) ->
     newOrAnimGame = -> $.get('runanimation'+$query, (data) ->
         console.log('neoranim', data.animation)
         if data.animation
-            runAnimation()
+           runAnimation()
         else
             newGame()
     )
