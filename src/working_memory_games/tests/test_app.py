@@ -156,10 +156,45 @@ class AppFunctionalTesting(unittest.TestCase):
             redirect = 'http://example.com/'
             self.assertIn(redirect, e.headers.values())
 
+    def get_game_stars_after_one_session(self, app, player_id):
+        app.request.cookies["active_player"] = player_id
+
+        def get_game_method(game, method_name, request):
+            for adapter in request.registry.registeredAdapters():
+                if len(adapter.required) > 2:
+                    if adapter.required[2].providedBy(game):
+                        if adapter.name == method_name:
+                            return adapter.factory.__view_attr__
+
+        name = next_game = app.get_next_game()
+        while name == next_game:
+
+            game = app.games[next_game["game"]]
+            method_name = get_game_method(game, "new", app.request)
+            new_game = getattr(game, method_name)()
+            items = new_game.get("items", new_game.get("sample", []))
+            app.request.json_body = items
+
+            game.save_pass()
+
+            next_game = app.get_next_game()
+
+        return game.get_game_over().get("stars")
+
     def test_stars_two_at_start(self):
-        """ Test first game player has always two stars
+        """Test first game player has always two stars
         """
-        self.assertTrue(False)
+        player_id = '123'
+
+        request = testing.DummyRequest()
+        request.cookies["players"] = json.dumps([{
+            'id': player_id, 'name': 'test'
+        }])
+
+        app = Application(request, PersistentMapping())
+        stars = self.get_game_stars_after_one_session(app, player_id)
+
+        self.assertEqual(stars, 2)
 
     def test_stars_three_when_better(self):
         """ Test second or later game with better result gives three stars
@@ -167,9 +202,19 @@ class AppFunctionalTesting(unittest.TestCase):
         self.assertTrue(False)
 
     def test_stars_two_when_same(self):
-        """ Test second or later game with same result gives two stars
+        """Test second or later game with same result gives two stars
         """
-        self.assertTrue(False)
+        player_id = '123'
+
+        request = testing.DummyRequest()
+        request.cookies["players"] = json.dumps([{
+            'id': player_id, 'name': 'test'
+        }])
+
+        app = Application(request, PersistentMapping())
+        stars = self.get_game_stars_after_one_session(app, player_id)
+
+        self.assertEqual(stars, 2)
 
     def test_stars_one_when_worse(self):
         """ Test second or later game with worse result gives one stars

@@ -67,9 +67,10 @@ class Game(object):
         return game_session
 
     def get_last_plays(self, n=None):
-        """ Return last n levels for the game for the current player
-        in reverse chronological order """
+        """Return last n levels for the game for the current player
+        in reverse chronological order
 
+        """
         if n is None:
             n = 10  # or some class property
 
@@ -212,6 +213,7 @@ class Game(object):
             "level": self.session.level,
             "pass": True,
             "items": items,
+            "start": self.session.last_start,
             "duration": duration
         })
         player_session = self.app.get_current_session()
@@ -226,7 +228,6 @@ class Game(object):
                 values["game_over"] = False
         return values
 
-
     @view_config(name="fail", renderer="../templates/save_fail.html")
     def save_fail(self):
         """ Saves failed game """
@@ -238,6 +239,7 @@ class Game(object):
             "level": self.session.level,
             "pass": False,
             "items": items,
+            "start": self.session.last_start,
             "duration": duration
         })
         player_session = self.app.get_current_session()
@@ -255,9 +257,15 @@ class Game(object):
     @view_config(name="game_over", renderer="../templates/game_over.html",
                  request_method="GET", xhr=False)
     def get_game_over(self):
-        # TODO: calculate last game success.
+        today = datetime.datetime(*(datetime.datetime.now().timetuple()[:3]))
+        all_plays = self.get_last_plays()
+        plays_today = [play for play in all_plays if
+                       "start" in play and play.get("start") >= today]
+
         session = self.app.get_current_session()
+
         return {
             "game": session.order[0]["game"],
+            "stars": 2
         }
 
