@@ -233,7 +233,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
 }
 
 .middle {
-  display: table-cell;
+  /*display: table-cell;*/
   vertical-align: middle;
   height: inherit;
   width: inherit;

@@ -40,5 +40,6 @@
 
         Numerot-kentän ääni: Anu Parviainen
 
+        Matkalle-kentän ääni: Lasse Lähteenmäki
 
 
