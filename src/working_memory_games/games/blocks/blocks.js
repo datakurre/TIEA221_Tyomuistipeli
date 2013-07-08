@@ -430,7 +430,7 @@
   })();
 
   jQuery(function($) {
-    var $board, $dialer, $game, $query, $tower, applyCube, applyDialerCube, bg, cubeSize, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeIn, queueFadeOut, runAnimation;
+    var $board, $dialer, $game, $query, $tower, answerWrong, applyCube, applyDialerCube, bg, cubeSize, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeIn, queueFadeOut, runAnimation;
     $game = $('#game');
     $board = $('#board');
     $tower = $('#tower');
@@ -610,13 +610,25 @@
         return $game.dequeue();
       });
     };
+    answerWrong = function(right, item, continueFunc) {
+      return $('#dialer #dial-' + right).animate({
+        opacity: 0
+      }, 500).animate({
+        opacity: 1
+      }, 500).animate({
+        opacity: 0
+      }, 500).animate({
+        opacity: 1
+      }, 500).promise().done(continueFunc);
+    };
     newGame = function() {
       $.preload('yrita', global.ctx + '/snd/yrita_rakentaa.[mp3,ogg]');
       return $('body').one('preloaded', function() {
         return $('body').play('yrita').promise().done(function() {
           return $.get('new', function(data) {
             GameInitialize(data.items, {
-              newGame: newGame
+              newGame: newGame,
+              answerWrong: answerWrong
             });
             return initGame(data);
           });

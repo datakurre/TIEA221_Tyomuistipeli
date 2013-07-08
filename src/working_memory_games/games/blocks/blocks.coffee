@@ -539,6 +539,14 @@ jQuery ($) ->
             $('.modal-backdrop.curtain').remove()
             $game.dequeue()
 
+    answerWrong = (right, item, continueFunc) ->
+        $('#dialer #dial-'+right)
+             .animate({opacity: 0}, 500)
+             .animate({opacity: 1}, 500)
+             .animate({opacity: 0}, 500)
+             .animate({opacity: 1}, 500)
+             .promise().done(continueFunc)
+ 
 
     newGame = ->
         $.preload('yrita', global.ctx+'/snd/yrita_rakentaa.[mp3,ogg]')
@@ -546,7 +554,10 @@ jQuery ($) ->
             $('body').play('yrita').promise().done(->
                 $.get('new', (data) ->
                     #data.items = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
-                    GameInitialize(data.items, newGame: newGame)
+                    GameInitialize(data.items,
+                        newGame: newGame,
+                        answerWrong: answerWrong
+                    )
                     initGame(data)
                 )
             )
