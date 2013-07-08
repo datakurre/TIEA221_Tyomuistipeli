@@ -31,6 +31,7 @@ class Blocks(Game):
                  for i in range(level)]
 
         return {
+            "assisted": self.app.get_next_game()['assisted'],
             "level": level,
             "items": items
         }

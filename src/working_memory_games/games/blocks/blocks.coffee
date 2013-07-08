@@ -518,8 +518,15 @@ jQuery ($) ->
         for idx in [(data.items.length - 1)..0]
             $number = $("<span class=\"number\">#{data.items[idx]}</span>")
             queueFadeIn($("#bg-cube-#{idx}"))
-            queueAppend($("#bg-cube-#{idx}"), $number, 
-                cubeSize(bg, data.items.length)).delay(1000)
+            cube = queueAppend($("#bg-cube-#{idx}"), $number,
+                cubeSize(bg, data.items.length))
+            if data.assisted
+                if (-idx + data.items.length - 1) % 3 == 2
+                    cube.delay(1500)
+                else
+                    cube.delay(750)
+            else
+                cube.delay(1000)
             queueFadeOut($("#bg-cube-#{idx}"))
 
         # Show the dialer
@@ -539,7 +546,6 @@ jQuery ($) ->
             $('body').play('yrita').promise().done(->
                 $.get('new', (data) ->
                     #data.items = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
-                    data.items = [1,2,3]
                     GameInitialize(data.items, newGame: newGame)
                     initGame(data)
                 )

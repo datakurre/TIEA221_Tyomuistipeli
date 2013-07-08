@@ -581,7 +581,16 @@
       for (idx = _ref2 = data.items.length - 1; _ref2 <= 0 ? idx <= 0 : idx >= 0; _ref2 <= 0 ? idx++ : idx--) {
         $number = $("<span class=\"number\">" + data.items[idx] + "</span>");
         queueFadeIn($("#bg-cube-" + idx));
-        queueAppend($("#bg-cube-" + idx), $number, cubeSize(bg, data.items.length)).delay(1000);
+        cube = queueAppend($("#bg-cube-" + idx), $number, cubeSize(bg, data.items.length));
+        if (data.assisted) {
+          if ((-idx + data.items.length - 1) % 3 === 2) {
+            cube.delay(1500);
+          } else {
+            cube.delay(750);
+          }
+        } else {
+          cube.delay(1000);
+        }
         queueFadeOut($("#bg-cube-" + idx));
       }
       $game.queue(function() {
@@ -606,7 +615,6 @@
       return $('body').one('preloaded', function() {
         return $('body').play('yrita').promise().done(function() {
           return $.get('new', function(data) {
-            data.items = [1, 2, 3];
             GameInitialize(data.items, {
               newGame: newGame
             });
