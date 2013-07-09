@@ -31,6 +31,8 @@ class Numbers(Game):
                  for i in range(level)]
 
         return {
+            "try": len(self.session.get_plays()),
+            "assisted": self.app.get_next_game()['assisted'],
             "level": level,
             "items": items
         }
