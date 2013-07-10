@@ -29,21 +29,24 @@ function runAnimation() {
 }
 
 function newGame() {
-  global.loader = html5Preloader();
+  
   $('.numberBtn').unbind('click');
+
   $('#answerLine').children().remove();
   $.get(global.ctx + '/new', function(data){
     $('body').append('<div class="modal-backdrop curtain"></div>');
     var level = data.level;
       $('#level span').text(level);
     var items = data.items;
-    console.log('new game '+data);
+    console.log('new game ',data);
 
     GameInitialize(items, {
       newGame: newGame,
       answerRight: answerRight,
       answerWrong: answerWrong
     });
+    // hide game until numbers are heard
+    $('#game').css('display', 'none');
 
     var sounds = {};
     var i = 0;
@@ -69,6 +72,7 @@ function newGame() {
 
 function setupGame() {
   $('.modal-backdrop.curtain').remove();
+  $('#game').css('display', 'block');
   $('.numberBtn').unbind('mousedown');
   $('.numberBtn').mousedown(function(event){
     event.preventDefault();
