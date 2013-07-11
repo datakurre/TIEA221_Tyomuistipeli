@@ -2,10 +2,10 @@
 """Tests for the main Application
 """
 
-import unittest, json
+import unittest
+import json
 
 from pyramid import testing
-from pyramid.httpexceptions import HTTPFound
 
 from persistent.mapping import PersistentMapping
 
@@ -118,13 +118,12 @@ class AppFunctionalTesting(unittest.TestCase):
         app = Application(request, PersistentMapping())
 
         result = app.get_session_statuses_for_today()
-        self.assertEquals(result, [{'123': { 'session_over': False }}])
+        self.assertEquals(result, [{'123': {'session_over': False}}])
 
         self.play_one_session(app, '123')
 
         result = app.get_session_statuses_for_today()
-        self.assertEquals(result, [{'123': { 'session_over': True }}])
-
+        self.assertEquals(result, [{'123': {'session_over': True}}])
 
     def test_after_session_game_redirects_to_main_page(self):
         """ Test for users that try to go to "pelaa" page after session.
@@ -221,7 +220,6 @@ class AppFunctionalTesting(unittest.TestCase):
         """
         self.assertTrue(False)
 
-
     def test_interrupted_game_wont_continue_day_later(self):
         """ If player quits the session before the session has ended
         the game shall not try to continue the same game on second day
@@ -229,21 +227,10 @@ class AppFunctionalTesting(unittest.TestCase):
         self.assertTrue(False)
 
     def test_session_order(self):
-        """ Testaa, että pelikenttä vaihtuu pelin edetessä
+        """Testaa, että pelikenttä vaihtuu pelin edetessä
         """
-        details = {
-            "registered": True,
-            "assisted": self.get_assistance_flag()
-        }
-        details.update(self.request.params)
-        return self.data.players.create_player(name, details)
-
         request = testing.DummyRequest()
         request.cookies["active_player"] = "123"
-
-        # from webtest import TestApp
-        # webapp = TestApp(self.layer["app"])
-        # import pdb; pdb.set_trace()
 
         app = Application(request, PersistentMapping())
 
