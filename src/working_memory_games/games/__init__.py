@@ -265,10 +265,22 @@ class Game(object):
         plays_today = [play for play in all_plays if
                        "start" in play and play.get("start") >= today]
 
+        # When first play, stars = 2
+        if len(all_plays) == len(plays_today):
+            stars = 2
+        # When level increased, stars = 3
+        elif self.session.level > plays_today[-1]["level"]:
+            stars = 3
+        # When level decreased, stars = 1
+        elif self.session.level < plays_today[-1]["level"]:
+            stars = 1
+        # Otherwise, stars = 2
+        else:
+            stars = 2
+
         session = self.app.get_current_session()
 
         return {
             "game": session.order[0]["game"],
-            "stars": 2
+            "stars": stars
         }
-
