@@ -2,12 +2,16 @@
 """ Base implementation for games """
 
 from __future__ import division
-from numpy import *
+from numpy import (
+    arange,
+    argmax,
+    exp,
+    log,
+    where
+)
 from numpy.random import random
 
-
 import datetime
-from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import (
     view_config,
@@ -100,12 +104,12 @@ class Game(object):
         """ Use jvk's adaptation to calculate the next level """
 
         # Mahdolliset tuntemattoman arvot
-        kvals = arange(1,21)
+        kvals = arange(1, 21)
 
         # Mahdolliset n:n arvot
-        nvals = arange(2,20)
+        nvals = arange(2, 20)
 
-        def psi(k,n):
+        def psi(k, n):
             # Todenmukaisessa mallissa on aina oltava pieni todennäköisyys
             # saada vahingossa väärin vaikka osaisi.  Kaavassa on hihasta
             # ravistettuna 5% vahinkotodennäköisyys ja lisäksi hatusta vedetty
@@ -115,13 +119,13 @@ class Game(object):
             # arvaustodennäköisyys 1/n).
 
             # 5% muistivirheitä (ref Memory book)
-            gamma = 1./4.**n
-            return gamma + (1 - gamma - 0.05)/(1+exp(n-k))
+            gamma = 1. / 4. ** n
+            return gamma + (1 - gamma - 0.05) / (1 + exp(n - k))
 
-        p0 = 1.0 / where(kvals>2,kvals,3)**2
+        p0 = 1.0 / where(kvals > 2, kvals, 3) ** 2
         p0 *= 1 / sum(p0)
 
-        def update(p,n,res):
+        def update(p, n, res):
             if res:
                 p = p * psi(kvals, n)
             else:
@@ -129,22 +133,22 @@ class Game(object):
             return p * (1 / sum(p))
 
         def entropy(p):
-            return -sum(p * log(p + 1e-100))/log(2)
+            return -sum(p * log(p + 1e-100)) / log(2)
 
         def simulate_result(n):
-            p_succ = psi(true_k,n)
+            p_succ = psi(true_k, n)
             return random() < p_succ
 
         def expected_gain(p, n, child_friendly=False):
             # oikean vastauksen estimoitu todennäköisyys
-            p_succ = sum( p * psi(kvals,n) )
+            p_succ = sum(p * psi(kvals, n))
 
             # väärän vastauksen estimoitu todennäköisyys
             p_fail = 1 - p_succ
 
             # entropian odotusarvo vastauksen jälkeen
-            expected_entropy = (  p_succ * entropy(update(p,n,1))
-                                  + p_fail * entropy(update(p,n,0)))
+            expected_entropy = (p_succ * entropy(update(p, n, 1))
+                                + p_fail * entropy(update(p, n, 0)))
 
             # entropian pieneniminen  = saatu informaatio
             gain = entropy(p) - expected_entropy
@@ -155,10 +159,9 @@ class Game(object):
                 # suhteessa "hinnan" odotusarvoon, missä hinta
                 # on määritelty siten, että väärä vastaus
                 # maksaa yhden yksikön
-                gain /= n #p_fail
+                gain /= n  # p_fail
 
             return gain
-
 
         # simuloitu todellinen pelaajan parametri
         true_k = 7
@@ -166,21 +169,21 @@ class Game(object):
         # käytetäänkö "lapsiystävällistä versiota"
         child_friendly = True
 
-
         p = p0
-        i = 0
+        # i = 0
         #n = 3 # defualt if not games yet
         last_plays = self.get_last_plays(20)
         for play in last_plays:
             #print play
             n = play['level']
             res = play['pass']
-            p = update(p,n,res)
+            p = update(p, n, res)
             #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
 
         #print
         #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
-        gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
+        gains = [expected_gain(p, n, child_friendly=child_friendly)
+                 for n in nvals]
 
         #print 'Expected gains in bits for n = %s:' % nvals
         #print '[%s]' % (' '.join('%.3f' % g for g in gains))
@@ -192,7 +195,7 @@ class Game(object):
         print 'Best n to present next:', n
 
         self.session.level = n
-        return int(n) #remove numpy-reperesentation
+        return int(n)  # remove numpy-reperesentation
 
     @view_config(name="runanimation", renderer="json")
     def run_animation(self):
