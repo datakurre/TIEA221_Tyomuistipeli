@@ -112,16 +112,16 @@ class AppFunctionalTesting(unittest.TestCase):
         """ Main page indicates whether user has played the session
             for today. Should check status before, during and after session.
         """
-        
+
         request = testing.DummyRequest()
         request.cookies["players"] = json.dumps([{'id':'123', 'name':'test'}])
         app = Application(request, PersistentMapping())
 
         result = app.get_session_statuses_for_today()
         self.assertEquals(result, [{'123': { 'session_over': False }}])
-        
+
         self.play_one_session(app, '123')
-        
+
         result = app.get_session_statuses_for_today()
         self.assertEquals(result, [{'123': { 'session_over': True }}])
 
