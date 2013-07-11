@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Tests for the main Application
-"""
 
 import unittest
 import json
@@ -10,8 +8,8 @@ from pyramid import testing
 from persistent.mapping import PersistentMapping
 
 from working_memory_games.app import Application
-
 from working_memory_games.testing import INTEGRATION_TESTING
+from working_memory_games.testing_utils import get_game_method
 
 
 class AppIntegrationTests(unittest.TestCase):
@@ -86,13 +84,6 @@ class AppFunctionalTesting(unittest.TestCase):
         app.request.cookies["active_player"] = player_id
         session = app.get_current_session(player_id)
 
-        def get_game_method(game, method_name, request):
-            for adapter in request.registry.registeredAdapters():
-                if len(adapter.required) > 2:
-                    if adapter.required[2].providedBy(game):
-                        if adapter.name == method_name:
-                            return adapter.factory.__view_attr__
-
         n = len(session.order)
         for i in range(n):
             next_game = app.get_next_game()
@@ -157,13 +148,6 @@ class AppFunctionalTesting(unittest.TestCase):
 
     def get_game_stars_after_one_session(self, app, player_id):
         app.request.cookies["active_player"] = player_id
-
-        def get_game_method(game, method_name, request):
-            for adapter in request.registry.registeredAdapters():
-                if len(adapter.required) > 2:
-                    if adapter.required[2].providedBy(game):
-                        if adapter.name == method_name:
-                            return adapter.factory.__view_attr__
 
         name = next_game = app.get_next_game()
         while name == next_game:
@@ -235,13 +219,6 @@ class AppFunctionalTesting(unittest.TestCase):
         app = Application(request, PersistentMapping())
 
         session = app.get_current_session()
-
-        def get_game_method(game, method_name, request):
-            for adapter in request.registry.registeredAdapters():
-                if len(adapter.required) > 2:
-                    if adapter.required[2].providedBy(game):
-                        if adapter.name == method_name:
-                            return adapter.factory.__view_attr__
 
         n = len(session.order)
         for i in range(n):
