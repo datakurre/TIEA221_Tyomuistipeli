@@ -12,6 +12,7 @@ body .modal {
   bottom: 2em;
   overflow: visible;
   background: white;
+  border: 1px solid black;
 }
 
 #board, #tower {
@@ -28,7 +29,7 @@ body .modal {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 5em:
+  height: 6em:
   overflow: visible;
 }
 
@@ -58,6 +59,7 @@ body .modal {
 }
 
 #tower .box2d.placeholder {
+  background-color: white;
   border: 0.1em dashed lightgrey;
 }
 
@@ -66,7 +68,7 @@ body .modal {
 }
 
 #dialer .box2d .number {
-  font-size: 5em;
+  font-size: 6em;
   cursor: pointer;
 }
 
@@ -74,7 +76,7 @@ body .modal {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border: 0.1em solid black;
+  border: 0.5em solid black;
   /* border-radius: 1em; */
 }
 
@@ -82,6 +84,63 @@ body .modal {
   box-sizing: border-box;
   border: 0.1em solid black;
 }
+
+/*
+.box2d.rectangle {
+  border-width: 1em;
+}*/
+
+.rectangle.color-1 {
+  color: #800000;
+  border-color: #800000;
+  background-color: #ff0000;
+}
+.rectangle.color-2 {
+  color: #a57500;
+  border-color: #a57500;
+  background-color: #ffb500;
+}
+.rectangle.color-3 {
+  color: #808000;
+  border-color: #808000;
+  background-color: #ffff00;
+}
+.rectangle.color-4 {
+  color: #ae926a;
+  border-color: #ae926a;
+  background-color: #ffd69c;
+}
+.rectangle.color-5 {
+  color: #008000;
+  border-color: #008000;
+  background-color: #00ff00;
+}
+.rectangle.color-6 {
+  color: #008080;
+  border-color: #008080;
+  background-color: #00ffff;
+}
+.rectangle.color-7 {
+  color: #000080;
+  border-color: #000080;
+  background-color: #0000ff;
+}
+.rectangle.color-8 {
+  color: #b27e8d;
+  border-color: #b27e8d;
+  background-color: #feb4c9;
+}
+.rectangle.color-9 {
+  color: #000000;
+  border-color: #000000;
+  background-color: #808080;
+}
+/* */
+.box2d.rectangle.white {
+  background-color: white;
+  border-color: black;
+}
+
 
 /* .color-0 { */
 /*   background: olive; */

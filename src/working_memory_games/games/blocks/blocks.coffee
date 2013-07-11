@@ -399,7 +399,7 @@ jQuery ($) ->
     applyDialerCube = (idx) ->
         left = dialer.width / 2 - (60 * 9 / 2)
 
-        dialCube= new Rectangle "dial-#{idx}", left + 60 * (idx - 1), 0, 50, 50
+        dialCube= new Rectangle "dial-#{idx}", left + 70 * (idx - 1), 0, 60, 60
         dialCube.el.className += " color-#{idx}"
         dialer.applyEntity(dialCube)
 
@@ -414,15 +414,17 @@ jQuery ($) ->
             item = idx
             items = global.gameItems  # XXX: we rely on game globals here
             currentIdx = global.userItems.length  # XXX: the same
+            size = cubeSize(bg, items.length)
 
             if items[currentIdx] == item
                 id = "fg-cube-#{currentIdx}"
-                left = fg.width / 2 - 100 / 2
-                cube = new Rectangle(id, left, fg.height, 100, 100)
+                left = fg.width / 2 - size / 2
+                cube = new Rectangle(id, left, fg.height, size, size)
                 fg.applyEntity(cube)
                 cube.el.className += " color-#{item}"
                 $number = $("<span class=\"number\">#{item}</span>")
                 $number.appendTo($(cube.el))
+                $number.css('font-size', Math.floor(size/10)+'em')
 
                 $('body').append('<div class="modal-backdrop curtain"></div>')
                 $game.queue -> fg.animate -> $game.dequeue()
@@ -459,15 +461,27 @@ jQuery ($) ->
     # Define helpers for building the game. game is reseted for every
     # game.
 
-    applyCube = (stage, id, position) ->
-        left = stage.width / 2 - 100 / 2
-        cube = new Rectangle(id, left, 0 + 120 * position, 100, 100)
+    cubeSize = (stage, count) ->
+        return Math.min(100, stage.height*.9 / count)
+
+    applyCube = (stage, id, position, count) ->
+        size = cubeSize(stage, count)
+        left = stage.width / 2 - size / 2
+        cube = new Rectangle(id, left, 0 + size*1.05 * position, size, size)
         stage.applyEntity(cube)
+        $(cube.el).addClass('white').css('border-width', size/100+'em')
         return cube
 
-    queueAppend = ($cube, $el) ->
+    queueAppend = ($cube, $el, size) ->
         $game.queue ->
             $el.appendTo($cube)
+            $el.css('font-size', Math.floor(size/10)+'em')
+            $game.dequeue()
+        return $game
+
+    queueFadeIn = ($el) ->
+        $game.queue ->
+            $el.removeClass('white')
             $game.dequeue()
         return $game
 
@@ -496,14 +510,23 @@ jQuery ($) ->
 
         # "Build the tower"
         for idx in [0...data.items.length]
-            cube = applyCube(bg, "bg-cube-#{idx}", idx)
+            cube = applyCube(bg, "bg-cube-#{idx}", idx, data.items.length)
             cube.el.className += " color-#{data.items[idx]}"
         $game.queue -> bg.animate -> $game.dequeue()
 
         # "Countdown"
         for idx in [(data.items.length - 1)..0]
             $number = $("<span class=\"number\">#{data.items[idx]}</span>")
-            queueAppend($("#bg-cube-#{idx}"), $number).delay(1000)
+            queueFadeIn($("#bg-cube-#{idx}"))
+            cube = queueAppend($("#bg-cube-#{idx}"), $number,
+                cubeSize(bg, data.items.length))
+            if data.assisted
+                if (-idx + data.items.length - 1) % 3 == 2
+                    cube.delay(1500)
+                else
+                    cube.delay(750)
+            else
+                cube.delay(1000)
             queueFadeOut($("#bg-cube-#{idx}"))
 
         # Show the dialer
@@ -516,10 +539,29 @@ jQuery ($) ->
             $('.modal-backdrop.curtain').remove()
             $game.dequeue()
 
-    newGame = -> $.get('new', (data) ->
-        GameInitialize(data.items, newGame: newGame)
-        initGame(data)
-    )
+    answerWrong = (right, item, continueFunc) ->
+        $('#dialer #dial-'+right)
+             .animate({opacity: 0}, 500)
+             .animate({opacity: 1}, 500)
+             .animate({opacity: 0}, 500)
+             .animate({opacity: 1}, 500)
+             .promise().done(continueFunc)
+ 
+
+    newGame = ->
+        $.preload('yrita', global.ctx+'/snd/yrita_rakentaa.[mp3,ogg]')
+        $('body').one('preloaded', ->
+            $('body').play('yrita').promise().done(->
+                $.get('new', (data) ->
+                    #data.items = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
+                    GameInitialize(data.items,
+                        newGame: newGame,
+                        answerWrong: answerWrong
+                    )
+                    initGame(data)
+                )
+            )
+        )
 
     runAnimation = -> 
         $('#animation').css('display', 'block')
@@ -566,9 +608,9 @@ jQuery ($) ->
 
     $query = if location.search != undefined then location.search else ''
     newOrAnimGame = -> $.get('runanimation'+$query, (data) ->
-        console.log('neoranim', data.animation)
+        console.log('neworanim', data.animation)
         if data.animation
-           runAnimation()
+            runAnimation()
         else
             newGame()
     )

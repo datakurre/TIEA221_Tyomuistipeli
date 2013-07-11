@@ -1,54 +1,78 @@
+
 $(document).ready(function(){
-  newGame();
+
+  $.preload('kuulet_numeroita',
+            global.ctx + '/snd/kuulet_numeroita.[ogg,mp3]');
+  $.preload('toista',
+            global.ctx + '/snd/toista_numerot.[ogg,mp3]');
+  for (var i=1; i<10; i++) {
+    $.preload('normal_'+i, global.ctx + '/snd/normal_' + i + '.[ogg,mp3]');
+    $.preload('adapt_'+i+'_0', global.ctx + '/snd/adapt_' + i + '_0.[ogg,mp3]');
+    $.preload('adapt_'+i+'_1', global.ctx + '/snd/adapt_' + i + '_1.[ogg,mp3]');
+    $.preload('adapt_'+i+'_2', global.ctx + '/snd/adapt_' + i + '_2.[ogg,mp3]');
+  }
+  $('body').one('preloaded', function(){
+    var query = location.search !== undefined? location.search: '';
+    $.get(global.ctx + '/runanimation'+query, function(data){
+	if (data.animation) {
+	    runAnimation();
+	} else {
+	    newGame();
+	}
+    });
+  });
 });
 
+function runAnimation() {
+  console.log("animation here");
+  newGame();
+}
+
 function newGame() {
-  global.loader = html5Preloader();
+  
   $('.numberBtn').unbind('click');
+
   $('#answerLine').children().remove();
   $.get(global.ctx + '/new', function(data){
     $('body').append('<div class="modal-backdrop curtain"></div>');
     var level = data.level;
       $('#level span').text(level);
     var items = data.items;
-    console.log('new game '+data);
+    console.log('new game ',data);
 
     GameInitialize(items, {
       newGame: newGame,
       answerRight: answerRight,
       answerWrong: answerWrong
     });
+    // hide game until numbers are heard
+    $('#game').css('display', 'none');
 
     var sounds = {};
     var i = 0;
-    for (i=0; i<items.length; i++) {
-      var nro = items[i];
-      sounds['snd'+nro+'*:'+global.ctx+'/snd/'+nro+'.ogg||'+global.ctx+'/snd/'+nro+'.mp3'] = nro;
-    }
-    files = [];
-    for (f in sounds) files.push(f);
-    console.log(files);
-    global.loader.on('finish', function(){
-      for (i=0; i<items.length; i++) {
-          var nro = items[i];
-          playSound(nro, i*1800);
-      }
-      setTimeout(setupGame, items.length*1700);
-    });
-    global.loader.on('error', function(e){ console.error(e); });
-    //global.loader.on('fileloaded', function(e){ console.error(e); });
-    global.loader.addFiles(files);
-  });
-}
 
-function playSound(nro, delay) {
-  setTimeout(function() {
-    global.loader.getFile('snd'+nro).play();
-  }, delay);
+    if (data.try == 0) { // first time
+      $('body').play('kuulet_numeroita');
+    } else {
+      $('body').play('toista');
+    }
+
+    for (var i in data.items) {
+      if (data.assisted) {
+        $('body').play('adapt_'+data.items[i]+'_'+(i % 3));
+      } else { // normal non-assisted
+        $('body').play('normal_'+data.items[i]);
+      }
+    }
+    $('body').promise().done(function(){
+      setupGame();
+    });
+  });
 }
 
 function setupGame() {
   $('.modal-backdrop.curtain').remove();
+  $('#game').css('display', 'block');
   $('.numberBtn').unbind('mousedown');
   $('.numberBtn').mousedown(function(event){
     event.preventDefault();
@@ -67,7 +91,18 @@ function setupGame() {
   });
 }
 
+function kavenna() {
+  var existing = $('.rightNro');
+  existing.each(function(idx){
+    if (idx < existing.length-1) {
+      $(this).animate({'width': '15px'}, 500);
+    }
+  });
+}
+
 function answerRight(item) {
+  kavenna();
+
   var elm = $('<span class="rightNro" style="opacity:0.1;margin-left:200px;">'+item+'</span>');
   $('#answerLine').append(elm);
   elm.animate({
@@ -78,7 +113,9 @@ function answerRight(item) {
   });
 }
 
-function answerWrong(right, item) {
+function answerWrong(right, item, continueFunc) {
+  kavenna();
+
   var elm = $('<span class="wrongNro" style="opacity:0.1;margin-left:200px;">'+item+'</span>');
   $('#answerLine').append(elm);
   elm.animate({
@@ -96,4 +133,7 @@ function answerWrong(right, item) {
     for (i=0;i<4;i++) {
       elmRight = elmRight.animate({opacity: 0.3}, 'fast').animate({opacity: 1}, 'fast');
     }
+    elmRight.promise().done(function(){
+        continueFunc();
+    });
 }
