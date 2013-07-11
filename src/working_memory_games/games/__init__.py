@@ -192,7 +192,7 @@ class Game(object):
             n = 3
         elif n > last_plays[0]['level'] + 2:
             n = last_plays[0]['level'] + 2
-        print 'Best n to present next:', n
+        logger.info('Best n to present next: %s' % n)
 
         self.session.level = n
         return int(n)  # remove numpy-reperesentation
