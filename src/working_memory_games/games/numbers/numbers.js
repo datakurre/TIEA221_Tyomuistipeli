@@ -24,12 +24,75 @@ $(document).ready(function(){
 });
 
 function runAnimation() {
-  console.log("animation here");
-  newGame();
+    $('#animation').css('display', 'block');
+
+    $('#hattu,#pupu').hide();
+
+    $('#magicstar').css({
+        width: '35px',
+        left:  '19px',
+        top:   '337px'
+    }).hide(1).delay(1500).show(1);
+    $('#magicstar').animate({
+        width: '100px',
+        left:  '336px',
+        top:   '390px'
+    }, {
+        duration: 2000,
+        progress: function(promise, progress, remainingMs) {
+            var a = progress * 1 * Math.PI;
+            $('#magicstar img').css({
+                'top': -Math.sin(a)*250+'px',
+            });
+        }
+    });
+    
+    $('#magicstar').promise().done(function(){
+        $('#hattu').show();
+
+        $('#magicstar').css({
+            width: '35px',
+            left:  '19px',
+            top:   '337px'
+        }).hide(1).delay(500).show(1).animate({
+            width: '100px',
+            left:  '336px',
+            top:   '390px'
+        }, {
+            duration: 2000,
+            progress: function(promise, progress, remainingMs) {
+                var a = progress * 1 * Math.PI;
+                $('#magicstar img').css({
+                    'top': -Math.sin(a)*250+'px',
+                });
+            }
+        }).hide(1).delay(1500).promise().done(function(){
+            $('#pupu').css({
+                display: 'block',
+                width: '65px',
+                left:  '356px',
+                top:   '450px'
+            }).animate({
+                width: '477px',
+                left:  '457px',
+                top:   '267px'
+            }, {
+                duration: 2000,
+                progress: function(promise, progress, remainingMs) {
+                    var a = progress * 1 * Math.PI;
+                    $('#pupu img').css({
+                        'top': -Math.sin(a)*350+'px',
+                    });
+                }
+            }).delay(500).promise().done(function(){
+                $('#animation').hide();
+                newGame();
+            });
+        });
+    });
 }
 
 function newGame() {
-  
   $('.numberBtn').unbind('click');
 
   $('#answerLine').children().remove();
