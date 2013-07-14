@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Robot Framework test suite"""
 
 import unittest
 
