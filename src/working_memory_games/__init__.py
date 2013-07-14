@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
-""" Pyramid startup and URL dispatch / traversal registrations """
+"""Pyramid startup and URL dispatch / traversal registrations
+"""
 
 # XXX: Monkeypatch a bug in Pyramid 1.4a3 debug mode
 import pyramid.config.predicates
