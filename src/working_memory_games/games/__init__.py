@@ -171,8 +171,9 @@ class Game(object):
 
         p = p0
         # i = 0
-        #n = 3 # defualt if not games yet
-        last_plays = self.get_last_plays(20)
+        #n = 3  # default if not games yet
+        last_plays = sorted(self.get_last_plays(20),
+                            cmp=lambda x, y: cmp(x['start'], y['start']))
         for play in last_plays:
             #print play
             n = play['level']
