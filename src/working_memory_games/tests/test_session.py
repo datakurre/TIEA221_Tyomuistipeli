@@ -12,11 +12,11 @@ from working_memory_games.app import Application
 from working_memory_games.testing import INTEGRATION_TESTING
 from working_memory_games.testing_utils import (
     get_view_method,
-    play_one_session
-)
+    play_one_session,
+    step_one_day)
 
 
-class AppFunctionalTesting(unittest.TestCase):
+class TestSession(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
@@ -64,7 +64,25 @@ class AppFunctionalTesting(unittest.TestCase):
         session
 
         """
-        self.assertTrue(False)
+        self.request.cookies["players"] = json.dumps([{
+            'id': '123',
+            'name': 'test'
+        }])
+
+        player = play_one_session(self.app, '123', percentage=80)
+        self.assertGreater(
+            len(self.app.get_current_session('123').order), 0,
+            u"Session was completed when it shouldn't.")
+        self.assertLess(
+            len(player), 2, u"More than one session was played.")
+
+        step_one_day(self.app, '123')
+        player = play_one_session(self.app, '123')
+
+        self.assertGreater(
+            len(player), 1, u"New session was not started.")
+        self.assertLess(
+            len(player), 3, u"More than two sessions were played.")
 
     def test_session_order(self):
         """Testaa, että pelikenttä vaihtuu pelin edetessä

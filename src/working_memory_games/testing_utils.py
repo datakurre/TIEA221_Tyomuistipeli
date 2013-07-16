@@ -35,11 +35,11 @@ def step_one_day(app, player_id):
     return player
 
 
-def play_one_session(app, player_id, save_pass=False):
+def play_one_session(app, player_id, percentage=100, save_pass=False):
     app.request.cookies["active_player"] = player_id
     session = app.get_current_session(player_id)
 
-    n = len(session.order)
+    n = int(len(session.order) * (percentage / 100.))
     for i in range(n):
         next_game = app.get_next_game()
         assert session.order[0] == next_game
@@ -56,6 +56,7 @@ def play_one_session(app, player_id, save_pass=False):
         else:
             game.save_fail()
 
-    assert len(session.order) == 0
+    if percentage == 100:
+        assert len(session.order) == 0
 
     return app.get_current_player(player_id)
