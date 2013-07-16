@@ -262,7 +262,8 @@ class Game(object):
     def get_game_over(self):
         data = {}
 
-        today = datetime.datetime(*(datetime.datetime.now().timetuple()[:3]))
+        now = datetime.datetime.utcnow()
+        today = datetime.datetime(*(now.timetuple()[:3]))
         all_plays = self.get_last_plays()
         plays_today = [play for play in all_plays if
                        "start" in play and play.get("start") >= today]
