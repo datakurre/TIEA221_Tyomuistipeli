@@ -59,14 +59,17 @@ class TestStars(unittest.TestCase):
             'name': 'test'
         }])
 
+        play_one_session(self.app, '123', save_pass=True)
+        step_one_day(self.app, '123')
         play_one_session(self.app, '123', save_pass=False)
         step_one_day(self.app, '123')
+
         player = play_one_session(self.app, '123', save_pass=True)
 
         self.assertGreater(
-            len(player), 1, u"Only one session was played.")
+            len(player), 2, u"Only one or two sessions were played.")
         self.assertLess(
-            len(player), 3, u"More than two sessions were played.")
+            len(player), 4, u"More than three sessions were played.")
 
         some_game = tuple(player.values()[0].keys())[0]
 
