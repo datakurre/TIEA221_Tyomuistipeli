@@ -171,8 +171,9 @@ class Game(object):
 
         p = p0
         # i = 0
-        #n = 3 # defualt if not games yet
-        last_plays = self.get_last_plays(20)
+        #n = 3  # default if not games yet
+        last_plays = sorted(self.get_last_plays(20),
+                            cmp=lambda x, y: cmp(x['start'], y['start']))
         for play in last_plays:
             #print play
             n = play['level']
@@ -260,27 +261,30 @@ class Game(object):
     @view_config(name="game_over", renderer="../templates/game_over.html",
                  request_method="GET", xhr=False)
     def get_game_over(self):
-        today = datetime.datetime(*(datetime.datetime.now().timetuple()[:3]))
+        data = {}
+
+        now = datetime.datetime.utcnow()
+        today = datetime.datetime(*(now.timetuple()[:3]))
         all_plays = self.get_last_plays()
         plays_today = [play for play in all_plays if
                        "start" in play and play.get("start") >= today]
 
         # When first play, stars = 2
         if len(all_plays) == len(plays_today):
-            stars = 2
+            data["stars"] = 2
         # When level increased, stars = 3
         elif self.session.level > plays_today[-1]["level"]:
-            stars = 3
+            data["stars"] = 3
         # When level decreased, stars = 1
         elif self.session.level < plays_today[-1]["level"]:
-            stars = 1
+            data["stars"] = 1
         # Otherwise, stars = 2
         else:
-            stars = 2
+            data["stars"] = 2
 
+        # When session has not yet ended, return the next game
         session = self.app.get_current_session()
+        if session.order:
+            data["game"] = session.order[0]["game"]
 
-        return {
-            "game": session.order[0]["game"],
-            "stars": stars
-        }
+        return data

@@ -10,7 +10,7 @@ from working_memory_games.app import Application
 from working_memory_games.testing import INTEGRATION_TESTING
 
 
-class PlayerTests(unittest.TestCase):
+class TestPlayer(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 

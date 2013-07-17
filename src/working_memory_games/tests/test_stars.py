@@ -9,10 +9,13 @@ from persistent.mapping import PersistentMapping
 
 from working_memory_games.app import Application
 from working_memory_games.testing import INTEGRATION_TESTING
-from working_memory_games.testing_utils import play_one_session
+from working_memory_games.testing_utils import (
+    play_one_session,
+    step_one_day
+)
 
 
-class AppFunctionalTesting(unittest.TestCase):
+class TestStars(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
@@ -29,16 +32,53 @@ class AppFunctionalTesting(unittest.TestCase):
             'name': 'test'
         }])
 
-        play_one_session(self.app, '123')
-        # import pdb; pdb.set_trace()
-        stars = 2
+        player = play_one_session(self.app, '123')
 
-        self.assertEqual(stars, 2)
+        self.assertGreater(
+            len(player), 0, u"No sessions was played.")
+        self.assertEqual(
+            len(player), 1, u"More than one session was played.")
+        self.assertGreater(
+            len(player.values()[0]), 0, u"No games were played.")
+
+        some_game = tuple(player.values()[0].keys())[0]
+
+        self.assertIn(
+            some_game, self.app.games, u"Game not found.")
+
+        game = self.app.games[some_game]
+
+        self.assertEqual(game.get_game_over()["stars"], 2)
 
     def test_stars_three_when_better(self):
         """ Test second or later game with better result gives three stars
         """
-        self.assertTrue(False)
+
+        self.request.cookies["players"] = json.dumps([{
+            'id': '123',
+            'name': 'test'
+        }])
+
+        play_one_session(self.app, '123', save_pass=True)
+        step_one_day(self.app, '123')
+        play_one_session(self.app, '123', save_pass=False)
+        step_one_day(self.app, '123')
+
+        player = play_one_session(self.app, '123', save_pass=True)
+
+        self.assertGreater(
+            len(player), 2, u"Only one or two sessions were played.")
+        self.assertLess(
+            len(player), 4, u"More than three sessions were played.")
+
+        some_game = tuple(player.values()[0].keys())[0]
+
+        self.assertIn(
+            some_game, self.app.games, u"Game not found.")
+
+        game = self.app.games[some_game]
+
+        self.assertEqual(game.get_game_over()["stars"], 3)
 
     def test_stars_two_when_same(self):
         """Test second or later game with same result gives two stars
@@ -49,13 +89,47 @@ class AppFunctionalTesting(unittest.TestCase):
             'name': 'test'
         }])
 
-        play_one_session(self.app, '123')
-        # import pdb; pdb.set_trace()
-        stars = 2
+        play_one_session(self.app, '123', save_pass=False)
+        step_one_day(self.app, '123')
+        player = play_one_session(self.app, '123', save_pass=False)
 
-        self.assertEqual(stars, 2)
+        self.assertGreater(
+            len(player), 1, u"Only one session was played.")
+        self.assertLess(
+            len(player), 3, u"More than two sessions were played.")
+
+        some_game = tuple(player.values()[0].keys())[0]
+
+        self.assertIn(
+            some_game, self.app.games, u"Game not found.")
+
+        game = self.app.games[some_game]
+
+        self.assertEqual(game.get_game_over()["stars"], 2)
 
     def test_stars_one_when_worse(self):
         """ Test second or later game with worse result gives one stars
         """
-        self.assertTrue(False)
+
+        self.request.cookies["players"] = json.dumps([{
+            'id': '123',
+            'name': 'test'
+        }])
+
+        play_one_session(self.app, '123', save_pass=True)
+        step_one_day(self.app, '123')
+        player = play_one_session(self.app, '123', save_pass=False)
+
+        self.assertGreater(
+            len(player), 1, u"Only one session was played.")
+        self.assertLess(
+            len(player), 3, u"More than two sessions were played.")
+
+        some_game = tuple(player.values()[0].keys())[0]
+
+        self.assertIn(
+            some_game, self.app.games, u"Game not found.")
+
+        game = self.app.games[some_game]
+
+        self.assertEqual(game.get_game_over()["stars"], 1)
