@@ -5,5 +5,5 @@
     <NC:persist RDF:resource="chrome://browser/content/browser.xul#main-window"/>
   </RDF:Description>
   <RDF:Description RDF:about="chrome://browser/content/browser.xul#main-window"
-                   width="1600" height="1200" />
+                   width="1200" height="900" />
 </RDF:RDF>
