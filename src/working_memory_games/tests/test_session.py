@@ -125,7 +125,7 @@ class TestSession(unittest.TestCase):
         n_assisted = len([game for game in session.order
                           if game.get("assisted") is True])
         portion_assisted = float(n_assisted) / len(session.order)
-        self.assertGreater(portion_assisted, 0.3)
+        self.assertGreaterEqual(portion_assisted, 0.3)
         self.assertLess(portion_assisted, 0.4)
 
     def test_at_least_95_of_200_of_new_players_are_assisted(self):
