@@ -102,6 +102,8 @@ class game_config(object):
             name = name.lower()  # game id is its class name in lowercase
             config = context.config.with_package(info.module)
 
+            logging.info("Registering game '%s'." % name)
+
             # Register game so that sessions will be able to find it
             config.registry.registerAdapter(
                 ob, name=name, required=(IApplication,), provided=IGame)
