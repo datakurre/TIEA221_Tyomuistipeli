@@ -42,4 +42,8 @@
 
         Matkalle-kentän ääni: Lasse Lähteenmäki
 
+        Takaperoiset numerot -kentän ääni ja hugoismit: Telle-Tiia Pitkänen
+
+        Pilottitestaus: 
+
 
