@@ -101,8 +101,8 @@ class Application(object):
             players = json.loads(urllib.unquote(
                 self.request.cookies.get("players", default)
             ))
-            players_by_id = dict(map([(player.get('id'), player.get('name'))
-                                      for player in players]))
+            players_by_id = dict([(player.get('id'), player.get('name'))
+                                  for player in players])
             if player_id in players_by_id:
                 # Re-create named player with the given name
                 player = self.data.players[player_id] = Player(
