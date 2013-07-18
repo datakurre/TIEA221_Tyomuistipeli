@@ -6,7 +6,7 @@
  *
  *  $.preload('hello', '/hello.[mp3,ogg]');
  *  $.preload('bye', '/snd/bye.[mp3,ogg]');
- *  $('body').on('preloaded', function(){
+ *  $('body').one('preloaded', function(){
  *    $('body').play('hello').play('hello').play('bye');
  *  });
  *
