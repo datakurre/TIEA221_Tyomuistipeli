@@ -1,11 +1,13 @@
 #-*- coding: utf-8 -*-
-""" Main application, player management and session code """
+"""Main application, player management and session code
+"""
 
 import json
 import random
 import re
 import urllib
 import urlparse
+import datetime
 
 from pyramid.view import (
     view_config,
@@ -45,23 +47,25 @@ logger = logging.getLogger("working_memory_games")
 
 @view_defaults(context=IApplication, route_name="traversal")
 class Application(object):
-    """ Dynamic application root object, which provides access to the
-    database and enables traverse for available games """
+    """Dynamic application root object, which provides access to the
+    database and enables path traverse for available games
 
+    """
     implements(IApplication)
 
     def __init__(self, context, request=None):
-
+        """Initialize application for each request
+        """
         # Support initialization as a view class instance
         if issubclass(context.__class__, self.__class__):
             self.__dict__.update(context.__dict__)
             return
 
         # Continue initialization as a root object instance
-        self.data = request  # 'request' is either None or a mock up db like {}
+        self.data = request  # 'request' is either None or a mockup db like {}
         self.request = context  # 'context' is the request for root_factory
 
-        # Get database root from ZODB
+        # Get database root from ZODB when no mockup db was given
         if self.data is None:
             self.data = get_connection(self.request).root()
 
@@ -72,76 +76,64 @@ class Application(object):
         # Migrate data over possible schema changes
         migrate(self.data)
 
-        # Get registered games
+        # Set registered games (available games could be filtered here)
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
 
     def get_current_player(self, player_id=''):
+        """Return the current player according to the available cookie data
+        """
         # Read cookie
         if player_id == '':
             player_id = self.request.cookies.get("active_player")
 
+        # When player_id was not available, redirect to application root
         if player_id is None:
             raise HTTPFound(location=self.request.application_url + "/")
 
         # Look up the current player using the cookie data
         player = self.data.players.get(player_id)
 
-        # Oops, player not found. Let's create one:
+        # When player was not found, create one for convenience
         if player is None:
-            # Let's figure out, what players the browser knows
+
+            # Figure out, what players the browser knows
             default = urllib.quote(json.dumps([]))
             players = json.loads(urllib.unquote(
                 self.request.cookies.get("players", default)
             ))
-            players_by_id = dict(map(
-                lambda x: (x.get('id'), x.get('name')),
-                players
-            ))
+            players_by_id = dict([(player.get('id'), player.get('name'))
+                                  for player in players])
             if player_id in players_by_id:
-                # Re-create named player with a name
+                # Re-create named player with the given name
                 player = self.data.players[player_id] = Player(
                     players_by_id[player_id], {
                         "registered": True,
-                        "assisted": self.get_assistance_flag()
+                        "assisted": self.get_next_assistance_flag()
                     }
                 )
             else:
-                # Or create just a guest
+                # Or create an incognito guest player
                 player = self.data.players[player_id] = Player(
                     u"Guest", {
                         "registered": False,
-                        "assisted": self.get_assistance_flag()
+                        "assisted": self.get_next_assistance_flag()
                     }
                 )
 
         return player
 
-    # def get_available_players(self):
-    #     # Read cookies
-    #     player_id = self.request.cookies.get("player_id")
-    #     player_ids = self.request.cookies.get("player_ids", "").split(",")
-
-    #     # Look up the available players using the cookie data
-    #     players = dict([
-    #         (x, self.data.players.get(x))
-    #         for x in set([player_id] + player_ids)
-    #         if x in self.data.players
-    #     ])
-
-    #     return players  # players may be an empty {}
-
     def get_current_session(self, player_id=''):
-        """ Return the current (today's) session or creates a new one and
-        returns it """
+        """Return the current (today's) session or create a new one and
+        return it
 
+        """
         player = self.get_current_player(player_id)
-
-        if player is None:
+        if player is not None:
+            return player.session(self.games)
+        else:
             return None
 
-        return player.session(self.games)
-
-    def get_assistance_flag(self):
+    def get_next_assistance_flag(self):
         """Return the next available value for assistance
         """
         if not hasattr(self.data, "assistance_flags"):
@@ -152,37 +144,15 @@ class Application(object):
         return self.data.assistance_flags.pop(0)
 
     def __getitem__(self, name):
-        """ Traverse to the given game """
-
+        """Traverse to the given game
+        """
         return self.games[name]  # raising a KeyError is allowed
-
-    # @view_config(name="list_players", renderer="templates/list_players.html",
-    #              request_method="GET", xhr=True)
-    # def list_available_players(self):
-    #     current_player = self.get_current_player()
-    #     available_players = self.get_available_players()
-
-    #     players = []
-    #     counter = 0
-    #     for player_id, player in available_players.items():
-    #         css = "gameBtn btn-%s" % counter
-    #         css += " selected" if player is current_player else ""
-    #         players.append({
-    #             "id": player_id,
-    #             "name": player.name,
-    #             "css": css
-    #         })
-    #         counter += 1
-
-    #     cmp_by_name = lambda x, y: cmp(x["name"], y["name"])
-
-    #     return {
-    #         "players": sorted(players, cmp=cmp_by_name),
-    #     }
 
     @view_config(name="liity", renderer="json",
                  request_method="POST")
     def create_new_player(self):
+        """Save named player information
+        """
         name = self.request.params.get("name", "").strip()
         logging.debug(self.request.params)
 
@@ -191,27 +161,32 @@ class Application(object):
 
         details = {
             "registered": True,
-            "assisted": self.get_assistance_flag()
+            "assisted": self.get_next_assistance_flag()
         }
         details.update(self.request.params)
+
         return self.data.players.create_player(name, details)
 
     @view_config(name="kokeile", renderer="json",
                  request_method="POST")
     def create_new_guest(self):
+        """Save new guest
+        """
         name = u"Guest"
 
         details = {
             "registered": False,
-            "assisted": self.get_assistance_flag()
+            "assisted": self.get_next_assistance_flag()
         }
         details.update(self.request.params)
+
         return self.data.players.create_player(name, details)
 
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
                  request_method="GET", xhr=False)
     def get_next_game(self):
-
+        """Return the next available game for the current player
+        """
         session = self.get_current_session()
 
         if session is None:
@@ -224,7 +199,8 @@ class Application(object):
             raise HTTPFound(location=self.request.application_url
                             + "/#pelataan-taas-huomenna")
 
-        #print len(session.order)
+        logger.debug("Games left in session: '{0:s}'.".format(session.order))
+
         return {
             "game": session.order[0]["game"],
             "assisted": session.order[0]["assisted"]
@@ -233,24 +209,22 @@ class Application(object):
     @view_config(name="session_status", renderer="json",
                  request_method="GET", xhr=True)
     def get_session_statuses_for_today(self):
-        players = self.request.cookies.get("players")
-        ret = []
-        if players != None:
-            players = json.loads(players)
-            for p in players:
-                player_id = p['id'];
-                if id == None: continue
-                session = self.get_current_session(player_id)
-                
-                ret.append({ player_id: { 'session_over': 
-                                          len(session.order) == 0 }})
-        return ret 
+        ret = {}
+        players_json = self.request.cookies.get("players")
+        if players_json is not None:
+            players = json.loads(urllib.unquote(players_json))
+            for player in players:
+                player_id = player.get("id")
+                if player_id is not None:
+                    session = self.get_current_session(player_id)
+                    ret[player_id] = {"session_over": len(session.order) == 0}
+        return ret
 
 
 @subscriber(BeforeRender)
 def add_base_template(event):
-    """ Adds base template for Chameleon renderer """
-
+    """Define base template and available globals for Chameleon renderer
+    """
     base_template =\
         get_renderer("templates/base_template.html").implementation()
 
@@ -268,16 +242,13 @@ def add_base_template(event):
     })
 
 
-@view_config(route_name="root", renderer="templates/index.html")
+@view_config(route_name="root", renderer="templates/index.html",
+             http_cache=(datetime.timedelta(1), {"public": True}))
 def root_view(request):
-    # Enforce that the application root is called with ending slash
+    """Static main menu view
+    """
+    # Enforce that the application root is always called with ending slash
     if not request.path.endswith("/"):
         url = urlparse.urljoin(request.application_url, request.path)
         raise HTTPFound(location=url + "/")
-    return {}
-
-
-@view_config(route_name="register", renderer="templates/register_player.html",
-             request_method="GET")
-def new_player_form(request):
     return {}

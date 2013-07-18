@@ -36,12 +36,12 @@ class TestSession(unittest.TestCase):
         }])
 
         result = self.app.get_session_statuses_for_today()
-        self.assertEquals(result, [{'123': {'session_over': False}}])
+        self.assertEquals(result, {'123': {'session_over': False}})
 
         play_one_session(self.app, '123')
 
         result = self.app.get_session_statuses_for_today()
-        self.assertEquals(result, [{'123': {'session_over': True}}])
+        self.assertEquals(result, {'123': {'session_over': True}})
 
     def test_after_session_game_redirects_to_main_page(self):
         """Test for users that try to go to "pelaa" page after session. Should
@@ -125,7 +125,7 @@ class TestSession(unittest.TestCase):
         n_assisted = len([game for game in session.order
                           if game.get("assisted") is True])
         portion_assisted = float(n_assisted) / len(session.order)
-        self.assertGreater(portion_assisted, 0.3)
+        self.assertGreaterEqual(portion_assisted, 0.3)
         self.assertLess(portion_assisted, 0.4)
 
     def test_at_least_95_of_200_of_new_players_are_assisted(self):
