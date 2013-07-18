@@ -32,13 +32,13 @@
              tal:repeat="idx python:range(stars)" />
       </div>
 	  <a href="${base_url}/${game}" id="nextGame" class="gameBtn"
-             tal:condition="game">
+             tal:condition="game|nothing">
 	    <div class="middle">
 	      Jatka
 	    </div>
 	  </a>
 	  <a href="${base_url}/" target="_top" id="nextGame" class="gameBtn"
-             tal:condition="not:game">
+             tal:condition="not:game|nothing">
 	    <div class="middle">
 	      Lopeta
 	    </div>
