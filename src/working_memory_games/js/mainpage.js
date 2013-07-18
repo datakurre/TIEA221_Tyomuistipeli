@@ -39,25 +39,47 @@ function animateTitle() {
 }
 
 function addPlayerButtons() {
+    // Init local variables
+    var players, $buttons = {}, idx, player, btn;
 
+    // Remove any existing button;
     $('#mainView > .player').remove();
 
-    var players = $.cookie('players');
-    if (players == null) return;
+    // Get available players from cookie
+    players = $.cookie('players');
+
+    // When cookie was not found, do nothing
+    if (players === null) return;
+
+    // Otherwise, parse cookie and add player buttons:w
     players = $.parseJSON(players).reverse();
     for (idx in players) {
-        if (players[idx].name != "Vieras") {
-            var btn = $('#buttonTemplate a').clone();
-            btn.find('#name').text(players[idx].name);
-            btn.attr('data-player', players[idx].id);
+        player = players[idx];
+        if (player.name != "Vieras" && player.name != "Guest") {
+            btn = $('#buttonTemplate a').clone();
+            btn.find('#name').text(player.name);
+            btn.attr('data-player', player.id);
             $("#mainView").prepend(btn);
             btn.show();
-            btn.click(function(event){
+            btn.click(function() {
                 $.cookie('active_player',
                          $(this).data('player'),
                          { expires: 365, path: '/'});
             });
+            $buttons[player.id] = btn;
         }
+    }
+    if (players.length > 0) {
+        $.post('session_status', function(data) {
+            var player_id, session_status;
+            for (player_id in data) {
+                session_status = data[player_id];
+                if (session_status["session_over"] === true) {
+                    $buttons[player_id].addClass("sessionOver");
+                    $buttons[player_id].prop("href", "#pelataan-taas-huomenna")
+                }
+            }
+        });
     }
 }
 
@@ -91,7 +113,7 @@ $(document).ready(function() {
                    // Store information to server and create local
                    // data in cookie.
                    var players = $.cookie('players');
-		   
+
                    if (players == null || players === undefined)
                        players = [];
                    else
@@ -101,11 +123,11 @@ $(document).ready(function() {
                        'name': $('#joinData input[name="name"]').val(),
                        'id': data.id
                    });
-		   
+
                    $.cookie('players',
                             JSON.stringify(players),
                             { expires: 365 });
-		   
+
                    location.hash = '';
                });
     };

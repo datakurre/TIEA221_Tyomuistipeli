@@ -209,18 +209,15 @@ class Application(object):
     @view_config(name="session_status", renderer="json",
                  request_method="GET", xhr=True)
     def get_session_statuses_for_today(self):
+        ret = {}
         players_json = self.request.cookies.get("players")
-        players = json.loads(players_json) if players_json is not None else []
-
-        ret = []
-        for player in players:
-            player_id = player.get("id")
-            if player_id is not None:
-                session = self.get_current_session(player_id)
-                session_status = {
-                    "session_over": len(session.order) == 0
-                }
-                ret.append(dict((player_id, session_status)))
+        if players_json is not None:
+            players = json.loads(urllib.unquote(players_json))
+            for player in players:
+                player_id = player.get("id")
+                if player_id is not None:
+                    session = self.get_current_session(player_id)
+                    ret[player_id] = {"session_over": len(session.order) == 0}
         return ret
 
 

@@ -161,6 +161,9 @@ h1 div {
 }
 
 .gameBtn, a.gameBtn {
+  position: relative;
+  overflow: hidden;
+
   height: 170px;
   width: 170px;
   display: inline-block;
@@ -222,6 +225,46 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
   border-left-color: #a2a2a2;
 
   text-decoration: none;
+}
+.gameBtn.sessionOver:hover {
+    cursor: default;
+
+    background: #efa639;
+    background: -moz-linear-gradient(top, #efa639 18%, #f1e767 92%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(18%,#efa639), color-stop(92%,#f1e767));
+    background: -webkit-linear-gradient(top, #efa639 18%,#f1e767 92%);
+    background: -o-linear-gradient(top, #efa639 18%,#f1e767 92%);
+    background: -ms-linear-gradient(top, #efa639 18%,#f1e767 92%);
+    background: linear-gradient(to bottom, #efa639 18%,#f1e767 92%);
+
+    border-top-color: rgb(230, 230, 230);
+    border-left-color: rgb(230, 230, 230);
+}
+.gameBtn.sessionOver > * {
+    -o-opacity: 0.5;
+    -webkit-opacity: 0.5;
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+}
+.gameBtn.sessionOver:before {
+    font-size: 50%;
+    position: absolute;
+    top: 26px;
+    right: -39px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 140px;
+    height: 40px;
+
+    border-top: 1px dashed black;
+	border-bottom: 1px dashed black;
+
+    background: white;
+    content: "Pelataan taas huomenna";
+    -webkit-transform:rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 #rootHeader {
   height: 150px;
