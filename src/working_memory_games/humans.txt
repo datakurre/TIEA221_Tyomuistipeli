@@ -1,7 +1,7 @@
 
 /* TIIMI */
 	
-	Hauskanpito, ideointi, säätö, suunnittelu ja toteutus
+	Hauskanpito, ideointi, säätö, suunnittelu, visualdesign ja toteutus
 	Matti Katila
 	matti.katila@gmail.com
 
@@ -44,6 +44,8 @@
 
         Takaperoiset numerot -kentän ääni ja hugoismit: Telle-Tiia Pitkänen
 
-        Pilottitestaus: 
+        DNS ja SMTP-relay: Pasi Sjöholm
 
+        Pilottitestaus: 
+           -Jenni
 
