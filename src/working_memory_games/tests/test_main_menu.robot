@@ -1,9 +1,9 @@
 *** Settings ***
 
-Resource  selenium.robot
+Resource  saucelabs.robot
 
-TestSetup  Open test browser
-TestTeardown  Close all browsers
+Test Setup  Open SauceLabs test browser
+Test Teardown  Run keywords  Report test status  Close all browsers
 
 *** Test Cases ***
 
