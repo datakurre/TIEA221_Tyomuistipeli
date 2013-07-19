@@ -564,6 +564,10 @@ jQuery ($) ->
         )
 
     runAnimation = -> 
+        $.preload('clip', global.base_ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine_clip_6s.[ogg,mp3]')
+        $('body').one('preloaded', ->
+            $('body').play('clip')
+        )
         $('#animation').css('display', 'block')
 
         $someRight = 1000

@@ -637,6 +637,10 @@
     };
     runAnimation = function() {
       var $someLeft, $someRight;
+      $.preload('clip', global.base_ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine_clip_6s.[ogg,mp3]');
+      $('body').one('preloaded', function() {
+        return $('body').play('clip');
+      });
       $('#animation').css('display', 'block');
       $someRight = 1000;
       $('#b3').animate({
