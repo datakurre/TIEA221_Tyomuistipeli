@@ -126,11 +126,16 @@ class game_config(object):
                     basename = os.path.basename(path)
                     config.add_route(path, "/%s/%s" % (name, basename),
                                      request_method="GET")
-                    config.add_view(route_name=path, view=static_file(path))
+                    if path.endswith('.js') or path.endswith('.css'):
+                        #print 'register', path
+                        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
+                    else:
+                        config.add_view(route_name=path, view=static_file(path))
                 for path in filter(lambda x: os.path.isdir(x), resources):
+                    #print 'static register', path
                     basename = os.path.basename(path)
                     config.add_static_view("%s/%s" % (name, basename),
-                                           path=path)
+                                           path=path, cache_max_age=3600)
 
         info = venusian.attach(wrapped, callback, category="pyramid")
 
@@ -154,11 +159,11 @@ def main(global_config, **settings):
         config.add_view(route_name=path, view=static_file(path))
 
     # Configure common static resources
-    config.add_static_view(name="css", path="css")
-    config.add_static_view(name="img", path="img")
-    config.add_static_view(name="snd", path="snd")
-    config.add_static_view(name="js", path="js")
-    config.add_static_view(name="lib", path="lib")
+    config.add_static_view(name="css", path="css", cache_max_age=3600)
+    config.add_static_view(name="img", path="img", cache_max_age=3600)
+    config.add_static_view(name="snd", path="snd", cache_max_age=3600)
+    config.add_static_view(name="js", path="js", cache_max_age=3600)
+    config.add_static_view(name="lib", path="lib", cache_max_age=3600)
 
     # Register Chameleon renderer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
