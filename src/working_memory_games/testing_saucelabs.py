@@ -3,18 +3,14 @@ import re
 import os
 import httplib
 import base64
-try:
-    import json
-    assert json  # pyflakes
-except ImportError:
-    import simplejson as json
+import json
 
 from robot.libraries.BuiltIn import BuiltIn
 
 USERNAME_ACCESS_KEY = re.compile("^(http|https):\/\/([^:]+):([^@]+)@")
 
 
-class SauceLabs:
+class SauceLabs(object):
 
     def report_sauce_status(self, name, status, tags=[], remote_url=""):
         """Report test status and tags to SauceLabs
