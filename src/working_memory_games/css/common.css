@@ -26,7 +26,14 @@
     overflow: hidden;
 }
 #dlg-saxopupu {
-    left: -122px;
+    left: -137px;
+    position: absolute;
+    z-index: -1;
+}
+#dlg-djembeharakka {
+    width: 577px;
+    top: 27px;
+    left: 150px;
     position: absolute;
     z-index: -1;
 }
