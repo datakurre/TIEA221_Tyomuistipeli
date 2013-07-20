@@ -137,9 +137,9 @@ class game_config(object):
         return wrapped
 
 
-def main(global_config, testing=False, **settings):
-    """ This function returns a Pyramid WSGI application with routing """
-
+def main(global_config, **settings):
+    """This function returns a Pyramid WSGI application with routing
+    """
     # Create Pyramid configurator
     config = Configurator(settings=settings)
 
@@ -160,7 +160,7 @@ def main(global_config, testing=False, **settings):
     config.add_static_view(name="js", path="js")
     config.add_static_view(name="lib", path="lib")
 
-    # Register Chameleon rendederer also for .html-files
+    # Register Chameleon renderer also for .html-files
     config.add_renderer(".html", "pyramid.chameleon_zpt.renderer_factory")
 
     # Configure common direct routes, which takes precedence over traverse
@@ -173,10 +173,9 @@ def main(global_config, testing=False, **settings):
     # Scan games for their configuration
     config.scan(".games")
 
-    if not testing:
-        # Enable ZODB support
-        config.include("pyramid_zodbconn")
-        config.include("pyramid_tm")
+    # Enable ZODB support
+    config.include("pyramid_zodbconn")
+    config.include("pyramid_tm")
 
     # Configure traverse (for views that require access to the database)
     config.add_route("traversal", "/*traverse", factory=Application)

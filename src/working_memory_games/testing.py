@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import time
 from pyramid.renderers import JSON
 from pyramid import testing
 
@@ -49,17 +48,17 @@ INTEGRATION_TESTING = PyramidLayer()
 class PyramidAppLayer(Layer):
 
     def setUp(self):
-        self['app'] = main({}, testing=True)
+        pass
 
     def tearDown(self):
-        testing.tearDown()
-        del self['app']
+        pass
 
     def testSetUp(self):
-        pass
+        self['app'] = main({}, **{"zodbconn.uri": "memory://"})
 
     def testTearDown(self):
-        pass
+        del self['app']
+
 
 FUNCTIONAL_TESTING = PyramidAppLayer()
 
@@ -67,9 +66,13 @@ FUNCTIONAL_TESTING = PyramidAppLayer()
 class PyramidServerLayer(Layer):
 
     def setUp(self):
-        self['app'] = main({}, testing=True)
+        pass
 
-        # XXX: If the server needs a customized DB, set up test DB here.
+    def tearDown(self):
+        pass
+
+    def testSetUp(self):
+        self['app'] = main({}, **{"zodbconn.uri": "memory://"})
 
         from wsgiref.simple_server import make_server
         self['server'] = make_server(
@@ -82,18 +85,10 @@ class PyramidServerLayer(Layer):
         self['thread'] = Thread(target=self['server'].serve_forever)
         self['thread'].start()
 
-    def tearDown(self):
-        self['server'].shutdown()
-
-        # XXX: If the server needs a customized DB, tear down test DB here.
-
-        testing.tearDown()
-        del self['app']
-
-    def testSetUp(self):
-        pass
-
     def testTearDown(self):
-        pass
+        self['server'].shutdown()
+        self['server'].server_close()
+
+        del self['app']
 
 ACCEPTANCE_TESTING = PyramidServerLayer()
