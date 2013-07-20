@@ -39,6 +39,7 @@ function animateTitle() {
 }
 
 function addPlayerButtons() {
+
     // Init local variables
     var players, $buttons = {}, idx, player, btn;
 
@@ -55,7 +56,8 @@ function addPlayerButtons() {
     players = $.parseJSON(players).reverse();
     for (idx in players) {
         player = players[idx];
-        if (player.name != "Vieras" && player.name != "Guest") {
+
+        if (player.guest !== true) {
             btn = $('#buttonTemplate a').clone();
             btn.find('#name').text(player.name);
             btn.attr('data-player', player.id);
@@ -69,6 +71,7 @@ function addPlayerButtons() {
             $buttons[player.id] = btn;
         }
     }
+
     if (players.length > 0) {
         $.post('session_status', function(data) {
             var player_id, session_status;
@@ -91,6 +94,20 @@ function addPlayerButtons() {
     }
 }
 
+function addPlayer(map) {
+    var players = $.cookie('players');
+    
+    if (players == null || players === undefined)
+        players = [];
+    else
+        players = $.parseJSON(players);
+    
+    players.push(map);
+    
+    $.cookie('players',
+             JSON.stringify(players),
+             { expires: 365, path: '/' });
+}
 
 $(document).ready(function() {
 
@@ -120,21 +137,10 @@ $(document).ready(function() {
                function(data) {
                    // Store information to server and create local
                    // data in cookie.
-                   var players = $.cookie('players');
-
-                   if (players == null || players === undefined)
-                       players = [];
-                   else
-                       players = $.parseJSON(players);
-
-                   players.push({
+                   addPlayer({
                        'name': $('#joinData input[name="name"]').val(),
                        'id': data.id
                    });
-
-                   $.cookie('players',
-                            JSON.stringify(players),
-                            { expires: 365, path: '/' });
 
                    location.hash = '';
                });
@@ -157,6 +163,11 @@ $(document).ready(function() {
             window.location.href = global.ctx + '/pelaa';
         } else {
             $.post('kokeile', function(data) {
+                addPlayer({
+                    'guest': true,
+                    'name': '__guest',
+                    'id': data.id
+                });
                 $.cookie('guest_player',
                          data.id,
                          { expires: 365, path: '/' });

@@ -213,17 +213,11 @@ class Application(object):
         players_json = self.request.cookies.get("players")
         if players_json is not None:
             players = json.loads(urllib.unquote(players_json))
-            # Iterate through registered players for the browser:
             for player in players:
                 player_id = player.get("id")
                 if player_id is not None:
                     session = self.get_current_session(player_id)
                     ret[player_id] = {"session_over": len(session.order) == 0}
-            # Handle non-registered guest player:
-            active_player = self.request.cookies.get("active_player")
-            if active_player is not None and active_player not in ret:
-                session = self.get_current_session(active_player)
-                ret[active_player] = {"session_over": len(session.order) == 0}
         return ret
 
 
