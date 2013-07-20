@@ -174,7 +174,8 @@ class Game(object):
         #n = 3  # default if not games yet
         last_plays = sorted(
             self.get_last_plays(20),
-            cmp=lambda x, y: cmp(x.get('start'), y.get('start'))
+            cmp=lambda x, y: cmp(x.get('start') or datetime.datetime.now(),
+                                 y.get('start') or datetime.datetime.now())
         )
         for play in last_plays:
             #print play
