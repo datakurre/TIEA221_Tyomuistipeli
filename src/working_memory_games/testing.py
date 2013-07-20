@@ -76,13 +76,13 @@ class PyramidServerLayer(Layer):
             '', int(os.environ.get("HTTP_PORT", 55002)), self['app'])
         self['server'].RequestHandlerClass.log_request =\
             lambda self, code, size: None  # mute http server
+        self['server'].timeout = 0.5  # set handle request timeout
 
         from threading import Thread
         self['thread'] = Thread(target=self['server'].serve_forever)
         self['thread'].start()
 
     def tearDown(self):
-        time.sleep(1)  # Allow server to get properly run the last request
         self['server'].shutdown()
 
         # XXX: If the server needs a customized DB, tear down test DB here.
