@@ -83,6 +83,7 @@ class PyramidServerLayer(Layer):
         time.sleep(0.5)  # Allow server to get properly started
 
     def tearDown(self):
+        time.sleep(0.5)  # Allow server to get properly run the last request
         self['server'].shutdown()
 
         # XXX: If the server needs a customized DB, tear down test DB here.
