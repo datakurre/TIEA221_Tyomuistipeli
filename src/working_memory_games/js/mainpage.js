@@ -75,8 +75,16 @@ function addPlayerButtons() {
             for (player_id in data) {
                 session_status = data[player_id];
                 if (session_status["session_over"] === true) {
-                    $buttons[player_id].addClass("sessionOver");
-                    $buttons[player_id].prop("href", "#pelataan-taas-huomenna")
+                    if (player_id in $buttons) {
+                        $buttons[player_id]
+                            .addClass("sessionOver")
+                            .prop("href", "#pelataan-taas-huomenna");
+                    } else {
+                        $("a#kokeile")
+                            .addClass("sessionOver")
+                            .prop("href", "#pelataan-taas-huomenna")
+                            .unbind("click");
+                    }
                 }
             }
         });
