@@ -254,7 +254,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
     padding-left: 15px;
     padding-right: 15px;
     width: 140px;
-    height: 40px;
+    height: 38px;
 
     border-top: 1px dashed black;
 	border-bottom: 1px dashed black;
@@ -265,6 +265,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+.gameBtn.sessionOver#kokeile > * {
+    -o-opacity: 1.0;
+    -webkit-opacity: 1.0;
+    -moz-opacity: 1.0;
+    opacity: 1.0;
+}
+.gameBtn.sessionOver#kokeile:before {
+    content: "Pelataan taas huomenna \2013  tai liity pelaajaksi!";
+    height: 56px;
+    right: -50px;
+    width: 160px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 #rootHeader {
   height: 150px;
