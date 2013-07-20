@@ -245,6 +245,9 @@ def add_base_template(event):
         # ^^ We always strip the ending slash so that we can always use these
         # variables like ${base_url}/something without ending up with double
         # slashes in URLs.
+        "current_url_encoded": urllib.urlencode({
+            "u": re.sub("/$", "", current_url)
+        })[2:],
     })
 
 

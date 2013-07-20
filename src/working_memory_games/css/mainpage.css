@@ -307,6 +307,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
 #humans {
   float: right;
 }
+#facebook {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAWklEQVQoz2P4//8/g1XYnP/EYJBaBuvwuf+JxSBNeDWAwL9//8A0TIwBn2JkQFAD1GAgG+J+om2wDpuNIs5AyCkEnUSyBqQwBwMYn3g/oImTrgEU3cRqAKkFAMgxdOXAps3CAAAAAElFTkSuQmCC");
+  background-position: left 9px;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-top: 11px;
+  padding-left: 16px;
+  font-size: 12px;
+  color: white;
+  font-family: sans-serif;
+  float: right;
+}
 
 #joinView {
   font-family: sans-serif;
