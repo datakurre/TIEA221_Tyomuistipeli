@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 from pyramid.renderers import JSON
 from pyramid import testing
 
@@ -79,6 +80,7 @@ class PyramidServerLayer(Layer):
         from threading import Thread
         self['thread'] = Thread(target=self['server'].serve_forever)
         self['thread'].start()
+        time.sleep(0.5)  # Allow server to get properly started
 
     def tearDown(self):
         self['server'].shutdown()
