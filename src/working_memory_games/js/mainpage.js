@@ -116,10 +116,18 @@ $(document).ready(function() {
 
     addPlayerButtons();
 
+    $("#joinData").valid();
+
     // Detect unsupported browsers
     if (BrowserDetect.browser === "MSIE"
         && BrowserDetect.version < 10) {
-        $('#unsupported-browser').modal('show');
+        content = $.modal(
+            $('#unsupported-browser').clone().css('display', 'block'), {
+                fitViewport: true,
+                closeSelector: null,
+                closeKeyCode: null,
+                closeText: ''
+        });
     }
 
     // show current view
@@ -127,6 +135,7 @@ $(document).ready(function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
             $('#joinView').slideDown();
+            $('#joinData').valid();
             $('#mainView').slideUp();
         } else {
             $('#joinView').slideUp();
@@ -136,21 +145,23 @@ $(document).ready(function() {
     });
 
     var handleSubmit = function(event) {
-
         event.preventDefault();
-        $.post('liity',
-               $('#joinData').serialize(),
-               function(data) {
-                   // Store information to server and create local
-                   // data in cookie.
-                   addPlayer({
-                       'name': $('#joinData input[name="name"]').val(),
-                       'id': data.id
-                   });
+        if ($("#joinData").valid()) {
+            $.post('liity',
+                $('#joinData').serialize(),
+                function(data) {
+                    // Store information to server and create local
+                    // data in cookie.
+                    addPlayer({
+                        'name': $('#joinData input[name="name"]').val(),
+                        'id': data.id
+                    });
 
-                   location.hash = '';
-               });
+                    location.hash = '';
+            });
+        }
     };
+
     $('#join').click(handleSubmit);
     $('#joinData').keypress(function(event) {
         if (event.which == 13) {
@@ -159,6 +170,7 @@ $(document).ready(function() {
             return false;
         }
     });
+
     $('#kokeile').click(function(event) {
         event.preventDefault();
         if ($.cookie('guest_player') !== null

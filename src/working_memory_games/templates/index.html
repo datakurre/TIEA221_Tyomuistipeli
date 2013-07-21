@@ -9,226 +9,136 @@
     <title>Työmuistipeli</title>
 
     <link rel="author" href="${base_url}/humans.txt" />
-    <link rel="stylesheet" href="${base_url}/css/reset.css" />
-    <link rel="stylesheet" href="${base_url}/css/bootstrap-prefixed.min.css" />
+    <link rel="stylesheet" href="${base_url}/css/pure.min.css" />
+    <link rel="stylesheet" href="${base_url}/css/jquery.rs.modal.css" />
     <link rel="stylesheet" href="${base_url}/css/common.css" />
     <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
-<!--
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One" />
--->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One|Tangerine:700|Luckiest+Guy|Bangers" />
 
-    <script src="${base_url}/lib/browserdetect.js"></script>
     <script src="${base_url}/lib/jquery.min.js"></script>
+    <script src="${base_url}/lib/jquery.cookie.min.js"></script>
+    <script src="${base_url}/lib/jquery.validate.min.js"></script>
+    <script src="${base_url}/lib/jquery.validate.messages_fi.js"></script>
+    <script src="${base_url}/lib/jquery.rs.modal.js"></script>
     <script src="${base_url}/lib/jquery.snd.js"></script>
-    <script src="${base_url}/lib/jquery.cookie.js"></script>
-    <script src="${base_url}/lib/bootstrap.min.js"></script>
+    <script src="${base_url}/lib/browserdetect.js"></script>
     <script src="${base_url}/js/game.js"></script>
-    <script type="text/javascript" src="${base_url}/js/mainpage.js"></script>
+    <script src="${base_url}/js/mainpage.js"></script>
   </head>
 
   <body>
     <div id="game">
 
-      <!-- AddThis Button BEGIN
-      <div id="addthis" class="addthis_toolbox addthis_default_style addthis_32x32_style">
-        <a class="addthis_button_facebook"></a>
-        <a class="addthis_counter addthis_bubble_style"></a>
-      </div>
-
-      <script type="text/javascript">
-      var addthis_config = {"data_track_addressbar":true};</script>
-      <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50cdc10e0038ed98"></script>
- -->
-      <!-- AddThis Button END -->
-
       <div id="ovalEdge">
         <div id="oval">
-          <img id="harakka" src="img/etukuva/harakka2001.png"/>
+          <img id="harakka" src="img/etukuva/harakka2001.png" />
           <span id="pupuName">Lupun</span>
           <span id="nameAmp">&amp;</span>
           <span id="harakkaName">Lassen</span>
-          <img id="pupu" src="img/etukuva/pupu001.png"/>
+          <img id="pupu" src="img/etukuva/pupu001.png" />
         </div>
       </div>
-
 
       <div id="rootHeader">
         <h1>Työmuistipeli</h1>
       </div>
 
-
-      <div id="joinView" class="bootstrap"
-           style="display:none; width: 40em;
-                  margin-left: auto; margin-right: auto;">
-        <form id="joinData" class="form-horizontal"
+      <div id="joinView" style="display:none; width: 30em;
+                                margin-left: auto; margin-right: auto;">
+        <form id="joinData" class="pure-form pure-form-aligned validate"
               action="${base_url}/liity" method="POST">
           <fieldset>
-            <div class="control-group">
-              <label class="control-label" for="name">Nimi</label>
-              <div class="controls">
-                <input type="text" name="name" placeholder="Etunimi" />
-                <span class="help-inline"><i class="icon-exclamation-sign"></i>
-                pakollinen tieto</span>
-              </div>
+            <div class="pure-control-group">
+              <label for="name">Nimi</label>
+              <input type="text" name="name" placeholder="Etunimi"
+                     required="required" />
             </div>
-            <div class="control-group">
-              <label class="control-label" for="age">Ikä</label>
-              <div class="controls">
-                <input type="number" name="age" placeholder="6" />
-              </div>
+            <div class="pure-control-group">
+              <label for="age">Ikä</label>
+              <input type="number" name="age" placeholder="6" />
             </div>
-            <div class="control-group">
-              <label class="control-label" for="gender">Sukupuoli</label>
-              <div class="controls">
-                <label class="radio inline">
-                  <input type="radio" name="gender" id="gender1" value="f" >
-                  Tyttö
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="gender" id="gender2" value="m">
-                  Poika
-                </label>
-              </div>
+            <div class="pure-control-group">
+              <label for="gender">Sukupuoli</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="gender" value="f" />
+                Tyttö
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="gender" value="m" />
+                Poika
+              </label>
             </div>
-            <div class="control-group">
-              <label class="control-label">Diagnoosi tai epäillään:</label>
-              <div class="controls">
-                <label class="radio inline sublabel">
-                  ADHD
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="adhd" id="adhd" value="true">
-                  kyllä
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="adhd" id="adhd" value="false">
-                  ei
-                </label>
-              </div>
+            <p>Diagnoosi tai epäillään:</p>
+            <div class="pure-control-group">
+              <label for="adhd">ADHD</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="adhd" value="true" />
+                kyllä
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="adhd" value="false" />
+                ei
+              </label>
             </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="radio inline sublabel">
-                  Asperger
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="asperger" id="asperger" value="true">
-                  kyllä
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="asperger" id="asperger" value="false">
-                  ei
-                </label>
-              </div>
+            <div class="pure-control-group">
+              <label for="asperger">Asperger</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="asperger" value="true" />
+                kyllä
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="asperger" value="false" />
+                ei
+              </label>
             </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="radio inline sublabel">
-                  Kehitysviive
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="delayed_development" value="true">
-                  kyllä
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="delayed_development" value="false">
-                  ei
-                </label>
-              </div>
+            <div class="pure-control-group">
+              <label for="delayed_development">Kehitysviive</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="delayed_development" value="true" />
+                kyllä
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="delayed_development" value="false" />
+                ei
+              </label>
             </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="radio inline sublabel">
-                  Kapea työmuisti
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="narrow_wm" value="true">
-                  kyllä
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="narrow_wm" value="false">
-                  ei
-                </label>
-              </div>
+            <div class="pure-control-group">
+              <label for="narrow_wm">Kapea työmuisti</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="narrow_wm" value="true" />
+                kyllä
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="narrow_wm" value="false" />
+                 ei
+              </label>
             </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="radio inline sublabel">
-                  Keskittymisvaikeus
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="concentration_difficulties" value="true">
-                  kyllä
-                </label>
-                <label class="radio inline">
-                  <input type="radio" name="concentration_difficulties" value="false">
-                  ei
-                </label>
-              </div>
+            <div class="pure-control-group">
+              <label for="concentration_difficulties">Keskittymisvaikeus</label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="concentration_difficulties" value="true" />
+                kyllä
+              </label>
+              <label class="pure-radio" style="width: auto;">
+                <input type="radio" name="concentration_difficulties" value="false" />
+                ei
+              </label>
             </div>
-            <div class="control-group">
-              <label class="control-label" for="email">Sähköposti</label>
-              <div class="controls">
-                <input type="email" name="email">
-              </div>
+            <div class="pure-control-group">
+              <label for="email">Sähköposti</label>
+              <input type="email" name="email" />
             </div>
-            <div class="control-group">
-              <div class="controls">
-                <label>
-                  Antamianne tietoja käytetään ainoastaan
-                  <a target="_blank" href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>
-                  henkilötietolain mukaisesti
-                  (<a href="#rekisteriseloste" data-toggle="modal">rekisteriseloste</a>).
-                </label>
-                <div class="modal hide" id="rekisteriseloste">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>Tietosuoja- ja rekisteriseloste</h3>
-                  </div>
-                  <div class="modal-body">
-                    <p>
-                      Henkilötietolaki sallii arkaluonteisten tietojen, kuten
-                      henkilön terveydentilaa, sairautta tai vammaisuutta
-                      koskevien tietojen keräämisen tutkimustarkoituksiin.
-                      Tässä tutkimuksessa näitä tietoja hyödynnetään
-                      mahdollisesti tulosten analysoinnissa. Tietojen
-                      luovuttaminen tutkimuskäyttöön on vapaaehtoista.
-                    </p>
-                    <p>
-                      Sivustolla käytetään evästeitä, joilla mahdollistetaan
-                      pelin pelaaminen ilman kirjautumista sekä ylläpidetään
-                      pelaajan tasoa.
-                    </p>
-                    <p>
-                      Tietoja edelleenluovutetaan ainoastaan tieteellisiin
-                      tutkimuksiin, kuten tutkimustulosten tarkistamista
-                      varten tai toisen tutkimuksen osaksi.
-                    </p>
-                    <p>
-                      Tiedot on varastoitu koneelle, johon pääsy on rajoitettu
-                      muutamaan henkilöön ja kirjautuminen varmennetaan
-                      vahvalla salauksella. Mahdolliset yhteydenotot
-                      rekisterinpitäjään:
-                      matti.katila@gmail.com, +358400637289.
-                    </p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="controls">
-                <input type="submit" name="submit" hidden="true"
-                       style="display: none;" />
-                <a id="join" class="gameBtn btn-2" href="#">
-                  <div class="middle">Liity!</div>
-                </a>
-              </div>
-            </div>
+            <p>Antamianne tietoja käytetään ainoastaan
+              <a target="_blank" href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>
+              henkilötietolain mukaisesti
+              (<a href="#rekisteriseloste" data-toggle="modal">rekisteriseloste</a>).
+            </p>
           </fieldset>
+          <input type="submit" name="submit" hidden="true"
+                 style="display: none;" />
+          <a id="join" class="gameBtn btn-2" href="#">
+            <div class="middle">Liity!</div>
+          </a>
         </form>
       </div>
 
@@ -255,24 +165,49 @@
          target="_blank" id="facebook">Jaa Facebookissa</a>
     </div>
 
-    <div class="bootstrap">
-    <div class="modal hide" data-backdrop="static"
-         id="unsupported-browser">
-        <div class="bootstrap modal-header">
-            <h3>Peli vaatii uudemman selaimen</h3>
-        </div>
-        <div class="modal-body">
-            <p>Tuetut selaimen ovat:</p>
-            <ul>
-               <li>Mozilla Firefox</li>
-               <li>Google Chrome</li>
-               <li>Internet Explorer 10 (tai uudempi)</li>
-            </ul>
-            <p><a href="http://www.mozilla.org/fi/firefox/"
-                  title="Lataa ja asenna Mozilla Firefox">Lataa ja asenna Mozilla Firefox.</a>
-            </p>
-        </div>
+    <div id="rekisteriseloste" style="display: none; height: 18em;">
+      <h3>Tietosuoja- ja rekisteriseloste</h3>
+      <p>
+      Henkilötietolaki sallii arkaluonteisten tietojen, kuten
+      henkilön terveydentilaa, sairautta tai vammaisuutta
+      koskevien tietojen keräämisen tutkimustarkoituksiin.
+      Tässä tutkimuksessa näitä tietoja hyödynnetään
+      mahdollisesti tulosten analysoinnissa. Tietojen
+      luovuttaminen tutkimuskäyttöön on vapaaehtoista.
+      </p><p>
+      Sivustolla käytetään evästeitä, joilla mahdollistetaan
+      pelin pelaaminen ilman kirjautumista sekä ylläpidetään
+      pelaajan tasoa.
+      </p><p>
+      Tietoja edelleenluovutetaan ainoastaan tieteellisiin
+      tutkimuksiin, kuten tutkimustulosten tarkistamista
+      varten tai toisen tutkimuksen osaksi.
+      </p><p>
+      Tiedot on varastoitu koneelle, johon pääsy on rajoitettu
+      muutamaan henkilöön ja kirjautuminen varmennetaan
+      vahvalla salauksella. Mahdolliset yhteydenotot
+      rekisterinpitäjään:
+      matti.katila@gmail.com, +358400637289.
+      </p>
+      <p style="text-align: right;">
+         <a class="pure-button pure-button-primary
+                   modal-close" href="#">Sulje</a>
+      </p>
+
     </div>
+
+    <div id="unsupported-browser" style="display: none;">
+      <h3>Peli vaatii uudemman selaimen</h3>
+      <p>Tuetut selaimen ovat:</p>
+      <ul>
+         <li>Mozilla Firefox</li>
+         <li>Google Chrome</li>
+         <li>Internet Explorer 10 (tai uudempi)</li>
+         <li>Apple Safari</li>
+      </ul>
+      <p><a href="http://www.mozilla.org/fi/firefox/"
+            title="Lataa ja asenna Mozilla Firefox">Lataa ja asenna Mozilla Firefox.</a>
+      </p>
     </div>
 
   </body>

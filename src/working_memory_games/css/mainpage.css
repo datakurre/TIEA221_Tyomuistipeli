@@ -173,6 +173,7 @@ h1 div {
   font-size: 30px;
   font-family: 'Belgrano', serif;
   font-family: 'Concert One', cursive;
+  text-decoration: none;
   color: black /*#1276ad*/;
 
   margin: 0px 15px 15px 0px;
