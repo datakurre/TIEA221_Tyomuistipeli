@@ -116,6 +116,12 @@ $(document).ready(function() {
 
     addPlayerButtons();
 
+    // Detect unsupported browsers
+    if (BrowserDetect.browser === "MSIE"
+        && BrowserDetect.version < 10) {
+        $('#unsupported-browser').modal('show');
+    }
+
     // show current view
     $(window).bind('hashchange', function() {
         var hash = location.hash.toString();
