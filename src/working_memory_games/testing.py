@@ -101,7 +101,7 @@ class PyramidServerLayer(Layer):
 
         self['server'].stop()
         while self['thread'].isAlive():
-            time.sleep(0.5)
+            time.sleep(0.1)
 
         del self['app']
 
