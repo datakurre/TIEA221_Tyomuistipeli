@@ -204,9 +204,11 @@ class Game(object):
 
     @view_config(name="runanimation", renderer="json")
     def run_animation(self):
+        logger.debug('run animation =>')
         ret = len(self.session.get_plays()) == 0
         if 'testAnimation' in self.app.request.params:
             ret = True
+        logger.debug('run animation <= ')
         return {
             "animation": ret
         }
