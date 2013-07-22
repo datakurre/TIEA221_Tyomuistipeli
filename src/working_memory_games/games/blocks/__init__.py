@@ -18,7 +18,7 @@ class Blocks(Game):
 
     can_assist = True
 
-    @view_config(name="new")
+    @view_config(name="new", xhr=False)
     def new_numbers_game(self):
         """Returns new game data
         """
