@@ -116,8 +116,6 @@ $(document).ready(function() {
 
     addPlayerButtons();
 
-    $("#joinData").valid();
-
     // Detect unsupported browsers
     if (BrowserDetect.browser === "MSIE"
         && BrowserDetect.version < 10) {
