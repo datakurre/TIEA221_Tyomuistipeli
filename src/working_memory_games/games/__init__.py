@@ -59,6 +59,7 @@ class Game(object):
         player_session = self.app.get_current_session()
 
         if player_session is None:
+            logger.debug('player session is None!')
             # TODO: Create implicit guest player here!
             from pyramid.httpexceptions import HTTPNotFound
             raise HTTPNotFound
