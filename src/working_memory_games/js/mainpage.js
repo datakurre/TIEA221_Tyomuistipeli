@@ -50,7 +50,7 @@ function addPlayerButtons() {
     players = $.cookie('players');
 
     // When cookie was not found, do nothing
-    if (players === null) return;
+    if (players === null || players === undefined) { return; }
 
     // Otherwise, parse cookie and add player buttons:w
     players = $.parseJSON(players).reverse();
@@ -97,7 +97,7 @@ function addPlayerButtons() {
 function addPlayer(map) {
     var players = $.cookie('players');
     
-    if (players == null || players === undefined)
+    if (players === null || players === undefined)
         players = [];
     else
         players = $.parseJSON(players);
