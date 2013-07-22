@@ -1,4 +1,5 @@
-var global = global || {}
+var global = global || {};
+
 global.userid = 0;
 global.gameItems = [];
 global.userItems = [];
@@ -143,3 +144,16 @@ function GameIncorrectAnswer() {
   });
 }
 
+// Wire up jquery.rs.modal for each a[data-toggle='modal']:
+jQuery(function($) {
+    $('a[data-toggle="modal"]').click(function(event) {
+        var target = $(this).attr('href'),
+            content = $(target).clone().css('display', 'block');
+        event.preventDefault();
+        $.modal(content, {
+            fitViewport: true,
+            closeSelector: '.pure-button-primary',
+            closeText: ''
+        });
+    });
+});

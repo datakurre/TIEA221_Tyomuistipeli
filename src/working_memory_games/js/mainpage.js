@@ -124,6 +124,7 @@ $(document).ready(function() {
         content = $.modal(
             $('#unsupported-browser').clone().css('display', 'block'), {
                 fitViewport: true,
+                closeOverlay: false,
                 closeSelector: null,
                 closeKeyCode: null,
                 closeText: ''

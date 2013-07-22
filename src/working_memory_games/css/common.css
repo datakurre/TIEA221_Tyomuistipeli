@@ -1,13 +1,10 @@
-form span.error {
-    display: inline-block;
-    font-size: 80%;
-    margin-left: 1em;
-    color: red;
-    /* keep the error next to the field: */
-    width: 1em;
-    overflow: visible;
-    white-space: nowrap;
+/* Elements, which should be hidden at start */
+.hidden {
+    display: none;
 }
+
+/* Disable link highlighting from game area */
+#game a { text-decoration: none; }
 
 #animation, #game {
   display: none; /* after animation bring up the next one */

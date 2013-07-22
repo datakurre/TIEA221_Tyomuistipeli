@@ -396,16 +396,3 @@
         return (new $.rs.Modal('modal', options)).open(content); };
 
 })(jQuery);
-
-// Wire up jquery.rs.modal for each a[data-toggle='modal']:
-jQuery(function($) {
-    $('a[data-toggle="modal"]').click(function(event) {
-        var target = $(this).attr('href'),
-            content = $(target).clone().css('display', 'block');
-        event.preventDefault();
-        $.modal(content, {
-            fitViewport: true,
-            closeText: ''
-        });
-    });
-});
