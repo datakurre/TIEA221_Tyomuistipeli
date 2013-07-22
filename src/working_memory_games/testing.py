@@ -90,7 +90,8 @@ class PyramidServerLayer(Layer):
                     socket.close()
 
         self['server'] = WSGITestServer(
-            self['app'], port=int(os.environ.get("HTTP_PORT", 55002)))
+            self['app'], port=int(os.environ.get("HTTP_PORT", 55002)),
+            threads=1)
 
         from threading import Thread
         self['thread'] = Thread(target=self['server'].run)
