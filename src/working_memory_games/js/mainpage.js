@@ -59,7 +59,7 @@ function addPlayerButtons() {
 
         if (player.guest !== true) {
             btn = $('#buttonTemplate a').clone();
-            btn.find('#name').text(player.name);
+            btn.find('.name').text(player.name);
             btn.attr('data-player', player.id);
             $("#mainView").prepend(btn);
             btn.show();
@@ -135,11 +135,11 @@ $(document).ready(function() {
     $(window).bind('hashchange', function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
-            $('#joinView').slideDown();
+            $('#liity').slideDown();
             $('#joinData').valid();
             $('#mainView').slideUp();
         } else {
-            $('#joinView').slideUp();
+            $('#liity').slideUp();
             $('#mainView').slideDown();
             addPlayerButtons();
         }

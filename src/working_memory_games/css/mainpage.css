@@ -322,29 +322,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
   float: right;
 }
 
-#joinView {
+#liity {
   font-family: sans-serif;
-}
-#joinView .modal {
-  overflow: hidden;
-}
-#joinView .modal-header {
-  background: #efa639;
-  background: -moz-linear-gradient(top, #efa639 18%, #f1e767 92%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(18%,#efa639), color-stop(92%,#f1e767));
-  background: -webkit-linear-gradient(top, #efa639 18%,#f1e767 92%);
-  background: -o-linear-gradient(top, #efa639 18%,#f1e767 92%);
-  background: -ms-linear-gradient(top, #efa639 18%,#f1e767 92%);
-  background: linear-gradient(to bottom, #efa639 18%,#f1e767 92%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', endColorstr='#f1e767',GradientType=0 );
-}
-#joinView .control-group {
-  margin-top: 0;
-  margin-bottom: 0.5ex;
-}
-#joinView .control-label{
-  margin-bottom: 0;
-}
-#joinView .sublabel {
-  padding-left: 0;
 }

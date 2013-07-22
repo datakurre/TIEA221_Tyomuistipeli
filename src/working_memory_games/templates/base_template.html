@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:metal="http://xml.zope.org/namespaces/metal">
   <head>
     <!--
       Usage: <meta metal:use-macro="base_template.macros['viewport']" />
@@ -11,7 +11,7 @@
     <!--
       Usage: <meta metal:use-macro="base_template.macros['seo']" />
     -->
-    <metal:seo define-macro="seo">
+    <metal:block define-macro="seo">
     <meta property="og:title" content="Työmuistipeli" />
     <meta property="og:type" content="game" />
     <meta property="og:url" content="${base_url}/" />
@@ -19,26 +19,26 @@
     <meta property="og:site_name" content="Työmuistipeli.fi" />
     <meta property="og:description" content="Lupun ja Lassen työmuistipeli on hauska tapa treenata muistia.
                                              Hyvällä työmuistilla on tutkittu yhteys koulumenestykseen!
-                                             Ikäsuositys: 4+" />
+                                             Ikäsuositus: 4+" />
     <meta property="description" content="Lupun ja Lassen työmuistipeli on hauska tapa treenata muistia.
                                           Hyvällä työmuistilla on tutkittu yhteys koulumenestykseen!
                                           Ikäsuositus: 4+" />
-    </metal:seo>
+    </metal:block>
 
     <!--
       Usage: <link metal:use-macro="base_template.macros['styles']" />
     -->
-    <metal:styles define-macro="styles">
+    <metal:block define-macro="styles">
     <link rel="stylesheet" href="${base_url}/css/pure.min.css" />
     <link rel="stylesheet" href="${base_url}/css/jquery.rs.modal.css" />
     <link rel="stylesheet" href="${base_url}/css/common.css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One|Tangerine:700|Luckiest+Guy|Bangers" />
-    </metal:styles>
+    </metal:block>
 
     <!--
       Usage: <script metal:use-macro="base_template.macros['scripts']" />
     -->
-    <metal:scripts define-macro="scripts">
+    <metal:block define-macro="scripts">
     <script src="${base_url}/lib/jquery.min.js"></script>
     <script src="${base_url}/lib/jquery.cookie.min.js"></script>
     <script src="${base_url}/lib/jquery.validate.min.js"></script>
@@ -47,7 +47,7 @@
     <script src="${base_url}/lib/jquery.snd.js"></script>
     <script src="${base_url}/lib/browserdetect.js"></script>
     <script src="${base_url}/js/game.js"></script>
-    </metal:scripts>
+    </metal:block>
   </head>
 
   <body>
