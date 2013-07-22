@@ -202,7 +202,7 @@ class Game(object):
         self.session.level = n
         return int(n)  # remove numpy-reperesentation
 
-    @view_config(name="runanimation", renderer="json")
+    @view_config(name="runanimation", renderer="json", xhr=False)
     def run_animation(self):
         logger.debug('run animation =>')
         ret = len(self.session.get_plays()) == 0
