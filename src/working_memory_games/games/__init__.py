@@ -213,7 +213,7 @@ class Game(object):
             "animation": ret
         }
 
-    @view_config(name="pass", renderer="../templates/save_pass.html")
+    @view_config(name="pass", renderer="../templates/save_pass.html", xhr=False)
     def save_pass(self):
         """ Saves successful game """
         items = self.app.request.json_body
@@ -238,7 +238,7 @@ class Game(object):
                 values["game_over"] = False
         return values
 
-    @view_config(name="fail", renderer="../templates/save_fail.html")
+    @view_config(name="fail", renderer="../templates/save_fail.html", xhr=False)
     def save_fail(self):
         """ Saves failed game """
 
