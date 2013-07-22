@@ -97,7 +97,11 @@ class PyramidServerLayer(Layer):
         self['thread'].start()
 
     def testTearDown(self):
+        import time
+
         self['server'].stop()
+        while self['thread'].isAlive():
+            time.sleep(0.5)
 
         del self['app']
 
