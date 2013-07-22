@@ -33,6 +33,7 @@ setup(
         'plone.testing',
         'robotframework-selenium2library',
         'robotsuite',
+        'waitress',
         'webtest'
     ]},
     entry_points="""\
