@@ -156,7 +156,7 @@ def main(global_config, **settings):
                      "tutkimussuunnitelma.pdf"]:
         path = os.path.join(os.path.dirname(__file__), filename)
         config.add_route(path, "/%s" % filename)
-        config.add_view(route_name=path, view=static_file(path))
+        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
 
     # Configure common static resources
     config.add_static_view(name="css", path="css", cache_max_age=3600)
