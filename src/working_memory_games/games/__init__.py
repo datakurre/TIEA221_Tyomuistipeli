@@ -26,7 +26,7 @@ import logging
 logger = logging.getLogger("working_memory_games")
 
 
-@view_defaults(context=IGame, route_name="traversal", xhr=True)
+@view_defaults(context=IGame, route_name="traversal")
 class Game(object):
     """ Game base class """
 
@@ -202,7 +202,7 @@ class Game(object):
         self.session.level = n
         return int(n)  # remove numpy-reperesentation
 
-    @view_config(name="runanimation", renderer="json", xhr=False)
+    @view_config(name="runanimation", renderer="json")
     def run_animation(self):
         logger.debug('run animation =>')
         ret = len(self.session.get_plays()) == 0
@@ -213,7 +213,7 @@ class Game(object):
             "animation": ret
         }
 
-    @view_config(name="pass", renderer="../templates/save_pass.html", xhr=False)
+    @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """
         items = self.app.request.json_body
@@ -238,7 +238,7 @@ class Game(object):
                 values["game_over"] = False
         return values
 
-    @view_config(name="fail", renderer="../templates/save_fail.html", xhr=False)
+    @view_config(name="fail", renderer="../templates/save_fail.html")
     def save_fail(self):
         """ Saves failed game """
 
@@ -265,7 +265,7 @@ class Game(object):
         return values
 
     @view_config(name="game_over", renderer="../templates/game_over.html",
-                 request_method="GET", xhr=False)
+                 request_method="GET")
     def get_game_over(self):
         data = {}
 

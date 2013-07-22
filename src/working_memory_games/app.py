@@ -184,7 +184,7 @@ class Application(object):
         return self.data.players.create_player(name, details)
 
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
-                 request_method="GET", xhr=False)
+                 request_method="GET")
     def get_next_game(self):
         """Return the next available game for the current player
         """
@@ -210,7 +210,7 @@ class Application(object):
         }
 
     @view_config(name="session_status", renderer="json",
-                 request_method="GET", xhr=True)
+                 request_method="GET")
     def get_session_statuses_for_today(self):
         ret = {}
         players_json = self.request.cookies.get("players")
