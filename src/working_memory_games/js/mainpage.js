@@ -133,8 +133,7 @@ $(document).ready(function() {
     $(window).bind('hashchange', function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
-            $('#liity').slideDown();
-            $('#joinData').valid();
+            $('#liity').slideDown(function() { $('#joinData').valid(); });
             $('#mainView').slideUp();
         } else {
             $('#liity').slideUp();
