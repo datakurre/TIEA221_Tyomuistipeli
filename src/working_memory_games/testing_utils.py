@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
-from pyramid import traversal
-from pyramid.interfaces import IViewClassifier, IView, IRequest
-from zope.interface import providedBy, implementedBy
 
 
-def get_view_method(obj, method_name, request):
+def get_view_attr_name(obj, method_name, request):
 
     #view_callable = request.registry.adapters.lookup(
     #    (IViewClassifier, implementedBy(IRequest), providedBy(obj)),
@@ -58,7 +55,7 @@ def play_one_session(app, player_id, percentage=100, save_pass=False):
         assert session.order[0] == next_game
 
         game = app.games[next_game["game"]]
-        method_name = get_view_method(game, "new", app.request)
+        method_name = get_view_attr_name(game, "new", app.request)
         new_game = getattr(game, method_name)()
 
         items = new_game.get("items", new_game.get("sample", []))

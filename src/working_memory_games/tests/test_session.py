@@ -11,7 +11,7 @@ from pyramid.httpexceptions import HTTPFound
 from working_memory_games.app import Application
 from working_memory_games.testing import INTEGRATION_TESTING
 from working_memory_games.testing_utils import (
-    get_view_method,
+    get_view_attr_name,
     play_one_session,
     step_one_day
 )
@@ -100,7 +100,7 @@ class TestSession(unittest.TestCase):
 
             game = self.app.games[next_game["game"]]
 
-            method_name = get_view_method(game, "new", self.request)
+            method_name = get_view_attr_name(game, "new", self.request)
             new_game = getattr(game, method_name)()
 
             items = new_game.get("items", new_game.get("sample", []))
