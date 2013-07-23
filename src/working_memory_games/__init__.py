@@ -2,12 +2,6 @@
 """Pyramid startup and URL dispatch / traversal registrations
 """
 
-# XXX: Monkeypatch a bug in Pyramid 1.4a3 debug mode
-import pyramid.config.predicates
-pyramid.config.predicates.RequestMethodPredicate.__text__ = u"n/a"
-pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
-#
-
 import os
 import datetime
 
@@ -75,8 +69,6 @@ class game_config(object):
         traversal
     renderer
         json
-    xhr
-        True
 
     Please, note that it's not possible to use Pyramid's @view_defaults
     together with @game_config (the latest one in chain will prevail).
@@ -127,9 +119,12 @@ class game_config(object):
                                      request_method="GET")
                     if path.endswith('.js') or path.endswith('.css'):
                         #print 'register', path
-                        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
+                        config.add_view(route_name=path,
+                                        view=static_file(path),
+                                        http_cache=3600)
                     else:
-                        config.add_view(route_name=path, view=static_file(path))
+                        config.add_view(route_name=path,
+                                        view=static_file(path))
                 for path in filter(lambda x: os.path.isdir(x), resources):
                     #print 'static register', path
                     basename = os.path.basename(path)
