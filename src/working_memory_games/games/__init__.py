@@ -26,7 +26,7 @@ import logging
 logger = logging.getLogger("working_memory_games")
 
 
-@view_defaults(context=IGame, route_name="traversal")
+@view_defaults(context=IGame, route_name="traversal", http_cache=0)
 class Game(object):
     """ Game base class """
 
@@ -264,8 +264,7 @@ class Game(object):
                 values["game_over"] = False
         return values
 
-    @view_config(name="game_over", renderer="../templates/game_over.html",
-                 request_method="GET")
+    @view_config(name="game_over", renderer="../templates/game_over.html")
     def get_game_over(self):
         data = {}
 

@@ -69,6 +69,10 @@ class game_config(object):
         traversal
     renderer
         json
+    http_cache
+        0
+
+    (http_cache=0 sets max-age=0, must-revalidate, no-cache, no-store)
 
     Please, note that it's not possible to use Pyramid's @view_defaults
     together with @game_config (the latest one in chain will prevail).
@@ -85,7 +89,8 @@ class game_config(object):
         wrapped.__view_defaults__ = {
             "context": wrapped,
             "route_name": "traversal",
-            "renderer": "json"
+            "renderer": "json",
+            "http_cache": 0
         }
         ##
 
@@ -150,7 +155,8 @@ def main(global_config, **settings):
                      "tutkimussuunnitelma.pdf"]:
         path = os.path.join(os.path.dirname(__file__), filename)
         config.add_route(path, "/%s" % filename)
-        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
+        config.add_view(route_name=path, view=static_file(path),
+                        http_cache=3600)
 
     # Configure common static resources
     config.add_static_view(name="css", path="css", cache_max_age=3600)

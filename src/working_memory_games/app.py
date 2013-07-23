@@ -150,7 +150,7 @@ class Application(object):
         return self.games[name]  # raising a KeyError is allowed
 
     @view_config(name="liity", renderer="json",
-                 request_method="POST")
+                 request_method="POST", http_cache=0)
     def create_new_player(self):
         """Save named player information
         """
@@ -169,7 +169,7 @@ class Application(object):
         return self.data.players.create_player(name, details)
 
     @view_config(name="kokeile", renderer="json",
-                 request_method="POST")
+                 request_method="POST", http_cache=0)
     def create_new_guest(self):
         """Save new guest
         """
@@ -184,7 +184,7 @@ class Application(object):
         return self.data.players.create_player(name, details)
 
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
-                 request_method="GET")
+                 request_method="GET", http_cache=0)
     def get_next_game(self):
         """Return the next available game for the current player
         """
@@ -209,8 +209,7 @@ class Application(object):
             "assisted": session.order[0]["assisted"]
         }
 
-    @view_config(name="session_status", renderer="json",
-                 request_method="GET")
+    @view_config(name="session_status", renderer="json", http_cache=0)
     def get_session_statuses_for_today(self):
         ret = {}
         players_json = self.request.cookies.get("players")
