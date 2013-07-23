@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
+from pyramid.config.views import ViewDeriver
 
 
 def get_view_attr_name(obj, method_name, request):
@@ -14,11 +15,19 @@ def get_view_attr_name(obj, method_name, request):
             if adapter.required[2].providedBy(obj):
                 if adapter.name == method_name:
                     view_callable = adapter.factory
+                    # A) Class based view method with xhr=True)
                     if hasattr(view_callable, "__view_attr__"):
                         return view_callable.__view_attr__
+                    # B) Class based view method without xhr
                     elif hasattr(view_callable, "__wraps__"):
                         wrapped_view = view_callable.__wraps__
-                        return wrapped_view.func_closure[0].cell_contents
+                        candidate = wrapped_view.func_closure[0].cell_contents
+                        # Class based view method without cache-control
+                        if type(candidate) == str:
+                            return candidate
+                        # Class based view method with cache-control
+                        elif isinstance(candidate, ViewDeriver):
+                            return candidate.kw["attr"]
     raise AttributeError("'{0:s}' not found".format(method_name))
 
 
