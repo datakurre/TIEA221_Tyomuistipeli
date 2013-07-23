@@ -148,7 +148,7 @@ function GameIncorrectAnswer() {
   });
 }
 
-// Wire up jquery.rs.modal for each a[data-toggle='modal']:
+/* Wire up jquery.rs.modal for each a[data-toggle='modal']: */
 jQuery(function($) {
     $('a[data-toggle="modal"]').click(function(event) {
         var target = $(this).attr('href'),
