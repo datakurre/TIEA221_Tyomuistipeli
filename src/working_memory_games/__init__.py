@@ -170,7 +170,7 @@ def main(global_config, **settings):
 
     # Configure common direct routes, which takes precedence over traverse
     config.add_route("root", "/")
-    config.add_route("register", "/liity", request_method="GET")
+    config.add_route("play", "/pelaa")
 
     # Scan app views for their configuration
     config.scan(".app")

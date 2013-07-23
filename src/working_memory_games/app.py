@@ -78,6 +78,7 @@ class Application(object):
 
         # Set registered games (available games could be filtered here)
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
+        self.games = {"numbers": self.games["numbers"]}
 
     def get_current_player(self, player_id=''):
         """Return the current player according to the available cookie data
@@ -183,8 +184,7 @@ class Application(object):
 
         return self.data.players.create_player(name, details)
 
-    @view_config(name="pelaa", renderer="templates/game_iframe.html",
-                 request_method="GET", http_cache=0)
+    @view_config(name="next_game", renderer="json", http_cache=0)
     def get_next_game(self):
         """Return the next available game for the current player
         """
@@ -256,4 +256,11 @@ def root_view(request):
     if not request.path.endswith("/"):
         url = urlparse.urljoin(request.application_url, request.path)
         raise HTTPFound(location=url + "/")
+    return {}
+
+
+@view_config(route_name="play", renderer="templates/game_iframe.html",
+             http_cache=(datetime.timedelta(1), {"public": True}))
+def game_iframe_view(request):
+    assert request  # please pyflakes
     return {}

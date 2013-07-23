@@ -15,6 +15,13 @@ form span.error {
     white-space: nowrap;
 }
 
+/* Game frame */
+#game-iframe {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    overflow: hidden;
+}
+
 /* Disable link highlighting from game area */
 #game a { text-decoration: none; }
 

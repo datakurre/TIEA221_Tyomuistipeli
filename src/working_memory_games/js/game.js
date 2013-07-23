@@ -1,3 +1,7 @@
+/* Define dummy logger: */
+if (window.console === undefined) { window.console = {log: function() {}}; }
+
+/* Define globals: */
 var global = global || {};
 
 global.userid = 0;

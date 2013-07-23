@@ -25,7 +25,7 @@ class PyramidLayer(Layer):
         self['config'].add_route(
             "root", "/")
         self['config'].add_route(
-            "register", "/liity", request_method="GET")
+            "play", "/pelaa")
         self['config'].add_route(
             "traversal", "/*traverse", factory=Application)
 

@@ -1,6 +1,25 @@
-<iframe src="${base_url}/${game}"
-        height="100%" width="100%" scrolling="no" frameborder="0"
-        style="position: absolute;
-               top: 0; right: 0; bottom: 0; left: 0;
-               overflow: hidden;">
-</iframe>
+<!DOCTYPE html>
+<html xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head>
+    <meta charset="utf-8" />
+    <meta name="base" content="${base_url}" />
+    <meta name="context" content="${current_url}" />
+    <meta metal:use-macro="base_template.macros['viewport']" />
+
+    <title>Työmuistipeli</title>
+
+    <link rel="icon" type="image/ico" href="${base_url}/favicon.ico"/>
+    <link rel="author" href="${base_url}/humans.txt" />
+    <link rel="" href="" metal:use-macro="base_template.macros['styles']" />
+
+    <script metal:use-macro="base_template.macros['scripts']"></script>
+    <script src="${base_url}/js/game_iframe.js"></script>
+</head>
+<body>
+  <div id="fullscreen-windows" class="hidden">
+      <h1>Peli vaatii suuremman ikkunan</h1>
+      <p>Paina F11-näppäintä suurentaaksesi ikkunan kokoruututilaan.</p>
+      <!-- Tai pienennä pelin (zoomaa ulos) -->
+  </div>
+</body>
+</html>
