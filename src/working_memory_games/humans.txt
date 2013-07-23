@@ -47,5 +47,6 @@
         DNS ja SMTP-relay: Pasi Sjöholm
 
         Pilottitestaus: 
-           -Jenni
+
+           - Jenni Jääskelä
 

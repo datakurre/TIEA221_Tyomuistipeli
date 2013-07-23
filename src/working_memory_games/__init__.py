@@ -93,8 +93,7 @@ class game_config(object):
         wrapped.__view_defaults__ = {
             "context": wrapped,
             "route_name": "traversal",
-            "renderer": "json",
-            "xhr": True
+            "renderer": "json"
         }
         ##
 

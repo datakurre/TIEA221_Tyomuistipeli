@@ -88,6 +88,7 @@ class Application(object):
 
         # When player_id was not available, redirect to application root
         if player_id is None:
+            logger.debug('player id is None')
             raise HTTPFound(location=self.request.application_url + "/")
 
         # Look up the current player using the cookie data
@@ -183,18 +184,20 @@ class Application(object):
         return self.data.players.create_player(name, details)
 
     @view_config(name="pelaa", renderer="templates/game_iframe.html",
-                 request_method="GET", xhr=False)
+                 request_method="GET")
     def get_next_game(self):
         """Return the next available game for the current player
         """
         session = self.get_current_session()
 
         if session is None:
+            logger.debug('session length is None')
             # User friendly version of:
             # raise HTTPBadRequest(u"No active session found.")
             raise HTTPFound(location=self.request.application_url + "/")
 
         if len(session.order) <= 0:
+            logger.debug('session length is 0')
             # Daily session has ended
             raise HTTPFound(location=self.request.application_url
                             + "/#pelataan-taas-huomenna")
@@ -207,7 +210,7 @@ class Application(object):
         }
 
     @view_config(name="session_status", renderer="json",
-                 request_method="GET", xhr=True)
+                 request_method="GET")
     def get_session_statuses_for_today(self):
         ret = {}
         players_json = self.request.cookies.get("players")

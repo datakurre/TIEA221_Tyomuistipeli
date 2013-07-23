@@ -26,7 +26,7 @@ import logging
 logger = logging.getLogger("working_memory_games")
 
 
-@view_defaults(context=IGame, route_name="traversal", xhr=True)
+@view_defaults(context=IGame, route_name="traversal")
 class Game(object):
     """ Game base class """
 
@@ -59,6 +59,7 @@ class Game(object):
         player_session = self.app.get_current_session()
 
         if player_session is None:
+            logger.debug('player session is None!')
             # TODO: Create implicit guest player here!
             from pyramid.httpexceptions import HTTPNotFound
             raise HTTPNotFound
@@ -203,9 +204,11 @@ class Game(object):
 
     @view_config(name="runanimation", renderer="json")
     def run_animation(self):
+        logger.debug('run animation =>')
         ret = len(self.session.get_plays()) == 0
         if 'testAnimation' in self.app.request.params:
             ret = True
+        logger.debug('run animation <= ')
         return {
             "animation": ret
         }
@@ -262,7 +265,7 @@ class Game(object):
         return values
 
     @view_config(name="game_over", renderer="../templates/game_over.html",
-                 request_method="GET", xhr=False)
+                 request_method="GET")
     def get_game_over(self):
         data = {}
 
