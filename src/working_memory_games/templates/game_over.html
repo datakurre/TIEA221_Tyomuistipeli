@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html xmlns:metal="http://xml.zope.org/namespaces/metal">
+<head>
     <meta charset="utf-8" />
     <meta name="base" content="${base_url}" />
     <meta name="context" content="${current_url}" />
@@ -8,48 +8,39 @@
 
     <title>Hyvin pelattu</title>
 
-    <link rel="stylesheet" href="${base_url}/css/common.css" />
+    <link rel="icon" type="image/ico" href="${base_url}/favicon.ico"/>
+    <link rel="author" href="${base_url}/humans.txt" />
+    <link rel="" href="" metal:use-macro="base_template.macros['styles']" />
     <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
     <link rel="stylesheet" href="${base_url}/css/game_over.css" />
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Belgrano|Knewave|Finger+Paint|Concert+One|Tangerine:700|Luckiest+Guy|Bangers" />
-
-    <script src="../lib/jquery.min.js"></script>
-    <script src="${base_url}/lib/jquery.snd.js"></script>
-    <script src="${base_url}/lib/jquery.cookie.js"></script>
-    <script src="${base_url}/js/game.js"></script>
+    <script metal:use-macro="base_template.macros['scripts']"></script>
     <script src="${base_url}/js/game_over.js"></script>
-<!-- is this here for some real purpose?
-    <script type="text/javascript" src="../js/mainpage.js"></script>
--->
-  </head>
-
-  <body>
-    <div id="game">
-
-      <div id="edge">
+</head>
+<body>
+<div id="game">
+    <div id="edge">
         <div id="dialog">
-	  <img id="pupu" src="${base_url}/img/etukuva/pupu001.png">
-	  <img id="harakka" src="${base_url}/img/etukuva/harakka2001.png">
-	  <div id="starBox">
-	    <img class="star" src="${base_url}/img/star.png"
-             tal:repeat="idx python:range(stars)" />
-      </div>
-	  <a href="${base_url}/${game}" id="nextGame" class="gameBtn"
-             tal:condition="game|nothing">
-	    <div class="center">
-	      Jatka
-	    </div>
-	  </a>
-	  <a href="${base_url}/" target="_top" id="nextGame" class="gameBtn"
-             tal:condition="not:game|nothing">
-	    <div class="center">
-	      Lopeta
-	    </div>
-	  </a>
+            <img id="pupu" src="${base_url}/img/etukuva/pupu001.png">
+            <img id="harakka" src="${base_url}/img/etukuva/harakka2001.png">
+            <div id="starBox">
+                <img class="star" src="${base_url}/img/star.png"
+                     tal:repeat="idx python:range(stars)" />
+            </div>
+            <a href="${base_url}/${game}" id="nextGame" class="gameBtn"
+               tal:condition="game|nothing">
+                <div class="center">
+                    Jatka
+                </div>
+            </a>
+            <a href="${base_url}/" target="_top" id="nextGame" class="gameBtn"
+               tal:condition="not:game|nothing">
+                <div class="center">
+                    Lopeta
+                </div>
+            </a>
         </div>
-      </div>
-
     </div>
-  </body>
+</div>
+</body>
 </html>
