@@ -2,12 +2,16 @@ jQuery(function($) {
     var checkWindowHeight, createGameFrame, dialog = null;
 
     checkWindowHeight = function() {
-        var windowHeight = $(window).height();
+        var windowHeight = $(window).height(),
+            platform = {
+                "Windows": "windows",
+                "iPad": "ipad"
+            }[BrowserDetect.OS] || "windows";
         if (windowHeight < 786) {
             if (dialog === null) {
                 // TODO: Create different instructions for different systems
                 // and check the system from BrowserDetect.OS
-                dialog = $.modal($('#fullscreen-windows').clone()
+                dialog = $.modal($('#fullscreen-' + platform).clone()
                     .css('display', 'block'), {
                     fitViewport: true,
                     closeOverlay: false,
