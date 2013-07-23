@@ -1,5 +1,5 @@
 jQuery(function($) {
-    var checkWindowHeight, createGameFrame, dialog = null;
+    var checkWindowHeight, createGameFrame, onGameFrameLoad, dialog = null;
 
     checkWindowHeight = function() {
         var windowHeight = $(window).height(),
@@ -45,20 +45,22 @@ jQuery(function($) {
                         .attr('scrolling', 'no')
                         .attr('frameborder', '0')
                         .attr('src', base_url + '/' + data.game + '/')
-                        .bind("load", function(event) {
-                            var target = this.contentWindow;
-                            if (target !== undefined
-                                    && target.location !== undefined
-                                    && target.postMessage !== undefined) {
-                                target.postMessage("CONNECT",
-                                                   target.location.toString());
-                            }
-                        }).prependTo($('body'));
+                        .bind('load', onGameFrameLoad)
+                        .prependTo($('body'));
                 } else {
                     window.location = base_url + '#pelataan-taas-huomenna';
                 }
             }
         });
+    };
+
+    onGameFrameLoad = function() {
+        if (this.contentWindow !== undefined
+                && this.contentWindow.location !== undefined
+                && this.contentWindow.postMessage !== undefined) {
+            this.contentWindow.postMessage(
+                "CONNECT", this.contentWindow.location.toString());
+        }
     };
 
     checkWindowHeight();
