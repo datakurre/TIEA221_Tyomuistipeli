@@ -1,14 +1,27 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
+from pyramid import traversal
+from pyramid.interfaces import IViewClassifier, IView, IRequest
+from zope.interface import providedBy, implementedBy
 
 
 def get_view_method(obj, method_name, request):
+
+    #view_callable = request.registry.adapters.lookup(
+    #    (IViewClassifier, implementedBy(IRequest), providedBy(obj)),
+    #    IView, name=method_name, default=None)
+
     for adapter in request.registry.registeredAdapters():
         if len(adapter.required) > 2:
             if adapter.required[2].providedBy(obj):
                 if adapter.name == method_name:
-                    return adapter.factory.__view_attr__
+                    view_callable = adapter.factory
+                    if hasattr(view_callable, "__view_attr__"):
+                        return view_callable.__view_attr__
+                    elif hasattr(view_callable, "__wraps__"):
+                        wrapped_view = view_callable.__wraps__
+                        return wrapped_view.func_closure[0].cell_contents
     raise AttributeError("'{0:s}' not found".format(method_name))
 
 
