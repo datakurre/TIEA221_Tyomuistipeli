@@ -25,7 +25,7 @@ class PyramidLayer(Layer):
         self['config'].add_route(
             "root", "/")
         self['config'].add_route(
-            "register", "/liity", request_method="GET")
+            "play", "/pelaa")
         self['config'].add_route(
             "traversal", "/*traverse", factory=Application)
 
@@ -74,20 +74,35 @@ class PyramidServerLayer(Layer):
     def testSetUp(self):
         self['app'] = main({}, **{"zodbconn.uri": "memory://"})
 
-        from wsgiref.simple_server import make_server
-        self['server'] = make_server(
-            '', int(os.environ.get("HTTP_PORT", 55002)), self['app'])
-        self['server'].RequestHandlerClass.log_request =\
-            lambda self, code, size: None  # mute http server
-        self['server'].timeout = 0.5  # set handle request timeout
+        import select
+        import waitress
+
+        class WSGITestServer(waitress.server.WSGIServer):
+
+            def run(self):
+                try:
+                    self.asyncore.loop(map=self._map)
+                except (SystemExit, KeyboardInterrupt, select.error):
+                    self.task_dispatcher.shutdown()
+
+            def stop(self):
+                for socket in self._map.values():
+                    socket.close()
+
+        self['server'] = WSGITestServer(
+            self['app'], port=int(os.environ.get("HTTP_PORT", 55002)),
+            threads=1)
 
         from threading import Thread
-        self['thread'] = Thread(target=self['server'].serve_forever)
+        self['thread'] = Thread(target=self['server'].run)
         self['thread'].start()
 
     def testTearDown(self):
-        self['server'].shutdown()
-        self['server'].server_close()
+        import time
+
+        self['server'].stop()
+        while self['thread'].isAlive():
+            time.sleep(0.1)
 
         del self['app']
 

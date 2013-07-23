@@ -1,3 +1,30 @@
+/* Elements, which should be hidden at start */
+.hidden {
+    display: none;
+}
+
+/* Form validation error message */
+form span.error {
+    display: inline-block;
+    font-size: 80%;
+    margin-left: 1em;
+    color: red;
+    /* keep the error next to the field: */
+    width: 1em;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* Game frame */
+#game-iframe {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    overflow: hidden;
+}
+
+/* Disable link highlighting from game area */
+#game a { text-decoration: none; }
+
 #animation, #game {
   display: none; /* after animation bring up the next one */
   position: absolute;

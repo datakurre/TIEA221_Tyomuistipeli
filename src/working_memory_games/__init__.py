@@ -2,12 +2,6 @@
 """Pyramid startup and URL dispatch / traversal registrations
 """
 
-# XXX: Monkeypatch a bug in Pyramid 1.4a3 debug mode
-import pyramid.config.predicates
-pyramid.config.predicates.RequestMethodPredicate.__text__ = u"n/a"
-pyramid.config.predicates.XHRPredicate.__text__ = u"n/a"
-#
-
 import os
 import datetime
 
@@ -75,8 +69,10 @@ class game_config(object):
         traversal
     renderer
         json
-    xhr
-        True
+    http_cache
+        0
+
+    (http_cache=0 sets max-age=0, must-revalidate, no-cache, no-store)
 
     Please, note that it's not possible to use Pyramid's @view_defaults
     together with @game_config (the latest one in chain will prevail).
@@ -93,7 +89,8 @@ class game_config(object):
         wrapped.__view_defaults__ = {
             "context": wrapped,
             "route_name": "traversal",
-            "renderer": "json"
+            "renderer": "json",
+            "http_cache": 0
         }
         ##
 
@@ -101,7 +98,7 @@ class game_config(object):
             name = name.lower()  # game id is its class name in lowercase
             config = context.config.with_package(info.module)
 
-            logging.info("Registering game '%s'." % name)
+            logger.info("Registering game '%s'." % name)
 
             # Register game so that sessions will be able to find it
             config.registry.registerAdapter(
@@ -127,9 +124,12 @@ class game_config(object):
                                      request_method="GET")
                     if path.endswith('.js') or path.endswith('.css'):
                         #print 'register', path
-                        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
+                        config.add_view(route_name=path,
+                                        view=static_file(path),
+                                        http_cache=3600)
                     else:
-                        config.add_view(route_name=path, view=static_file(path))
+                        config.add_view(route_name=path,
+                                        view=static_file(path))
                 for path in filter(lambda x: os.path.isdir(x), resources):
                     #print 'static register', path
                     basename = os.path.basename(path)
@@ -155,7 +155,8 @@ def main(global_config, **settings):
                      "tutkimussuunnitelma.pdf"]:
         path = os.path.join(os.path.dirname(__file__), filename)
         config.add_route(path, "/%s" % filename)
-        config.add_view(route_name=path, view=static_file(path), http_cache=3600)
+        config.add_view(route_name=path, view=static_file(path),
+                        http_cache=3600)
 
     # Configure common static resources
     config.add_static_view(name="css", path="css", cache_max_age=3600)
@@ -169,7 +170,7 @@ def main(global_config, **settings):
 
     # Configure common direct routes, which takes precedence over traverse
     config.add_route("root", "/")
-    config.add_route("register", "/liity", request_method="GET")
+    config.add_route("play", "/pelaa")
 
     # Scan app views for their configuration
     config.scan(".app")

@@ -1,14 +1,33 @@
 # -*- coding: utf-8 -*-
 import datetime
 import re
+from pyramid.config.views import ViewDeriver
 
 
-def get_view_method(obj, method_name, request):
+def get_view_attr_name(obj, method_name, request):
+
+    #view_callable = request.registry.adapters.lookup(
+    #    (IViewClassifier, implementedBy(IRequest), providedBy(obj)),
+    #    IView, name=method_name, default=None)
+
     for adapter in request.registry.registeredAdapters():
         if len(adapter.required) > 2:
             if adapter.required[2].providedBy(obj):
                 if adapter.name == method_name:
-                    return adapter.factory.__view_attr__
+                    view_callable = adapter.factory
+                    # A) Class based view method with xhr=True)
+                    if hasattr(view_callable, "__view_attr__"):
+                        return view_callable.__view_attr__
+                    # B) Class based view method without xhr
+                    elif hasattr(view_callable, "__wraps__"):
+                        wrapped_view = view_callable.__wraps__
+                        candidate = wrapped_view.func_closure[0].cell_contents
+                        # Class based view method without cache-control
+                        if type(candidate) == str:
+                            return candidate
+                        # Class based view method with cache-control
+                        elif isinstance(candidate, ViewDeriver):
+                            return candidate.kw["attr"]
     raise AttributeError("'{0:s}' not found".format(method_name))
 
 
@@ -45,7 +64,7 @@ def play_one_session(app, player_id, percentage=100, save_pass=False):
         assert session.order[0] == next_game
 
         game = app.games[next_game["game"]]
-        method_name = get_view_method(game, "new", app.request)
+        method_name = get_view_attr_name(game, "new", app.request)
         new_game = getattr(game, method_name)()
 
         items = new_game.get("items", new_game.get("sample", []))
