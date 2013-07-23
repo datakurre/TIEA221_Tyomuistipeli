@@ -78,7 +78,7 @@ class Application(object):
 
         # Set registered games (available games could be filtered here)
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
-        self.games = {"numbers": self.games["numbers"]}
+        #self.games = {"numbers": self.games["numbers"]}
 
     def get_current_player(self, player_id=''):
         """Return the current player according to the available cookie data
