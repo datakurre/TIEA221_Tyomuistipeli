@@ -196,6 +196,8 @@
                     .addClass(this.options.overlayClassName ? this.modalName + '-overlay ' + this.options.overlayClassName : this.modalName + '-overlay')
                     .fadeTo(speed, this.options.overlayOpacity);
             }
+
+            return this;
         },
 
         _setIsOpen: function (val) {
@@ -239,6 +241,8 @@
                 this.options.afterResize(this.objects);
                 this.objects.doc.trigger('modalAfterResize', [this.objects]);
             }
+
+            return this;
         },
 
         // updates modal with new content, options will persist
@@ -246,6 +250,8 @@
             if (this.isOpen) {
                 this.open(newContent, $.extend(this.options, options));
             }
+
+            return this;
         },
 
         // helper method to indicate loading
@@ -254,6 +260,8 @@
                 className: this.modalName + '-isloading',
                 beforeClose: beforeClose || $.noop
             });
+
+            return this;
         },
 
         close: function (animate) {
@@ -275,6 +283,8 @@
             if (this.options.modal) {
                 this.objects.overlay.fadeOut(speed);
             }
+
+            return this;
         },
 
         // removes all style attributes, NOTE: CSS should hide .modal by default
@@ -393,6 +403,7 @@
     };
 
     $.modal = function(content, options) {
-        return (new $.rs.Modal('modal', options)).open(content); };
+        return (new $.rs.Modal('modal', options)).open(content);
+    }
 
 })(jQuery);
