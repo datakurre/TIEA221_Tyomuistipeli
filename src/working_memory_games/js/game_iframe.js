@@ -1,7 +1,10 @@
 jQuery(function($) {
-    var checkWindowHeight, createGameFrame, onGameFrameLoad, dialog = null;
+    var checkWindowHeight, createGameFrame, onGameFrameLoad,
+        timeout = null, dialog = null;
 
     checkWindowHeight = function() {
+        timeout = null;
+
         var windowHeight = $(window).height(),
             platform = {
                 "Windows": "windows",
@@ -19,9 +22,14 @@ jQuery(function($) {
                     closeKeyCode: null,
                     closeText: ''
                 });
-                $(window.document).one('modalAfterClose', createGameFrame);
+                $(window.document).one('modalAfterClose', function() {
+                    if (timeout !== undefined && timeout !== null) {
+                        window.clearTimeout(timeout);
+                    }
+                    createGameFrame();
+                });
             }
-            window.setTimeout(checkWindowHeight, 500);  // check every 0.5 sec
+            timeout = window.setTimeout(checkWindowHeight, 500);
         } else if (dialog !== null) {
             dialog.close();
         } else {
