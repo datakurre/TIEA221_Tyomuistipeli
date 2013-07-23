@@ -15,15 +15,15 @@ jQuery(function($) {
                     .css('display', 'block'), {
                     fitViewport: true,
                     closeOverlay: false,
-                    closeSelector: null,
+                    closeSelector: ".pure-button-primary",
                     closeKeyCode: null,
                     closeText: ''
                 });
+                $(window.document).one('modalAfterClose', createGameFrame);
             }
             window.setTimeout(checkWindowHeight, 500);  // check every 0.5 sec
         } else if (dialog !== null) {
             dialog.close();
-            createGameFrame();
         } else {
             createGameFrame();
         }
