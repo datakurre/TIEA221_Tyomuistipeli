@@ -155,7 +155,7 @@ class Application(object):
         """Save named player information
         """
         name = self.request.params.get("name", "").strip()
-        logging.debug(self.request.params)
+        logger.debug(self.request.params)
 
         if not name:  # does not validate
             return HTTPBadRequest()
