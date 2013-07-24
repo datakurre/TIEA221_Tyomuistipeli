@@ -169,6 +169,30 @@ class Application(object):
 
         return self.data.players.create_player(name, details)
 
+    @view_config(name="pelinappulat", renderer="json",
+                 request_method="POST", http_cache=0)
+    def send_email(self):
+        """Save named player information
+        """
+        email = self.request.params.get("email", "").strip()
+        logger.debug(self.request.params)
+
+        if not email:  # does not validate
+            return HTTPBadRequest()
+
+        players = []
+        for playerid, player in self.data.players.items():
+            if 'email' in player.details and player.details['email'] == email:
+                #print 'send player id to ', player.details['email'], playerid, player.details
+                players.append({ 'name': player.details['name'] or '',
+                                 'id': playerid
+                                 })
+        if len(players) > 0:
+            import emailer
+            emailer.email(email, players)
+        return {}
+
+
     @view_config(name="kokeile", renderer="json",
                  request_method="POST", http_cache=0)
     def create_new_guest(self):

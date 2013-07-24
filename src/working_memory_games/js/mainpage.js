@@ -133,10 +133,25 @@ $(document).ready(function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
             $('#liity').slideDown(function() { $('#joinData').valid(); });
+            $('#olenJoLiittynyt').slideUp();
+            $('#mainView').slideUp();
+        } else if (hash.startsWith('#olen-jo-liittynyt')) {
+            $('#liity').slideUp();
+            $('#olenJoLiittynyt').slideDown();
             $('#mainView').slideUp();
         } else {
             $('#liity').slideUp();
+            $('#olenJoLiittynyt').slideUp();
             $('#mainView').slideDown();
+
+            if (hash.startsWith('#players=')) {
+                var players = jQuery.parseJSON(hash.split('players=')[1]);
+                for (var i in players) {
+                    addPlayer(players[i]);
+                }
+                location.hash = '';
+            }
+
             addPlayerButtons();
         }
     });
@@ -193,6 +208,17 @@ $(document).ready(function() {
             });
         }
     });
+
+    $('#activateExistingPlayers').click(function(event){
+        event.preventDefault();
+
+        $.post('pelinappulat',
+               $('#alreadyJoinedData').serialize(),
+               function(data) {
+                   location.hash = '';
+               });
+    });
+
 
     // trigger view!
     $(window).trigger('hashchange');

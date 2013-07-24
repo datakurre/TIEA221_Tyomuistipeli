@@ -131,8 +131,33 @@
           <a id="join" class="gameBtn btn-2" href="#">
             <div class="middle">Liity!</div>
           </a>
+          <a id="alreadyJoined" class="gameBtn btn-2" href="#olen-jo-liittynyt">
+            <div class="middle">Olen jo liittynyt</div>
+          </a>
         </form>
       </div>
+
+      <div id="olenJoLiittynyt" style="display:none; width: 30em;
+                             margin-left: auto; margin-right: auto;">
+        <form id="alreadyJoinedData" class="pure-form pure-form-aligned validate"
+              action="${base_url}/liity" method="POST">
+          <p> Mikäli annoit liittyessäsi sähköpostiosoitteesi,
+          lähetetään sinulle linkki jolla voit aktivoida pelinappulat.
+          </p>
+          <fieldset>
+            <div class="pure-control-group">
+              <label for="email">Sähköposti</label>
+              <input type="email" name="email" id="email" />
+            </div>
+          </fieldset>
+          <input type="submit" name="submit" hidden="hidden"
+                 style="display: none;" />
+          <a id="activateExistingPlayers" class="center gameBtn btn-2" href="#">
+            <div class="middle">Lähetä pelinappulat</div>
+          </a>
+        </form>
+      </div>
+
 
       <div id="mainView" class="center">
         <a class="gameBtn" href="#liity">
