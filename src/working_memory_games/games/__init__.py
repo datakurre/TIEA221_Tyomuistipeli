@@ -229,7 +229,7 @@ class Game(object):
         player_session = self.app.get_current_session()
 
         if (len(player_session.order) > 0
-                and player_session.order[0]["name"] == self.name):
+                and player_session.order[0]["game"] == self.name):
             player_session.order.pop(0)  # Remove played game form the session.
 
         values = {
@@ -256,7 +256,10 @@ class Game(object):
             "duration": duration
         })
         player_session = self.app.get_current_session()
-        player_session.order.pop(0)  # Remove played game form the session.
+
+        if (len(player_session.order) > 0
+                and player_session.order[0]["game"] == self.name):
+            player_session.order.pop(0)  # Remove played game form the session.
 
         values = {
             "game": self.name,
