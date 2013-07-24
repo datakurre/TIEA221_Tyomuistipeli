@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 import smtplib
-import json
+import json, urllib
 from email.mime.text import MIMEText
+from email.header import Header
+
+# http://bugs.python.org/issue12552
+from email import charset
+charset.add_charset('utf-8', charset.SHORTEST, charset.QP)
 
 def email(addr, players):
 
     #print addr, players
 
-    #fp = open(textfile, 'rb')
-    # Create a text/plain message
-    #msg = MIMEText(fp.read())
-    #fp.close()
 
-    link = 'http://työmuistipeli.fi/peli/#players='+json.dumps(players)
+    link = ''
+    for p in players:
+        if link != '': 
+            link += '&'
+        link += 'player='+urllib.quote_plus(p['name'])+';'+p['id']
+    link = 'http://työmuistipeli.fi/peli/#'+link
 
-    msg = MIMEText("""
+    msg = """
 Hei,
 
 Oheisella linkillä saat käyttöösi pelinappulat:
@@ -25,10 +31,12 @@ Oheisella linkillä saat käyttöösi pelinappulat:
    Terveisin Lupu ja Lasse
 
 
-""" % { 'link':link }, _charset="UTF-8")
+""" % { 'link':link }
 
-    me = 'noreply@työmuistipeli.fi'
-    msg['Subject'] = 'työmuistipeli.fi: pelinappulat'
+    msg = MIMEText(msg.encode('utf-8'), 'plain', 'utf-8')
+
+    me = 'noreply@xn--tymuistipeli-5ib.fi'
+    msg['Subject'] = Header('työmuistipeli.fi: pelinappulat', 'utf-8')
     msg['From'] = me
     msg['To'] = addr
 
