@@ -17,7 +17,6 @@ function startMusic() {
           global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
     $('body').on('preloaded', function(){
 	console.log($('<div></div>').snd('moi'));
-	$('<div></div>').snd('sudit')[0].volume = 0.3;
 	$('<div></div>').play('moi').play('sudit');
     });
 }
