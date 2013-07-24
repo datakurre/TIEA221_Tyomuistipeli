@@ -314,14 +314,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
   background-repeat: no-repeat;
   margin-right: 5px;
   margin-left: 5px;
-  padding-top: 11px;
+  padding-top: 6px;
   padding-left: 16px;
-  font-size: 12px;
+  font-size: 14px;
   color: white;
-  font-family: sans-serif;
+/*  font-family: sans-serif; */
+  font-weight: 700;
   float: right;
 }
 
 #liity {
-  font-family: sans-serif;
+/*  font-family: sans-serif; */
 }
