@@ -10,7 +10,7 @@ jQuery(function($) {
                 "Windows": "windows",
                 "iPad": "ipad"
             }[BrowserDetect.OS] || "windows";
-        if (windowHeight < 786) {
+        if (windowHeight < 768) {
             if (dialog === null) {
                 // TODO: Create different instructions for different systems
                 // and check the system from BrowserDetect.OS

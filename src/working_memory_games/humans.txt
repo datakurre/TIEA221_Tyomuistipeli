@@ -48,5 +48,10 @@
 
         Pilottitestaus: 
 
-           - Jenni Jääskelä
+           - Jenni ja Sanni Jääskelä
+
+           - Toni ja Marjo Orava
+
+           - Pihla, Neea, Veera ja Sanni
+
 
