@@ -1,6 +1,6 @@
-/** This is a very qute sound preloading and jquery integration for
+/** This is a very cute sound preloading and jquery integration for
  *  playing with jquery's fx queue.
- * 
+ *
  * Basically you use it like this:
  *
  *  $.preload('hello', '/hello.[mp3,ogg]');
@@ -9,21 +9,41 @@
  *    $('body').play('hello').play('hello').play('bye');
  *  });
  *
- * Copyright 2013, Matti Katila
+ * Copyright 2013, Matti Katila, Asko Soukka
  */
 (function() {
 
-var parentWindow;
+var isMaster = (
+    window.parent === window
+    || window.parent === null
+    || window.parent === undefined
+);
 
-window.addEventListener("message", function(event) {
+window.addEventListener('message', function(event) {
+    var parts;
     if (event !== undefined && event.data !== undefined) {
-        if (event.data === "CONNECT") {
-            console.log("CONNECTED");
-            parentWindow = event.source;
-        } else if (/^PRELOAD:.*/.test(event.data)) {
-            console.log(event.data);
-        } else if (/^PLAY:.*/.test(event.data)) {
-            console.log(event.data);
+        if (/^PRELOAD:[^:]+:.+/.test(event.data)) {
+            console.log("PARENT", event.data);
+            parts = /^PRELOAD:([^:]+):(.+)/.exec(event.data);
+            $.preload(parts[1], parts[2], function() {
+               event.source.postMessage('PRELOADED', '*');
+            });
+        } else if (/^PRELOADED$/.test(event.data)) {
+            console.log("CHILD", event.data);
+            $('body').trigger('preloaded');
+
+        } else if (/^PLAY:.+/.test(event.data)) {
+            console.log("PARENT", event.data);
+            parts = /^PLAY:(.+)/.exec(event.data);
+            $($._preload.audio).play(parts[1], function() {
+                $($._preload.audio).dequeue('fx');
+                event.source.postMessage('DEQUEUE', '*');
+            });
+        } else if (/^DEQUEUE$/.test(event.data)) {
+            console.log("CHILD", event.data);
+            if ($._preload.queued.length > 0) {
+                $._preload.queued.shift().dequeue('fx');
+            }
         }
     }
 }, false);
@@ -33,124 +53,148 @@ jQuery(function($) {
     $._preload = {
         iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false),
         audio: document.createElement('audio'),
+        formats: {},
         loaded: {},
-        processing: {}
+        processing: {},
+        queued: []
     };
 
-    $.fn.extend({
-        snd: function(id) {
-            var audio = $._preload.loaded[id];
-            return audio;
-        },
-        play: function(id) {
-            if (id === undefined) {
-                console.trace();
-                return;
-            }
-            return this.queue('fx', function() {
-                if (parentWindow !== undefined
-                        && parentWindow.postMessage !== undefined) {
-                    parentWindow.postMessage('PLAY:' + id, '*');
-                    return;
-                }
-
-                var elem = this;
-                var audio = $._preload.loaded[id];
-
-                // listen complete signal
-                $($._preload.audio).unbind('ended');
-                $($._preload.audio).bind('ended', function(event) {
-                    var currentTime = $._preload.audio.currentTime,
-                        duration = $._preload.audio.duration;
-
-                    // keep going on fake endings :)
-                    if (currentTime < duration) {
-                        $._preload.audio.play();
-                        return;
-                    }
-
-                    // completion frees the queue
-                    jQuery.dequeue(elem, "fx");
-                });
-                if (audio !== undefined) {
-                    //console.log('Start play');
-                    //console.log(audio);
-                    $._preload.audio.src = audio;
-                    $._preload.audio.play();
-                }
-            });
+    // Populate supported audio types:
+    if (typeof $._preload.audio.canPlayType === 'function') {
+        if ($._preload.audio.canPlayType('audio/mpeg;')
+                            .replace(/no/, '')) {
+            $._preload.formats['mp3'] = true;
         }
-    });
+        if ($._preload.audio.canPlayType('audio/ogg; codecs="vorbis"')
+                            .replace(/no/, '')) {
+            $._preload.formats['ogg'] = true;
+        }
+    } else {
+        $._preload.formats['mp3'] = true;
+    }
+
     $.extend({
-        preload: function(id, uri) {
-            console.log("PRELOAD");
-            if (parentWindow !== undefined
-                    && parentWindow.postMessage !== undefined) {
-                parentWindow.postMessage('PRELOAD:' + id + ':' + uri, '*');
+        preload: function(id, uri, callback) {
+            if (isMaster === false) {
+                parent.window.postMessage('PRELOAD:' + id + ':' + uri, '*');
                 return;
             }
+            console.log("PRELOADING:", id, uri);
 
             $._preload.processing[id] = true;
+
             var a = uri.indexOf('['),
                 b = uri.indexOf(','),
                 c = uri.indexOf(']'),
-                urls = [];
+                urls = [], i;
             if (0 < a && a < b && b < c) {
                 var pre = uri.split('[', 2);
                 var post = pre[1].split(']', 2);
                 var list = post[0].split(',');
-                for (var i=0; i<list.length; i++) {
-                    urls.push(pre[0]+list[i]+post[1]);
+                for (i = 0; i < list.length; i++) {
+                    urls.push(pre[0] + list[i] + post[1]);
                 }
             } else {
-                urls = [url];
+                urls = [uri];
             }
 
-            var dumb = document.createElement('audio');
-            for (var i=0; i<urls.length; i++) {
-                if (urls[i].search(/mp3/i) > 0
-                    && !(dumb.canPlayType && dumb.canPlayType('audio/mpeg;').replace(/no/, '')))
-                    continue;
+            var initAudio = function(url) { return $.ajax({
+                type: 'get',
+                url: url,
+                complete: function() {
+                    console.log("COMPLETE:", id, url);
 
-                if (urls[i].search(/ogg/i) > 0
-                    && !(dumb.canPlayType && dumb.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, '')))
-                    continue;
+                    delete $._preload.processing[id];
+                    $._preload.loaded[id] = url;
 
-                function initAudio(url) {
-                    $.ajax({
-                        type: 'get',
-                        url: url,
-                        complete: function(data) {
-                            console.log($._preload.processing);
-                            delete $._preload.processing[id];
-
-                            //var audio = $('<audio src="'+url+'"></audio>');
-                            $._preload.loaded[id] = url; //audio;
-
-                            if (jQuery.isEmptyObject($._preload.processing)) {
-                                if ($._preload.iOS) {
-                                    $('body').append('<div id="iOShit" style="position:absolute;top:0%;z-index:500;left:0%;width:100%;height:100%" ></div>');
-                                    $('#iOShit')[0].ontouchstart = function(event) {
-                                        $('#iOShit').remove();
-                                        $('body').trigger('preloaded');
-                                    };
-                                } else
+                    if (jQuery.isEmptyObject($._preload.processing)) {
+                        if ($._preload.iOS === true) {
+                            $('<div></div>').css({
+                                'position': 'absolute',
+                                'top': '0', 'right': '0',
+                                'bottom': '0', 'left': '0',
+                                'z-index': '99999'
+                            }).bind('ontouchstart', function() {
+                                $(this).remove();
+                                if (typeof callback === 'function') {
+                                    callback();
+                                } else {
+                                    $._preload.iOS = false;
                                     $('body').trigger('preloaded');
-                            }
-
-                            // XXX todo, should we also wait for canplaythrough?
-                            $($._preload.audio).bind('canplaythrough', function(event){
-                                //console.log(event);
+                                }
                             });
+                        } else {
+                            if (typeof callback === 'function') {
+                                callback();
+                            } else {
+                                $('body').trigger('preloaded');
+                            }
                         }
-                    });
+                    }
+                    // TODO: should we also wait for canplaythrough?
+                    // $($._preload.audio).bind('canplaythrough', function(){
+                    // });
+                }});
+            };
+
+            for (i = 0; i < urls.length; i++) {
+                if (urls[i].search(/mp3/i) > 0 && $._preload.formats['mp3']) {
+                    initAudio(urls[i]);
+                    break;
                 }
-                initAudio(urls[i]);
-                break;
+                if (urls[i].search(/ogg/i) > 0 && $._preload.formats['ogg']) {
+                    initAudio(urls[i]);
+                    break;
+                }
             }
         }
     });
 
+    $.fn.extend({
+        snd: function(id) {
+            return $._preload.loaded[id];
+        },
+        play: function(id, callback) {
+            var that = this;
+            if (id !== null && id !== undefined && isMaster === true) {
+                return this.queue('fx', function() {
+                    var audio = $._preload.loaded[id];
+
+                    // Listen complete signal:
+                    $($._preload.audio).unbind('ended')
+                                       .bind('ended', function() {
+                        var currentTime = $._preload.audio.currentTime,
+                            duration = $._preload.audio.duration;
+
+                        // Keep going on fake endings :)
+                        if (currentTime < duration) {
+                            $._preload.audio.play();
+
+                        // Completion frees the queue:
+                        } if (typeof callback === 'function') {
+                            callback();
+                        } else {
+                            that.dequeue('fx');
+                        }
+                    });
+
+                    // Play:
+                    if (audio !== null && audio !== undefined) {
+                        $._preload.audio.src = audio;
+                        $._preload.audio.play();
+                    }
+                });
+            } else if (id !== null && id !== undefined) {
+                return this.queue('fx', function() {
+                    $._preload.queued.push(that);
+                    window.parent.postMessage('PLAY:' + id, '*');
+                });
+            } else {
+                console.trace();
+                return this;
+            }
+        }
+    });
 });
 
 }).call(this);
