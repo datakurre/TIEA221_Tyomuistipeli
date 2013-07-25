@@ -17,7 +17,7 @@ def email(addr, players):
     for p in players:
         if link != '': 
             link += '&'
-        link += 'player='+urllib.quote_plus(p['name'])+';'+p['id']
+        link += 'player='+urllib.quote(p['name'])+';'+p['id']
     link = 'http://työmuistipeli.fi/peli/#'+link
 
     msg = """

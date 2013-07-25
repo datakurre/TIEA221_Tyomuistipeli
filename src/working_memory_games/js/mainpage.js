@@ -148,9 +148,9 @@ $(document).ready(function() {
                 hash = hash.substring(1);
                 var players = hash.split('&');
                 for (var i in players) {
-                    var player = hash.split(';');
+                    var player = players[i].split('player=')[1].split(';');
                     if (player.length == 2)
-                        addPlayer({ name: player[0], id: player[1] });
+                        addPlayer({ name: decodeURIComponent(player[0]), id: player[1] });
                 }
                 location.hash = '';
             }
