@@ -188,8 +188,11 @@ class Application(object):
                                  'id': playerid
                                  })
         if len(players) > 0:
+            logger.info('Send players for email: '+email)
             import emailer
             emailer.email(email, players)
+        else:
+            logger.info('No players for email: '+email)
         return {}
 
 

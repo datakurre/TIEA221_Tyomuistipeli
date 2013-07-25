@@ -144,10 +144,13 @@ $(document).ready(function() {
             $('#olenJoLiittynyt').slideUp();
             $('#mainView').slideDown();
 
-            if (hash.startsWith('#players=')) {
-                var players = jQuery.parseJSON(hash.split('players=')[1]);
+            if (hash.startsWith('#player=')) {
+                hash = hash.substring(1);
+                var players = hash.split('&');
                 for (var i in players) {
-                    addPlayer(players[i]);
+                    var player = hash.split(';');
+                    if (player.length == 2)
+                        addPlayer({ name: player[0], id: player[1] });
                 }
                 location.hash = '';
             }

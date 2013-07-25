@@ -28,12 +28,12 @@ Oheisella linkillä saat käyttöösi pelinappulat:
 %(link)s
 
 
-   Terveisin Lupu ja Lasse
+Terveisin Lupu ja Lasse
 
 
 """ % { 'link':link }
 
-    msg = MIMEText(msg.encode('utf-8'), 'plain', 'utf-8')
+    msg = MIMEText(msg, 'plain', 'utf-8')
 
     me = 'noreply@xn--tymuistipeli-5ib.fi'
     msg['Subject'] = Header('työmuistipeli.fi: pelinappulat', 'utf-8')
