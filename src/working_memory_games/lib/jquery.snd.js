@@ -77,6 +77,9 @@ jQuery(function($) {
     if (!(typeof $._preload.audio.play === 'function')) {
         $._preload.audio.play = function() { $(this).trigger('ended'); };
     }
+    if (!(typeof $._preload.audio.load === 'function')) {
+        $._preload.audio.load = function() {};
+    }
 
     $.extend({
         preload: function(id, uri, callback) {
