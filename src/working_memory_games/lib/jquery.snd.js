@@ -73,6 +73,11 @@ jQuery(function($) {
         $._preload.formats['mp3'] = true;
     }
 
+    // Fix broken audio tag with a mock
+    if (!(typeof $._preload.audio.play === 'function')) {
+        $._preload.audio.play = function() { $(this).trigger('ended'); };
+    }
+
     $.extend({
         preload: function(id, uri, callback) {
             if (isMaster === false) {
