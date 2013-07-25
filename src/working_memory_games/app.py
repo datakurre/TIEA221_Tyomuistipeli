@@ -246,6 +246,10 @@ class Application(object):
                     len(order) > 0 and order[0]['game'] == next_game
                 while next_game_is_in(session.order):
                     session.order.pop(0)
+                # Do explicit commit, because HTTPFound later would rollback
+                if len(session.order) >= 0:
+                    import transaction
+                    transaction.commit()
 
         if len(session.order) <= 0:
             logger.debug('session length is 0')
