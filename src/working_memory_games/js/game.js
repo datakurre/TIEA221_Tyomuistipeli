@@ -65,7 +65,10 @@ function GameCheckUserPress(item) {
 
 
 function GameCheckUserPressForSet(item) {
-  global.userItems.push(item)
+  // only add to selection set if not added already
+  if ($.inArray(item, global.userItems) < 0) {
+      global.userItems.push(item);
+  }
   if ($.inArray(item, global.gameItems) >= 0) {
     global.callbacks.answerRight(item);
   } else {

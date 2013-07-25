@@ -1,3 +1,7 @@
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 /* Elements, which should be hidden at start */
 .hidden {
     display: none;

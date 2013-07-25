@@ -1,13 +1,16 @@
 jQuery(function($) {
-    var checkWindowHeight, createGameFrame, onGameFrameLoad, dialog = null;
+    var checkWindowHeight, createGameFrame, onGameFrameLoad,
+        timeout = null, dialog = null;
 
     checkWindowHeight = function() {
+        timeout = null;
+
         var windowHeight = $(window).height(),
             platform = {
                 "Windows": "windows",
                 "iPad": "ipad"
             }[BrowserDetect.OS] || "windows";
-        if (windowHeight < 786) {
+        if (windowHeight < 768) {
             if (dialog === null) {
                 // TODO: Create different instructions for different systems
                 // and check the system from BrowserDetect.OS
@@ -15,15 +18,20 @@ jQuery(function($) {
                     .css('display', 'block'), {
                     fitViewport: true,
                     closeOverlay: false,
-                    closeSelector: null,
+                    closeSelector: ".pure-button-primary",
                     closeKeyCode: null,
                     closeText: ''
                 });
+                $(window.document).one('modalAfterClose', function() {
+                    if (timeout !== undefined && timeout !== null) {
+                        window.clearTimeout(timeout);
+                    }
+                    createGameFrame();
+                });
             }
-            window.setTimeout(checkWindowHeight, 500);  // check every 0.5 sec
+            timeout = window.setTimeout(checkWindowHeight, 500);
         } else if (dialog !== null) {
             dialog.close();
-            createGameFrame();
         } else {
             createGameFrame();
         }

@@ -169,6 +169,33 @@ class Application(object):
 
         return self.data.players.create_player(name, details)
 
+    @view_config(name="pelinappulat", renderer="json",
+                 request_method="POST", http_cache=0)
+    def send_email(self):
+        """Save named player information
+        """
+        email = self.request.params.get("email", "").strip()
+        logger.debug(self.request.params)
+
+        if not email:  # does not validate
+            return HTTPBadRequest()
+
+        players = []
+        for playerid, player in self.data.players.items():
+            if 'email' in player.details and player.details['email'] == email:
+                #print 'send player id to ', player.details['email'], playerid, player.details
+                players.append({ 'name': player.details['name'] or '',
+                                 'id': playerid
+                                 })
+        if len(players) > 0:
+            logger.info('Send players for email: '+email)
+            import emailer
+            emailer.email(email, players)
+        else:
+            logger.info('No players for email: '+email)
+        return {}
+
+
     @view_config(name="kokeile", renderer="json",
                  request_method="POST", http_cache=0)
     def create_new_guest(self):
@@ -190,11 +217,35 @@ class Application(object):
         """
         session = self.get_current_session()
 
+        # TODO: Refactor these into BadRequests and reflect that refactoring
+        # into game_iframe.js code
         if session is None:
             logger.debug('session length is None')
             # User friendly version of:
             # raise HTTPBadRequest(u"No active session found.")
             raise HTTPFound(location=self.request.application_url + "/")
+
+        # Check the possible broken game and skip it. A broken game is a game
+        # that has been started at least once before during the session, but is
+        # never completed during the session and more than 10 seconds have
+        # elapsed since the last start.
+        if len(session.order) > 0:
+            datetime_now = datetime.datetime.utcnow()
+            next_game = session.order[0]['game']
+            next_game_is_broken = (
+                next_game in session
+                and len(session[next_game]) == 0
+                and (datetime_now
+                     - getattr(session[next_game], 'last_start', datetime_now)
+                     > datetime.timedelta((1.0 / 24 / 60 / 60) * 10))  # > 10s
+            )
+            if next_game_is_broken:
+                logger.warn("Removing game '{0:s}' from session.order.".format(
+                    next_game))
+                next_game_is_in = lambda order:\
+                    len(order) > 0 and order[0]['game'] == next_game
+                while next_game_is_in(session.order):
+                    session.order.pop(0)
 
         if len(session.order) <= 0:
             logger.debug('session length is 0')

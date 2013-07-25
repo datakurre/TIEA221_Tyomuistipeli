@@ -17,7 +17,6 @@ function startMusic() {
           global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
     $('body').on('preloaded', function(){
 	console.log($('<div></div>').snd('moi'));
-	$('<div></div>').snd('sudit')[0].volume = 0.3;
 	$('<div></div>').play('moi').play('sudit');
     });
 }
@@ -134,10 +133,28 @@ $(document).ready(function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
             $('#liity').slideDown(function() { $('#joinData').valid(); });
+            $('#olenJoLiittynyt').slideUp();
+            $('#mainView').slideUp();
+        } else if (hash.startsWith('#olen-jo-liittynyt')) {
+            $('#liity').slideUp();
+            $('#olenJoLiittynyt').slideDown();
             $('#mainView').slideUp();
         } else {
             $('#liity').slideUp();
+            $('#olenJoLiittynyt').slideUp();
             $('#mainView').slideDown();
+
+            if (hash.startsWith('#player=')) {
+                hash = hash.substring(1);
+                var players = hash.split('&');
+                for (var i in players) {
+                    var player = players[i].split('player=')[1].split(';');
+                    if (player.length == 2)
+                        addPlayer({ name: decodeURIComponent(player[0]), id: player[1] });
+                }
+                location.hash = '';
+            }
+
             addPlayerButtons();
         }
     });
@@ -194,6 +211,17 @@ $(document).ready(function() {
             });
         }
     });
+
+    $('#activateExistingPlayers').click(function(event){
+        event.preventDefault();
+
+        $.post('pelinappulat',
+               $('#alreadyJoinedData').serialize(),
+               function(data) {
+                   location.hash = '';
+               });
+    });
+
 
     // trigger view!
     $(window).trigger('hashchange');
