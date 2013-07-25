@@ -114,20 +114,24 @@ jQuery(function($) {
 
                     if (jQuery.isEmptyObject($._preload.processing)) {
                         if ($._preload.iOS === true) {
+                            if (isMaster === false) alert("WTF?");
+                            console.log("IOS AUDIO DETECTED");
                             $('<div></div>').css({
                                 'position': 'absolute',
                                 'top': '0', 'right': '0',
                                 'bottom': '0', 'left': '0',
                                 'z-index': '99999'
-                            }).bind('ontouchstart', function() {
+                            }).bind('touchstart', function() {
+                                console.log("IOS AUDIO ACTIVATED");
                                 $(this).remove();
+                                $._preload.iOS = false;
+                                $._preload.audio.load();
                                 if (typeof callback === 'function') {
                                     callback();
                                 } else {
-                                    $._preload.iOS = false;
                                     $('body').trigger('preloaded');
                                 }
-                            });
+                            }).appendTo($('body'));
                         } else {
                             if (typeof callback === 'function') {
                                 callback();
