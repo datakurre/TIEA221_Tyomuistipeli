@@ -36,7 +36,7 @@ class Game(object):
     app = None
     session = None
 
-    day_limit = 3       # How many games can be played during a daily session.
+    day_limit = 4       # How many games can be played during a daily session.
     can_assist = False  # Can the game assist player.
     start_level = 3.0   # Start level.
 
