@@ -53,11 +53,19 @@ jQuery(function($) {
     $._preload = {
         iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false),
         audio: document.createElement('audio'),
+        context: (function() {
+            if (window.webkitAudioContext !== undefined) {
+               return new webkitAudioContext();
+            } else { return undefined; }
+        })(),
         formats: {},
         loaded: {},
         processing: {},
         queued: []
     };
+
+    $._preload.source = $._preload.context.createBufferSource();
+    $._preload.source.connect($._preload.context.destination);
 
     // Populate supported audio types:
     if (typeof $._preload.audio.canPlayType === 'function') {
@@ -105,27 +113,94 @@ jQuery(function($) {
             } else {
                 urls = [uri];
             }
+            var initHTML5Audio = function(url) {
+                console.log("HTML5AUDIO");
+                var request = new XMLHttpRequest();
+                request.open('GET', url, true);
+                request.responseType = 'arraybuffer';
 
+                request.onload = function() {
+                    $._preload.context.decodeAudioData(request.response,
+                                                       function(buffer) {
+                        console.log('COMPLETE:', id, url);
+                        console.log('COMPLETE:', buffer);
+                        delete $._preload.processing[id];
+                        $._preload.loaded[id] = buffer;
+
+                        if (jQuery.isEmptyObject($._preload.processing)) {
+                           if ($._preload.iOS === true) {
+                               console.log('IOS AUDIO DETECTED');
+                               $('<div></div>').css({
+                                   'position': 'absolute',
+                                   'top': '0', 'right': '0',
+                                   'bottom': '0', 'left': '0',
+                                   'z-index': '99999'
+                               }).bind('touchstart', function() {
+                                       console.log('IOS AUDIO ACTIVATED');
+                                       $(this).remove();
+                                       $._preload.iOS = false;
+                                       $._preload.audio.load();
+                                       $._preload.source.noteOn(0);
+                                       if (typeof callback === 'function') {
+                                           callback();
+                                       } else {
+                                           $('body').trigger('preloaded');
+                                       }
+                                   }).appendTo($('body'));
+                           } else {
+                               if (typeof callback === 'function') {
+                                   callback();
+                               } else {
+                                   $('body').trigger('preloaded');
+                               }
+                           }
+                        }
+                    }, function() {
+                       /* OnError */
+                    });
+                };
+                request.send();
+            }
             var initAudio = function(url) { return $.ajax({
                 type: 'get',
                 url: url,
-                complete: function() {
-                    console.log("COMPLETE:", id, url);
+                beforeSend: function(jqXHR) {
+                    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)
+                        && typeof window.btoa === 'function') {
+                        jqXHR.overrideMimeType(
+                            'text/plain; charset=x-user-defined');
+                    }
+                },
+                complete: function(jqXHR) {
+                    var data, i;
 
+                    console.log('COMPLETE:', id, url);
                     delete $._preload.processing[id];
                     $._preload.loaded[id] = url;
 
+                    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)
+                        && typeof window.btoa === 'function') {
+                        data = new ArrayBuffer(jqXHR.responseText.length);
+                        for (i = 0; i < jqXHR.responseText.length; i++ ) {
+                            data[i] = String.fromCharCode(
+                                jqXHR.responseText[i].charCodeAt(0) & 0xff);
+                        }
+                        $._preload.loaded[id] =
+                            'data:audio/mpeg;base64,' + btoa(data);
+
+                        $._preload.loaded[id] = btoa(data);
+                    }
+
                     if (jQuery.isEmptyObject($._preload.processing)) {
                         if ($._preload.iOS === true) {
-                            if (isMaster === false) alert("WTF?");
-                            console.log("IOS AUDIO DETECTED");
+                            console.log('IOS AUDIO DETECTED');
                             $('<div></div>').css({
                                 'position': 'absolute',
                                 'top': '0', 'right': '0',
                                 'bottom': '0', 'left': '0',
                                 'z-index': '99999'
                             }).bind('touchstart', function() {
-                                console.log("IOS AUDIO ACTIVATED");
+                                console.log('IOS AUDIO ACTIVATED');
                                 $(this).remove();
                                 $._preload.iOS = false;
                                 $._preload.audio.load();
@@ -151,7 +226,11 @@ jQuery(function($) {
 
             for (i = 0; i < urls.length; i++) {
                 if (urls[i].search(/mp3/i) > 0 && $._preload.formats['mp3']) {
-                    initAudio(urls[i]);
+                    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+                        initHTML5Audio(urls[i]);
+                    } else {
+                        initAudio(urls[i]);
+                    }
                     break;
                 }
                 if (urls[i].search(/ogg/i) > 0 && $._preload.formats['ogg']) {
@@ -192,8 +271,19 @@ jQuery(function($) {
 
                     // Play:
                     if (audio !== null && audio !== undefined) {
-                        $._preload.audio.src = audio;
-                        $._preload.audio.play();
+//                        $._preload.audio.src = audio;
+//                        $._preload.audio.play();
+                        $._preload.source.disconnect();
+                        delete $._preload.source;
+
+                        $._preload.source = $._preload.context.createBufferSource();
+                        $._preload.source.connect($._preload.context.destination);
+                        $._preload.source.buffer = audio;
+                        $._preload.source.noteOn(0);
+
+                        setTimeout(function() { callback();
+                          console.log('playback finished');
+                        }, audio.duration * 1000);
                     }
                 });
             } else if (id !== null && id !== undefined) {

@@ -21,7 +21,8 @@ jQuery(function($) {
                         if ($._preload !== undefined) {
                             if($._preload.iOS === true) {
                                 $._preload.iOS = false;
-                                $._preload.audio.load();
+                                $._preload.audio.play();
+                                $._preload.source.noteOn(0);
                             }
                         }
                         return true;
