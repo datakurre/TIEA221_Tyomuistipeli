@@ -241,7 +241,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
     border-top-color: rgb(230, 230, 230);
     border-left-color: rgb(230, 230, 230);
 }
-.gameBtn.sessionOver > * {
+.gameBtn.sessionOver > .middle {
     -o-opacity: 0.5;
     -webkit-opacity: 0.5;
     -moz-opacity: 0.5;
@@ -267,7 +267,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.gameBtn.sessionOver#kokeile > * {
+.gameBtn.sessionOver#kokeile > .middle {
     -o-opacity: 1.0;
     -webkit-opacity: 1.0;
     -moz-opacity: 1.0;
@@ -275,7 +275,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa639', end
 }
 .gameBtn.sessionOver#kokeile:before {
     content: "Pelataan taas huomenna \2013  tai liity pelaajaksi!";
-    height: 56px;
+    height: 62px;
     right: -50px;
     width: 160px;
     padding-left: 30px;

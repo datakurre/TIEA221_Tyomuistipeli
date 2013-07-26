@@ -1,5 +1,5 @@
 jQuery(function($) {
-    var checkWindowHeight, createGameFrame, onGameFrameLoad,
+    var checkWindowHeight, createGameFrame,
         timeout = null, dialog = null;
 
     checkWindowHeight = function() {
@@ -15,7 +15,17 @@ jQuery(function($) {
                 // TODO: Create different instructions for different systems
                 // and check the system from BrowserDetect.OS
                 dialog = $.modal($('#fullscreen-' + platform).clone()
-                    .css('display', 'block'), {
+                    .css('display', 'block')
+                    .one("touchstart", function() {
+                        // "Accidentally" Activate iOS audio
+                        if ($._preload !== undefined) {
+                            if($._preload.iOS === true) {
+                                $._preload.iOS = false;
+                                $._preload.audio.load();
+                            }
+                        }
+                        return true;
+                    }), {
                     fitViewport: true,
                     closeOverlay: false,
                     closeSelector: ".pure-button-primary",
@@ -53,22 +63,12 @@ jQuery(function($) {
                         .attr('scrolling', 'no')
                         .attr('frameborder', '0')
                         .attr('src', base_url + '/' + data.game + '/')
-                        .bind('load', onGameFrameLoad)
                         .prependTo($('body'));
                 } else {
                     window.location = base_url + '#pelataan-taas-huomenna';
                 }
             }
         });
-    };
-
-    onGameFrameLoad = function() {
-        if (this.contentWindow !== undefined
-                && this.contentWindow.location !== undefined
-                && this.contentWindow.postMessage !== undefined) {
-            this.contentWindow.postMessage(
-                "CONNECT", this.contentWindow.location.toString());
-        }
     };
 
     checkWindowHeight();

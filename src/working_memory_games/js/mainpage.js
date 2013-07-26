@@ -117,7 +117,7 @@ $(document).ready(function() {
     addPlayerButtons();
 
     // Detect unsupported browsers
-    if (BrowserDetect.browser === "MSIE"
+    if (BrowserDetect.browser === "Explorer"
         && BrowserDetect.version < 10) {
         content = $.modal(
             $('#unsupported-browser').clone().css('display', 'block'), {

@@ -1,5 +1,10 @@
 /* Define dummy logger: */
-if (window.console === undefined) { window.console = {log: function() {}}; }
+if (window.console === null || window.console === undefined) {
+    window.console = {
+        log: function() {},
+        trace: function() {}
+    };
+}
 
 /* Define globals: */
 var global = global || {};
