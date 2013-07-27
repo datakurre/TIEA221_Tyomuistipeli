@@ -193,7 +193,7 @@ jQuery(function($) {
                                     $._preload.context.destination);
                                 //noinspection jsunresolvedfunction
                                 $._preload.source.noteOn(0);
-                                $._preload.ios = false;
+                                $._preload.iOS = false;
                                 $(this).remove();
                                 console.log('IOS AUDIO ACTIVATED');
 
