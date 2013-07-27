@@ -19,10 +19,16 @@ jQuery(function($) {
                     .one("touchstart", function() {
                         // "Accidentally" Activate iOS audio
                         if ($._preload !== undefined) {
-                            if($._preload.iOS === true) {
-                                $._preload.iOS = false;
-                                $._preload.audio.play();
+                            if($._preload.iOS === true && $._preload.context) {
+                                $._preload.source =
+                                    $._preload.context.createBufferSource();
+                                $._preload.source.connect(
+                                    $._preload.context.destination);
                                 $._preload.source.noteOn(0);
+                                $._preload.iOS = false;
+                            } else if ($._preload.iOS === true) {
+                                $._preload.audio.play();
+                                $._preload.iOS = false;
                             }
                         }
                         return true;

@@ -111,6 +111,8 @@ function addPlayer(map) {
 
 $(document).ready(function() {
 
+    $._preload.context = false;  // Never use AudioContext on main page.
+
     startMusic();
     animateTitle();
 
