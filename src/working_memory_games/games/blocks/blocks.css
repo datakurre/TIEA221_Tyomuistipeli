@@ -10,7 +10,7 @@ body .modal {
 #game {
   display: block;
   bottom: 2em;
-  overflow: visible;
+  overflow: hidden;
   background: white;
   border: 1px solid black;
 }
