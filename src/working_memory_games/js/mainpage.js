@@ -100,7 +100,8 @@ function addPlayer(map) {
         players = [];
     else
         players = $.parseJSON(players);
-    
+
+    // check that id is not added already.
     players.push(map);
     
     $.cookie('players',

@@ -112,10 +112,13 @@ class Player(OOBTree):
         """
         today = str(datetime.datetime.utcnow().date())
         if not today in self:
+            all_games = games.items()
+            random.shuffle(all_games)
+            selected_games = dict(all_games[:8])
             if self.details.get("assisted", False):
-                self[today] = Session(games, 0.30)
+                self[today] = Session(selected_games, 0.30)
             else:
-                self[today] = Session(games)
+                self[today] = Session(selected_games)
         return self[today]
 
     def get_sessions(self):

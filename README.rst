@@ -60,3 +60,8 @@ joko
         bin/eye -p 8070 var/filestorage/Data.fs
 
 Molemmissa tapauksissa tietokanta löytyy osoitteesta http://localhost:8070/
+
+Debuggaus ZEO:n ollessa päällä::
+
+    bin/python -i scripts/debugger.py
+
