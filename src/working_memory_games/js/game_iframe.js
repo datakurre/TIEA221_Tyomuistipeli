@@ -89,12 +89,10 @@ jQuery(function($) {
         case -90:
         case 90:
         case 180: // lanscape
-            $('head').append($('<meta name="viewport" content="height=768,
-initial-scale=1.0, user-scalable=no">'));
+            $('head').append($('<meta name="viewport" content="height=768, initial-scale=1.0, user-scalable=no">'));
             break;
         default: // portrait
-            $('head').append($('<meta name="viewport" content="width=800,
-initial-scale=1.0, user-scalable=no">'));
+            $('head').append($('<meta name="viewport" content="width=800, initial-scale=1.0, user-scalable=no">'));
             break;
         }
     }
