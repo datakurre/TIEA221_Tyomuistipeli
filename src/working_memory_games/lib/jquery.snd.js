@@ -187,12 +187,12 @@ jQuery(function($) {
                             }).bind('touchstart',function () {
                                 //noinspection jsunresolvedfunction
                                 $._preload.source =
-                                    $._preload.context.createbuffersource();
+                                    $._preload.context.createBufferSource();
                                 //noinspection jsunresolvedvariable,jsunresolvedfunction
                                 $._preload.source.connect(
                                     $._preload.context.destination);
                                 //noinspection jsunresolvedfunction
-                                $._preload.source.noteon(0);
+                                $._preload.source.noteOn(0);
                                 $._preload.ios = false;
                                 $(this).remove();
                                 console.log('IOS AUDIO ACTIVATED');
@@ -268,7 +268,16 @@ jQuery(function($) {
                             $._preload.context.destination);
                         $._preload.source.buffer = audio;
                         $._preload.source.noteOn(0);
-                        setTimeout(callback, audio.duration * 1000);
+                        // Completion frees the queue:
+                        if (typeof callback === 'function') {
+                            setTimeout(function() {
+                                callback()
+                            }, audio.duration * 1000);
+                        } else {
+                            setTimeout(function() {
+                                that.dequeue('fx');
+                            }, audio.duration * 1000);
+                        }
                     } else {
                         // Listen complete signal:
                         $($._preload.audio).unbind('ended')
