@@ -65,6 +65,16 @@ window.addEventListener('message', function(event) {
                     delete $._preload.loaded[id];
                 }
             }
+
+            // clear queue
+            $($._preload.audio).clearQueue();
+
+            // stop any sound
+            if (typeof $._preload.source !== "undefined") {
+                $._preload.source.noteOff(0);
+            } else {
+                $._preload.audio.stop();
+            }
         }
     }
 }, false);
