@@ -61,7 +61,9 @@ window.addEventListener('message', function(event) {
         } else if (/^PURGE$/.test(event.data)) {
             console.log("PARENT", event.data);
             for (id in $._preload.loaded) {
-                delete $._preload.loaded[id];
+                if ($._preload.playingAudio != id) {
+                    delete $._preload.loaded[id];
+                }
             }
         }
     }
@@ -77,7 +79,8 @@ jQuery(function($) {
         formats: {},
         loaded: {},
         processing: {},
-        queued: []
+        queued: [],
+        playingAudio: undefined
     };
 
     // Populate supported audio types:
@@ -252,8 +255,11 @@ jQuery(function($) {
             var that = this;
             if (id !== null && id !== undefined && isMaster === true) {
                 return this.queue('fx', function() {
+                    
                     var audio = $._preload.loaded[id];
+                    $._preload.playingAudio = id;
                     if($._preload.context) {
+                        
                         // Play:
                         if (typeof $._preload.source !== "undefined") {
                             $._preload.source.disconnect();
