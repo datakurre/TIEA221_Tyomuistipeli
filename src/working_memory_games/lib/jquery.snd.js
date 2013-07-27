@@ -185,13 +185,10 @@ jQuery(function($) {
                                 'bottom': '0', 'left': '0',
                                 'z-index': '99999'
                             }).bind('touchstart',function () {
-                                //noinspection jsunresolvedfunction
                                 $._preload.source =
                                     $._preload.context.createBufferSource();
-                                //noinspection jsunresolvedvariable,jsunresolvedfunction
                                 $._preload.source.connect(
                                     $._preload.context.destination);
-                                //noinspection jsunresolvedfunction
                                 $._preload.source.noteOn(0);
                                 $._preload.iOS = false;
                                 $(this).remove();
