@@ -1,5 +1,7 @@
 body {
     font-family: 'Roboto Condensed', sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }
 
 /* Elements, which should be hidden at start */
