@@ -79,4 +79,24 @@ jQuery(function($) {
     };
 
     checkWindowHeight();
+
+
+    function doOnOrientationChange()
+    {
+        $('head meta[name="viewport"]').remove();
+        switch(window.orientation) 
+        {  
+        case -90:
+        case 90:
+        case 180: // lanscape
+            $('head').append($('<meta name="viewport" content="height=768, width=device-width, initial-scale=0.9, user-scalable=no">'));
+            break;
+        default: // portrait
+            $('head').append($('<meta name="viewport" content="height=device-height, width=768, initial-scale=1.0, user-scalable=no">'));
+            break;
+        }
+    }
+
+    window.addEventListener('onorientationchange', doOnOrientationChange);
+    doOnOrientationChange();
 });
