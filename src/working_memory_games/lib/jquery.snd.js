@@ -72,6 +72,7 @@ window.addEventListener('message', function(event) {
             // stop any sound
             if (typeof $._preload.source !== "undefined") {
                 $._preload.source.noteOff(0);
+                clearTimeout($._preload.endedTimeout);
             } else {
                 $._preload.audio.stop();
             }
@@ -283,11 +284,11 @@ jQuery(function($) {
                         $._preload.source.noteOn(0);
                         // Completion frees the queue:
                         if (typeof callback === 'function') {
-                            setTimeout(function() {
+                            $._preload.endedTimeout = setTimeout(function() {
                                 callback()
                             }, audio.duration * 1000);
                         } else {
-                            setTimeout(function() {
+                            $._preload.endedTimeout = setTimeout(function() {
                                 that.dequeue('fx');
                             }, audio.duration * 1000);
                         }
