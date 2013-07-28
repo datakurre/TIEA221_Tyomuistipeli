@@ -17,18 +17,18 @@ jQuery(function($) {
                 dialog = $.modal($('#fullscreen-' + platform).clone()
                     .css('display', 'block')
                     .one("touchstart", function() {
-                        // "Accidentally" Activate iOS audio
+                        // "Accidentally" Activate requireTouchStart audio
                         if ($._preload !== undefined) {
-                            if($._preload.iOS === true && $._preload.context) {
+                            if($._preload.requireTouchStart === true && $._preload.context) {
                                 $._preload.source =
                                     $._preload.context.createBufferSource();
                                 $._preload.source.connect(
                                     $._preload.context.destination);
                                 $._preload.source.noteOn(0);
-                                $._preload.iOS = false;
-                            } else if ($._preload.iOS === true) {
+                                $._preload.requireTouchStart = false;
+                            } else if ($._preload.requireTouchStart === true) {
                                 $._preload.audio.play();
-                                $._preload.iOS = false;
+                                $._preload.requireTouchStart = false;
                             }
                         }
                         return true;

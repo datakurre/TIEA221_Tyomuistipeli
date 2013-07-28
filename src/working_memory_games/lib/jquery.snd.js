@@ -20,7 +20,7 @@ var isMaster = (
 );
 
 var createAudioContext = function() {
-    // Enable web audio api only for iOS >= 6:
+    // Enable web audio api only for requireTouchStart >= 6:
     if (!navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
         return false;
     }
@@ -71,7 +71,8 @@ jQuery(function($) {
 
     // Init
     $._preload = {
-        iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false),
+        requireTouchStart:
+            (navigator.userAgent.match(/(iPad|iPhone|iPod|Android)/g) ? true : false),
         audio: document.createElement('audio'),
         context: createAudioContext(),
         formats: {},
@@ -139,7 +140,7 @@ jQuery(function($) {
                     $._preload.loaded[id] = url;
 
                     if (jQuery.isEmptyObject($._preload.processing)) {
-                        if ($._preload.iOS === true) {
+                        if ($._preload.requireTouchStart === true) {
                             console.log('IOS AUDIO DETECTED');
                             $('<div></div>').css({
                                 'position': 'absolute',
@@ -148,7 +149,7 @@ jQuery(function($) {
                                 'z-index': '99999'
                             }).bind('touchstart',function () {
                                 $._preload.audio.load();
-                                $._preload.iOS = false;
+                                $._preload.requireTouchStart = false;
                                 $(this).remove();
                                 console.log('IOS AUDIO ACTIVATED');
 
@@ -177,7 +178,7 @@ jQuery(function($) {
                     $._preload.loaded[id] = buffer;
 
                     if (jQuery.isEmptyObject($._preload.processing)) {
-                        if ($._preload.iOS === true) {
+                        if ($._preload.requireTouchStart === true) {
                             console.log('IOS AUDIO DETECTED');
                             $('<div></div>').css({
                                 'position': 'absolute',
@@ -190,7 +191,7 @@ jQuery(function($) {
                                 $._preload.source.connect(
                                     $._preload.context.destination);
                                 $._preload.source.noteOn(0);
-                                $._preload.iOS = false;
+                                $._preload.requireTouchStart = false;
                                 $(this).remove();
                                 console.log('IOS AUDIO ACTIVATED');
 
