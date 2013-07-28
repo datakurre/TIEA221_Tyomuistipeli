@@ -305,8 +305,10 @@ jQuery(function($) {
 
                             // Completion frees the queue:
                             } if (typeof callback === 'function') {
+                                $._preload.audio.src = null;
                                 callback();
                             } else {
+                                $._preload.audio.src = null;
                                 that.dequeue('fx');
                             }
                         });
