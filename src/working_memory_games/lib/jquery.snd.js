@@ -72,7 +72,7 @@ window.addEventListener('message', function(event) {
             // stop any sound
             if (typeof $._preload.source !== "undefined") {
                 $._preload.source.noteOff(0);
-            } else {
+            } else if (typeof $._preload.audio !== "undefined") {
                 $._preload.audio.stop();
             }
         }
