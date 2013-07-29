@@ -13,14 +13,16 @@
  */
 (function() {
 
+// If the current frame is not master, $.preload and $.play calls
+// are send to window.parent via postMessaging.
 var isMaster = (
     window.parent === window
     || window.parent === null
     || typeof window.parent === "undefined"
 );
 
+// Web Audio API is enabled only on iOS, where it's currently tested to work:
 var createAudioContext = function() {
-    // Enable web audio api only for requireTouchStart >= 6:
     if (!navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
         return false;
     }
@@ -33,6 +35,7 @@ var createAudioContext = function() {
     return false;
 };
 
+// Handle postMessaging between the main page and iframe:
 window.addEventListener('message', function(event) {
     var parts, id;
     if (event !== undefined && event.data !== undefined) {
@@ -60,16 +63,15 @@ window.addEventListener('message', function(event) {
             }
         } else if (/^PURGE$/.test(event.data)) {
             console.log("PARENT", event.data);
+            // Delete all but the currently playing buffer to free up memory:
             for (id in $._preload.loaded) {
                 if ($._preload.playingAudio != id) {
                     delete $._preload.loaded[id];
                 }
             }
-
-            // clear queue
+            // Clear all jQuery-queues (mainly the default 'fx' queue):
             $($._preload.audio).clearQueue();
-
-            // stop any sound
+            // Stop any currently playing sound:
             if (typeof $._preload.source !== "undefined") {
                 $._preload.source.noteOff(0);
                 clearTimeout($._preload.endedTimeout);
@@ -82,7 +84,7 @@ window.addEventListener('message', function(event) {
 
 jQuery(function($) {
 
-    // Init
+    // Init:
     $._preload = {
         requireTouchStart:
             (navigator.userAgent.match(/(iPad|iPhone|iPod|Android)/g) ? true : false),
@@ -109,7 +111,7 @@ jQuery(function($) {
         $._preload.formats['mp3'] = true;
     }
 
-    // Fix broken audio tag with a mock
+    // Fix broken audio tag with a mock:
     if (!(typeof $._preload.audio.play === 'function')) {
         $._preload.audio.play = function() { $(this).trigger('ended'); };
     }
@@ -117,6 +119,7 @@ jQuery(function($) {
         $._preload.audio.load = function() {};
     }
 
+    // Free memory by clearing the buffers from the previous games:
     if (!isMaster) {
         window.parent.postMessage('PURGE', ['*']);
     }
@@ -267,11 +270,11 @@ jQuery(function($) {
             var that = this;
             if (id !== null && id !== undefined && isMaster === true) {
                 return this.queue('fx', function() {
-                    
                     var audio = $._preload.loaded[id];
                     $._preload.playingAudio = id;
+
+                    // Play using AudioContext:
                     if($._preload.context) {
-                        
                         // Play:
                         if (typeof $._preload.source !== "undefined") {
                             $._preload.source.disconnect();
@@ -283,6 +286,7 @@ jQuery(function($) {
                             $._preload.context.destination);
                         $._preload.source.buffer = audio;
                         $._preload.source.noteOn(0);
+
                         // Completion frees the queue:
                         if (typeof callback === 'function') {
                             $._preload.endedTimeout = setTimeout(function() {
@@ -293,6 +297,7 @@ jQuery(function($) {
                                 that.dequeue('fx');
                             }, audio.duration * 1000);
                         }
+                    // Play using Audio-tag:
                     } else {
                         // Listen complete signal:
                         $($._preload.audio).unbind('ended')
