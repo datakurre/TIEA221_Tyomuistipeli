@@ -1,38 +1,16 @@
 jQuery(function($) {
-    var checkWindowHeight, createGameFrame,
-        timeout = null, dialog = null;
+    var checkWindowHeight, createGameFrame, timeout = null, dialog = null;
 
     checkWindowHeight = function() {
-        timeout = null;
-
         var windowHeight = $(window).height(),
             platform = {
-                "Windows": "windows",
-                "iPad": "ipad"
+                "Windows": "windows"
             }[BrowserDetect.OS] || "windows";
+
         if (windowHeight < 768) {
             if (dialog === null) {
-                // TODO: Create different instructions for different systems
-                // and check the system from BrowserDetect.OS
                 dialog = $.modal($('#fullscreen-' + platform).clone()
-                    .css('display', 'block')
-                    .one("touchstart", function() {
-                        // "Accidentally" Activate requireTouchStart audio
-                        if ($._preload !== undefined) {
-                            if($._preload.requireTouchStart === true && $._preload.context) {
-                                $._preload.source =
-                                    $._preload.context.createBufferSource();
-                                $._preload.source.connect(
-                                    $._preload.context.destination);
-                                $._preload.source.noteOn(0);
-                                $._preload.requireTouchStart = false;
-                            } else if ($._preload.requireTouchStart === true) {
-                                $._preload.audio.play();
-                                $._preload.requireTouchStart = false;
-                            }
-                        }
-                        return true;
-                    }), {
+                          .css('display', 'block'), {
                     fitViewport: true,
                     closeOverlay: false,
                     closeSelector: ".pure-button-primary",
@@ -40,7 +18,8 @@ jQuery(function($) {
                     closeText: ''
                 });
                 $(window.document).one('modalAfterClose', function() {
-                    if (timeout !== undefined && timeout !== null) {
+                    if (timeout !== null) {
+                        timeout = null;
                         window.clearTimeout(timeout);
                     }
                     createGameFrame();
@@ -80,23 +59,23 @@ jQuery(function($) {
 
     checkWindowHeight();
 
-
-    function doOnOrientationChange()
-    {
+    function doOnOrientationChange() {
         $('head meta[name="viewport"]').remove();
-        switch(window.orientation) 
-        {  
-        case -90:
-        case 90:
-        case 180: // lanscape
-            $('head').append($('<meta name="viewport" content="height=768, width=device-width, initial-scale=0.9, user-scalable=no">'));
-            break;
-        default: // portrait
-            $('head').append($('<meta name="viewport" content="height=device-height, width=768, initial-scale=1.0, user-scalable=no">'));
-            break;
+        switch(window.orientation) {
+            case -90:
+            case 90:
+            case 180: // Landscape:
+                $('head').append($('<meta name="viewport" content="height=768, width=device-width, initial-scale=0.9, user-scalable=no">'));
+                break;
+            default: // Portrait:
+                $('head').append($('<meta name="viewport" content="height=device-height, width=768, initial-scale=1.0, user-scalable=no">'));
+                break;
         }
     }
 
-    window.addEventListener('onorientationchange', doOnOrientationChange);
-    doOnOrientationChange();
+    // Limit doOrientationChange only for iPad, for which it is optimized:
+    if (BrowserDetect.OS === "iPad") {
+        window.addEventListener('onorientationchange', doOnOrientationChange);
+        doOnOrientationChange();
+    }
 });
