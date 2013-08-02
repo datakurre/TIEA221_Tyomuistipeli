@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="base" content="${base_url}" />
     <meta name="context" content="${current_url}" />
-    <meta metal:use-macro="base_template.macros['viewport']" />
 
     <title>Työmuistipeli</title>
 
@@ -19,17 +18,13 @@
   <div id="fullscreen-windows" class="hidden">
       <h1>Peli vaatii suuremman ikkunan</h1>
       <p>Paina F11-näppäintä suurentaaksesi ikkunan kokoruututilaan.</p>
-      <!-- Tai pienennä pelin (zoomaa ulos) -->
       <p style="text-align: right;">
           <a class="pure-button pure-button-primary" href="#">Jatka tästä välittämättä</a>
       </p>
   </div>
-  <div id="fullscreen-ipad" class="hidden">
-      <h1>Peli vaatii suuremman ikkunan</h1>
-      <p>Käännä iPad pystyasentoon.</p>
-      <p style="text-align: right;">
-          <a class="pure-button pure-button-primary" href="#">Jatka tästä välittämättä</a>
-      </p>
+  <div id="touchstart" class="hidden">
+      <img src="${base_url}/img/iPadbutton/brb001.png" alt="Aloita peli"
+           id="big-red-button" style="cursor: pointer;" />
   </div>
 </body>
 </html>

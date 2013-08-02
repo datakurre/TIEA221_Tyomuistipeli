@@ -121,8 +121,18 @@ $(document).ready(function() {
     // Detect unsupported browsers
     if (BrowserDetect.browser === "Explorer"
         && BrowserDetect.version < 10) {
-        content = $.modal(
-            $('#unsupported-browser').clone().css('display', 'block'), {
+        $.modal($('#unsupported-browser')
+            .clone().css('display', 'block'), {
+                fitViewport: true,
+                closeOverlay: false,
+                closeSelector: null,
+                closeKeyCode: null,
+                closeText: ''
+        });
+    } else if (BrowserDetect.OS === "Android"
+               && BrowserDetect.browser !== "Firefox") {
+        $.modal($('#unsupported-android-browser')
+            .clone().css('display', 'block'),{
                 fitViewport: true,
                 closeOverlay: false,
                 closeSelector: null,
