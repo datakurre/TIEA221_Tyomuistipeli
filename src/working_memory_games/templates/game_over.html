@@ -27,8 +27,8 @@
             <div id="starBox">
                 <img class="star" src="${base_url}/img/star.png"
                      tal:repeat="idx python:range(stars)" />
-                <br tal:condition="python:stars==1" />
             </div>
+            <br tal:condition="python:stars==1" />
             <a href="${base_url}/${game}" id="nextGame" class="gameBtn"
                tal:condition="game|nothing">
                 <div class="center">
