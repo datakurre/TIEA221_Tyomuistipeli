@@ -298,4 +298,9 @@ class Game(object):
         if session.order:
             data["game"] = session.order[0]["game"]
 
+        # for hugoism we need to know if last try was ok.
+        data['last_pass'] = 'undefined'
+        if len(all_plays) > 0:
+            data['last_pass'] = str(all_plays[0]['pass'])
+
         return data
