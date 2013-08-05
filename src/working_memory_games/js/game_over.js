@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
     if ($('#nextGame').attr('href') == global.base_ctx + '/') {
-        $('#nextGame').style('visibility', 'hidden');
+        $('#nextGame').css('visibility', 'hidden');
     }
     $.preload('hugoism',
               global.base_ctx + '/snd/hugoismit/hugoismi'+(Math.floor(Math.random()*19))+'.[ogg,mp3]');
@@ -16,7 +16,7 @@ $(document).ready(function(){
         }
         if ($('#nextGame').attr('href') == global.base_ctx + '/') {
             $('body').play('huomenna').promise().done(function(){
-                $('#nextGame').style('visibility', 'visible');
+                $('#nextGame').css('visibility', 'visible');
                 $('body').play('lopuke');
             });
         }
