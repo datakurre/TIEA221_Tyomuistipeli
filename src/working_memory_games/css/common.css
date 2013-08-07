@@ -31,6 +31,21 @@ form span.error {
 /* Disable link highlighting from game area */
 #game a { text-decoration: none; }
 
+/* Disable select & drag unless explicitly allowed */
+* {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+p, input {
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+
 #animation, #game {
   display: none; /* after animation bring up the next one */
   position: absolute;
