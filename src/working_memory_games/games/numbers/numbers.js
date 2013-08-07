@@ -99,7 +99,7 @@ function newGame() {
 
   $('#answerLine').children().remove();
   $.get(global.ctx + '/new', function(data){
-    $('body').append('<div class="modal-backdrop curtain"></div>');
+    GameDropCurtain();
     var level = data.level;
       $('#level span').text(level);
     var items = data.items;
@@ -136,7 +136,7 @@ function newGame() {
 }
 
 function setupGame() {
-  $('.modal-backdrop.curtain').remove();
+  GameRaiseCurtain();
   $('#game').css('display', 'block');
   $('.numberBtn').unbind('mousedown');
   $('.numberBtn').mousedown(function(event){
@@ -179,6 +179,7 @@ function answerRight(item) {
 }
 
 function answerWrong(right, item, continueFunc) {
+  GameDropCurtain();
   kavenna();
 
   var elm = $('<span class="wrongNro" style="opacity:0.1;margin-left:200px;">'+item+'</span>');

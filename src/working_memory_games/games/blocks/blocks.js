@@ -1,8 +1,8 @@
 (function() {
   var Circle, DEBUG, Entity, FPS, Rectangle, SCALE, Stage, StaticCircle, StaticRectangle, b2AABB, b2Body, b2BodyDef, b2CircleShape, b2DebugDraw, b2Fixture, b2FixtureDef, b2MassData, b2PolygonShape, b2Vec2, b2World, getBoundingBox, grepFloat,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
-    __slice = Array.prototype.slice;
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   FPS = 15;
 
@@ -56,7 +56,6 @@
   b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
 
   Entity = (function() {
-
     Entity.prototype.type = b2Body.b2_dynamicBody;
 
     function Entity(id, x, y, angle) {
@@ -105,7 +104,6 @@
   })();
 
   Circle = (function(_super) {
-
     __extends(Circle, _super);
 
     function Circle(id, x, y, radius) {
@@ -150,7 +148,6 @@
   })(Entity);
 
   StaticCircle = (function(_super) {
-
     __extends(StaticCircle, _super);
 
     StaticCircle.prototype.type = b2Body.b2_staticBody;
@@ -165,7 +162,6 @@
   })(Circle);
 
   Rectangle = (function(_super) {
-
     __extends(Rectangle, _super);
 
     function Rectangle(id, x, y, width, height) {
@@ -211,7 +207,6 @@
   })(Entity);
 
   StaticRectangle = (function(_super) {
-
     __extends(StaticRectangle, _super);
 
     StaticRectangle.prototype.type = b2Body.b2_staticBody;
@@ -226,13 +221,14 @@
   })(Rectangle);
 
   Stage = (function() {
-
     function Stage(root, width, height, gravity) {
       var canvas, debugDraw;
       this.root = root;
       this.width = width;
       this.height = height;
-      if (gravity == null) gravity = 10;
+      if (gravity == null) {
+        gravity = 10;
+      }
       this.world = new b2World(new b2Vec2(0, gravity * -1), true);
       this.entities = {};
       this.bodies = {};
@@ -261,7 +257,9 @@
         fixture = fixtures[_i];
         body.CreateFixture(fixture);
       }
-      if (!fixtures.length) body.CreateFixture(entity.b2FixtureDef());
+      if (!fixtures.length) {
+        body.CreateFixture(entity.b2FixtureDef());
+      }
       this.entities[entity.id] = entity;
       this.bodies[entity.id] = body;
       this.root.appendChild(entity.el);
@@ -274,16 +272,16 @@
     };
 
     Stage.prototype.resetWorld = function() {
-      var body, entity, id, _ref, _ref2;
+      var body, entity, id, _ref, _ref1;
       _ref = this.entities;
       for (id in _ref) {
         entity = _ref[id];
         this.root.removeChild(entity.el);
         delete this.entities[id];
       }
-      _ref2 = this.bodies;
-      for (id in _ref2) {
-        body = _ref2[id];
+      _ref1 = this.bodies;
+      for (id in _ref1) {
+        body = _ref1[id];
         this.world.DestroyBody(body);
         delete this.bodies[id];
       }
@@ -343,7 +341,9 @@
     Stage.prototype.pan = function(from, to, seconds, callback, frame) {
       var coords, factor, x, y,
         _this = this;
-      if (frame == null) frame = 0;
+      if (frame == null) {
+        frame = 0;
+      }
       factor = $.easing.swing(frame / (seconds * FPS));
       coords = this.getViewportCenter();
       x = from.x + (to.x - from.x) * factor;
@@ -361,7 +361,9 @@
     Stage.prototype.zoom = function(from, to, seconds, callback, frame) {
       var factor, value,
         _this = this;
-      if (frame == null) frame = 0;
+      if (frame == null) {
+        frame = 0;
+      }
       factor = $.easing.swing(frame / (seconds * FPS));
       value = from + (to - from) * factor;
       this.setViewportScale(value);
@@ -377,8 +379,12 @@
     Stage.prototype.animate = function(callback) {
       var bbox, body, done, id, state, tmp, type,
         _this = this;
-      if (typeof callback === 'function') this.callbacks.push(callback);
-      if (this.animating && callback !== false) return this;
+      if (typeof callback === 'function') {
+        this.callbacks.push(callback);
+      }
+      if (this.animating && callback !== false) {
+        return this;
+      }
       this.world.Step(1 / FPS, 10, 10);
       this.world.ClearForces();
       body = this.world.GetBodyList();
@@ -401,12 +407,18 @@
         type = typeof body.GetType === "function" ? body.GetType() : void 0;
         if (id && type !== b2Body.b2_staticBody) {
           bbox = getBoundingBox(body);
-          if (bbox.upperBound.y < 0) this.world.DestroyBody(body);
+          if (bbox.upperBound.y < 0) {
+            this.world.DestroyBody(body);
+          }
         }
-        if (type !== b2Body.b2_staticBody && body.IsAwake()) done = false;
+        if (type !== b2Body.b2_staticBody && body.IsAwake()) {
+          done = false;
+        }
         body = body.GetNext();
       }
-      if (DEBUG) this.world.DrawDebugData();
+      if (DEBUG) {
+        this.world.DrawDebugData();
+      }
       if (done) {
         tmp = [];
         this.animating = false;
@@ -430,7 +442,7 @@
   })();
 
   jQuery(function($) {
-    var $board, $dialer, $game, $query, $tower, answerWrong, applyCube, applyDialerCube, bg, cubeSize, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeIn, queueFadeOut, runAnimation;
+    var $board, $dialer, $game, $query, $tower, answerWrong, applyCube, applyDialerCube, bg, cubeSize, dialer, fg, idx, initGame, newGame, newOrAnimGame, queueAppend, queueApplyImpulse, queueFadeIn, queueFadeOut, runAnimation, _i;
     $game = $('#game');
     $board = $('#board');
     $tower = $('#tower');
@@ -468,7 +480,7 @@
           $number = $("<span class=\"number\">" + item + "</span>");
           $number.appendTo($(cube.el));
           $number.css('font-size', Math.floor(size / 10) + 'em');
-          $('body').append('<div class="modal-backdrop curtain"></div>');
+          GameDropCurtain();
           $game.queue(function() {
             return fg.animate(function() {
               return $game.dequeue();
@@ -502,7 +514,7 @@
             });
           }
           return $game.queue(function() {
-            $('.modal-backdrop.curtain').remove();
+            GameRaiseCurtain();
             GameCheckUserPress(item);
             return $game.dequeue();
           });
@@ -511,7 +523,7 @@
         }
       });
     };
-    for (idx = 1; idx <= 9; idx++) {
+    for (idx = _i = 1; _i <= 9; idx = ++_i) {
       applyDialerCube(idx);
     }
     cubeSize = function(stage, count) {
@@ -557,8 +569,8 @@
       return $game;
     };
     initGame = function(data) {
-      var $number, cube, idx, _ref, _ref2;
-      $('body').append('<div class="modal-backdrop curtain"></div>');
+      var $number, cube, _j, _k, _ref, _ref1;
+      GameDropCurtain();
       $('#level span').text(data.level);
       $board.css({
         bottom: "0"
@@ -569,7 +581,7 @@
       });
       bg.resetWorld().resetViewport().applyEntity(new StaticRectangle('bg-floor', -bg.width, -1, bg.width * 3, 1));
       fg.resetWorld().resetViewport().applyEntity(new StaticRectangle('fg-floor', -fg.width, -1, fg.width * 3, 1));
-      for (idx = 0, _ref = data.items.length; 0 <= _ref ? idx < _ref : idx > _ref; 0 <= _ref ? idx++ : idx--) {
+      for (idx = _j = 0, _ref = data.items.length; 0 <= _ref ? _j < _ref : _j > _ref; idx = 0 <= _ref ? ++_j : --_j) {
         cube = applyCube(bg, "bg-cube-" + idx, idx, data.items.length);
         cube.el.className += " color-" + data.items[idx];
       }
@@ -578,7 +590,7 @@
           return $game.dequeue();
         });
       });
-      for (idx = _ref2 = data.items.length - 1; _ref2 <= 0 ? idx <= 0 : idx >= 0; _ref2 <= 0 ? idx++ : idx--) {
+      for (idx = _k = _ref1 = data.items.length - 1; _ref1 <= 0 ? _k <= 0 : _k >= 0; idx = _ref1 <= 0 ? ++_k : --_k) {
         $number = $("<span class=\"number\">" + data.items[idx] + "</span>");
         queueFadeIn($("#bg-cube-" + idx));
         cube = queueAppend($("#bg-cube-" + idx), $number, cubeSize(bg, data.items.length));
@@ -606,11 +618,12 @@
         });
       });
       return $game.queue(function() {
-        $('.modal-backdrop.curtain').remove();
+        GameRaiseCurtain();
         return $game.dequeue();
       });
     };
     answerWrong = function(right, item, continueFunc) {
+      GameDropCurtain();
       return $('#dialer #dial-' + right).animate({
         opacity: 0
       }, 500).animate({

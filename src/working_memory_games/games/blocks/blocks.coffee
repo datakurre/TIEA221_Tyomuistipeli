@@ -426,7 +426,7 @@ jQuery ($) ->
                 $number.appendTo($(cube.el))
                 $number.css('font-size', Math.floor(size/10)+'em')
 
-                $('body').append('<div class="modal-backdrop curtain"></div>')
+                do GameDropCurtain
                 $game.queue -> fg.animate -> $game.dequeue()
 
                 if currentIdx + 1 == items.length
@@ -449,7 +449,7 @@ jQuery ($) ->
                                 $game.dequeue()
 
                 $game.queue ->
-                    $('.modal-backdrop.curtain').remove()
+                    do GameRaiseCurtain
                     GameCheckUserPress(item)
                     $game.dequeue()
 
@@ -497,7 +497,7 @@ jQuery ($) ->
         return $game
 
     initGame = (data) ->
-        $('body').append('<div class="modal-backdrop curtain"></div>')
+        do GameDropCurtain
         $('#level span').text data.level
 
         # "Reset"
@@ -536,10 +536,11 @@ jQuery ($) ->
             $dialer.animate opacity: "1", bottom: "0", 1000, -> $game.dequeue()
 
         $game.queue ->
-            $('.modal-backdrop.curtain').remove()
+            do GameRaiseCurtain
             $game.dequeue()
 
     answerWrong = (right, item, continueFunc) ->
+        do GameDropCurtain
         $('#dialer #dial-'+right)
              .animate({opacity: 0}, 500)
              .animate({opacity: 1}, 500)

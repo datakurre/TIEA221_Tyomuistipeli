@@ -123,6 +123,7 @@ function createDialog(data){
     //   global.callbacks.newGame();
     // });
     dialog.modal('show');
+    GameRaiseCurtain();
   }
 }
 
@@ -130,28 +131,40 @@ function GameAnswerDialogShowButton() {
     $('.btn').removeAttr('disabled').animate({opacity: 1}, 500);
 }
 
+function GameDropCurtain() {
+    if ($('.modal-backdrop.curtain').length === 0) {
+        $('body').append('<div class="modal-backdrop curtain"></div>');
+    }
+}
+
+function GameRaiseCurtain() {
+    $('.modal-backdrop.curtain').remove();
+}
+
 function GameCorrectAnswer() {
+  GameDropCurtain();
   $.ajax({
       type: 'POST',
       url: global.ctx + '/pass',
       data: JSON.stringify({game: global.gameItems, user: global.userItems}),
       contentType: 'application/json; charset=utf-8',
       success: function(data) { 
-	  GamePlayFeedback(true, GameAnswerDialogShowButton);
-	  createDialog(data); 
+          GamePlayFeedback(true, GameAnswerDialogShowButton);
+          createDialog(data);
       }
   });
 }
 
 function GameIncorrectAnswer() {
+  GameDropCurtain();
   $.ajax({
       type: 'POST',
       url: global.ctx + '/fail',
       data: JSON.stringify({game: global.gameItems, user: global.userItems}),
       contentType: 'application/json; charset=utf-8',
       success: function(data) {
-	  GamePlayFeedback(false, GameAnswerDialogShowButton);
-	  createDialog(data);
+          GamePlayFeedback(false, GameAnswerDialogShowButton);
+          createDialog(data);
       }
   });
 }
