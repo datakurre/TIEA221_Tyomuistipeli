@@ -94,7 +94,7 @@ function addPlayerButtons() {
 }
 
 function addPlayer(map) {
-    var players = $.cookie('players');
+    var i, players = $.cookie('players');
     
     if (players === null || players === undefined)
         players = [];
@@ -102,7 +102,15 @@ function addPlayer(map) {
         players = $.parseJSON(players);
 
     // check that id is not added already.
-    players.push(map);
+    var exists = false;
+    for (i=0; i<players.length; i++) {
+        if (players[i].id == map.id) {
+            exists = true;
+        }
+    }
+    if (!exists) {
+        players.push(map);
+    }
     
     $.cookie('players',
              JSON.stringify(players),
