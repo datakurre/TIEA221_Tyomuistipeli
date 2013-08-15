@@ -183,6 +183,7 @@ class Game(object):
             n = play['level']
             res = play['pass']
             p = update(p, n, res)
+            #i = last_plays.index(play)
             #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
 
         #print
@@ -193,10 +194,11 @@ class Game(object):
         #print 'Expected gains in bits for n = %s:' % nvals
         #print '[%s]' % (' '.join('%.3f' % g for g in gains))
         n = nvals[argmax(gains)]
+        #print 'Best n to present next: %s' % n
         if len(last_plays) == 0:
             n = 3
-        elif n > last_plays[0]['level'] + 2:
-            n = last_plays[0]['level'] + 2
+        elif n > last_plays[-1]['level'] + 2:
+            n = last_plays[-1]['level'] + 2
         logger.info('Best n to present next: %s' % n)
 
         self.session.level = n

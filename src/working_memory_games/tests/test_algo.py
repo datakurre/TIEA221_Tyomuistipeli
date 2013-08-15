@@ -66,7 +66,6 @@ class TestAlgorithm(unittest.TestCase):
 
         for level in expected_levels:
             player = play_one_try(self.app, '123', level)
-            print player
 
 def play_one_try(app, player_id, expected_level, save_pass=True):
     app.request.cookies["active_player"] = player_id
