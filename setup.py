@@ -21,16 +21,15 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "zope.interface",
-
         "numpy",
 
+        "zope.interface",
         "venusian",
         "pyramid",
-        "pyramid-zodbconn",
-        "pyramid-tm",  # (transaction manager)
+        "pyramid_zodbconn",
 
-        "repoze.catalog",  # catalog
+        "pyramid_tm",  # (transaction manager)
+        "zope.index",  # (index)
     ],
     extras_require={'test': [
         'plone.testing',
