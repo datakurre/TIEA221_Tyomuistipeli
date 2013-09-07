@@ -35,14 +35,11 @@ from working_memory_games.datatypes import (
 )
 
 from working_memory_games.upgrades import migrate
-
 from working_memory_games.interfaces import (
     IApplication,
     IGame,
 )
-
-import logging
-logger = logging.getLogger("working_memory_games")
+from working_memory_games import logger
 
 
 @view_defaults(context=IApplication, route_name="traversal")

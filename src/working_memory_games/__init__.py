@@ -4,6 +4,7 @@
 
 import os
 import datetime
+import logging
 
 import venusian
 
@@ -17,7 +18,9 @@ from working_memory_games.interfaces import (
     IApplication,
     IGame
 )
-from working_memory_games.logging import logger
+
+# Register app specific logger
+logger = logging.getLogger("working_memory_games")
 
 
 ###
