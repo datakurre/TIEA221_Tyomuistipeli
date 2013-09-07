@@ -119,37 +119,6 @@ function addPlayer(map) {
 
 $(document).ready(function() {
 
-//    $._preload.context = false;  // Never use AudioContext on main page.
-
-    startMusic();
-    animateTitle();
-
-    addPlayerButtons();
-
-    // Detect unsupported browsers
-    if (BrowserDetect.browser === "Explorer"
-        && BrowserDetect.version < 10) {
-        $.modal($('#unsupported-browser')
-            .clone().css('display', 'block'), {
-                fitViewport: true,
-                closeOverlay: false,
-                closeSelector: null,
-                closeKeyCode: null,
-                closeText: ''
-        });
-    } else if (BrowserDetect.OS === "Android"
-               && BrowserDetect.browser !== "Firefox") {
-        $.modal($('#unsupported-android-browser')
-            .clone().css('display', 'block'),{
-                fitViewport: true,
-                closeOverlay: false,
-                closeSelector: null,
-                closeKeyCode: null,
-                closeText: ''
-        });
-    }
-
-    // show current view
     $(window).bind('hashchange', function() {
         var hash = location.hash.toString();
         if (hash.startsWith('#liity')) {
@@ -243,7 +212,32 @@ $(document).ready(function() {
                });
     });
 
-
-    // trigger view!
-    $(window).trigger('hashchange');
+    // Detect unsupported browsers
+    if (BrowserDetect.browser === "Explorer"
+        && BrowserDetect.version < 10) {
+        $.modal($('#unsupported-browser')
+            .clone().css('display', 'block'), {
+            fitViewport: true,
+            closeOverlay: false,
+            closeSelector: null,
+            closeKeyCode: null,
+            closeText: ''
+        });
+    } else if (BrowserDetect.OS === "Android"
+        && BrowserDetect.browser !== "Firefox") {
+        $.modal($('#unsupported-android-browser')
+            .clone().css('display', 'block'),{
+            fitViewport: true,
+            closeOverlay: false,
+            closeSelector: null,
+            closeKeyCode: null,
+            closeText: ''
+        });
+    // And start if everything looks fine
+    } else {
+        startMusic();
+        animateTitle();
+        addPlayerButtons();
+        $(window).trigger('hashchange');
+    }
 });

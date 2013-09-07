@@ -36,7 +36,7 @@ var createAudioContext = function() {
 };
 
 // Handle postMessaging between the main page and iframe:
-window.addEventListener('message', function(event) {
+(window.addEventListener || function() {})('message', function(event) {
     var parts, id;
     if (event !== undefined && event.data !== undefined) {
         if (/^PRELOAD:[^:]+:.+/.test(event.data)) {
@@ -121,7 +121,7 @@ jQuery(function($) {
 
     // Free memory by clearing the buffers from the previous games:
     if (!isMaster) {
-        window.parent.postMessage('PURGE', ['*']);
+        try { window.parent.postMessage('PURGE', ['*']); } catch (e) {}
     }
 
     $.extend({
