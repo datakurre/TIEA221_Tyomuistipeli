@@ -25,11 +25,12 @@ setup(
 
         "numpy",
 
+        "venusian",
         "pyramid",
         "pyramid-zodbconn",
         "pyramid-tm",  # (transaction manager)
 
-        "repoze.catalog"  # catalog
+        "repoze.catalog",  # catalog
     ],
     extras_require={'test': [
         'plone.testing',

@@ -13,52 +13,52 @@ from pyramid.renderers import JSON
 from pyramid.httpexceptions import HTTPNotFound
 
 from working_memory_games.app import Application
-
 from working_memory_games.interfaces import (
     IApplication,
     IGame
 )
-
-import logging
-logger = logging.getLogger("working_memory_games")
+from working_memory_games.logging import logger
 
 
 ###
 # Static file view factory
-static_file = lambda filename: lambda request:\
+static_file = lambda filename: lambda request: \
     FileResponse(filename, request=request)
 ###
 
+
 ###
 # JSON adapter with support for datetime.timedelta and numpy.int
-json_renderer = JSON()
-
 def datetime_timedelta_adapter(obj, request):
     return float(obj.total_seconds())
-json_renderer.add_adapter(datetime.timedelta, datetime_timedelta_adapter)
+
 
 def int_adapter(obj, request):
     return int(obj)
+
+
+json_renderer = JSON()
+json_renderer.add_adapter(datetime.timedelta, datetime_timedelta_adapter)
 json_renderer.add_adapter(int, int_adapter)
 ###
 
 
 class game_config(object):
-    """ A class decorator which allows a developer to configure game related
+    """A class decorator which allows a developer to configure game related
     registrations nearer to actual code.
 
     This decorator will provide magic to register all necessary stuff for
     a single game, whatever it ends to be.
 
-    Currently this decorater accepts two parameters:
+    Currently this decorator accepts two parameters:
 
     add_view
         which accepts a boolean value and triggers registering the game
-        template at ``/gamename``
+        template at ``/name``
 
     add_asset_views
         which accepts a boolean value and triggers registering the game
-        related static resource directory at  ``/gamename/static``
+        related static resource directory at  ``/name/static``
 
     The decorator also registers some view defaults for the possible
     view methods within the class:
@@ -76,6 +76,7 @@ class game_config(object):
 
     Please, note that it's not possible to use Pyramid's @view_defaults
     together with @game_config (the latest one in chain will prevail).
+
     """
 
     def __init__(self, **settings):
@@ -142,7 +143,9 @@ class game_config(object):
 
 
 def main(global_config, **settings):
-    """This function returns a Pyramid WSGI application with routing
+    """This function returns a Pyramid WSGI application with all the required
+    URL routing and traversing in place
+
     """
     # Create Pyramid configurator
     config = Configurator(settings=settings)
