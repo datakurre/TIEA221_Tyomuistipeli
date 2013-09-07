@@ -39,7 +39,7 @@ from working_memory_games.interfaces import (
     IApplication,
     IGame,
 )
-from working_memory_games import logger
+from working_memory_games.logger import logger
 
 
 @view_defaults(context=IApplication, route_name="traversal")
