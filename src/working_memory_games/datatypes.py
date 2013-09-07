@@ -36,7 +36,6 @@ class OOBTree(OOBTreeBase):
     #
     # http://pastie.org/1732745
     #
-
     def __getstate__(self):
         tree_state = super(OOBTree, self).__getstate__()
         attr_state = [(k, v) for k, v in self.__dict__.items()
@@ -49,7 +48,6 @@ class OOBTree(OOBTreeBase):
         for k, v in attr_state:
             setattr(self, k, v)
         super(OOBTree, self).__setstate__(tree_state)
-
     ###
 
     def __json__(self, request):
@@ -57,7 +55,7 @@ class OOBTree(OOBTreeBase):
 
 
 class Length(LengthBase):
-    """Generic integer based length, which handles conflict resolutiosn and can
+    """Generic integer based length, which handles conflict resolutions and can
     be JSON-serialized
 
     """
