@@ -6,6 +6,9 @@ import os
 import datetime
 import logging
 
+# Register app specific logger
+logger = logging.getLogger("working_memory_games")
+
 import venusian
 
 from pyramid.config import Configurator
@@ -18,10 +21,6 @@ from working_memory_games.interfaces import (
     IApplication,
     IGame
 )
-
-# Register app specific logger
-logger = logging.getLogger("working_memory_games")
-
 
 ###
 # Static file view factory
