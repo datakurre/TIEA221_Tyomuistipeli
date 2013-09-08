@@ -76,7 +76,7 @@ var createAudioContext = function() {
                 $._preload.source.noteOff(0);
                 clearTimeout($._preload.endedTimeout);
             } else if (typeof $._preload.audio !== "undefined"
-                       && $._preload.audio.stop !== "undefined") {
+                       && typeof $._preload.audio.stop === "function") {
                 $._preload.audio.stop();
             }
         }
