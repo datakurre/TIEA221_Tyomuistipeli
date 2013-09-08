@@ -312,10 +312,14 @@ jQuery(function($) {
 
                             // Completion frees the queue:
                             } if (typeof callback === 'function') {
-                                $._preload.audio.src = null;
+                                try {
+                                    $._preload.audio.removeAttribute("src");
+                                } catch (e) {}
                                 callback();
                             } else {
-                                $._preload.audio.src = null;
+                                try {
+                                    $._preload.audio.removeAttribute("src");
+                                } catch (e) {}
                                 that.dequeue('fx');
                             }
                         });
