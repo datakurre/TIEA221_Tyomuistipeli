@@ -13,23 +13,27 @@ from pyramid.view import (
     view_config,
     view_defaults
 )
-
 from pyramid.events import (
     BeforeRender,
     subscriber
 )
 
 from zope.interface import implements
+from zope.index.field import FieldIndex
+from zope.index.keyword import KeywordIndex
 
 from pyramid.renderers import get_renderer
-from pyramid.httpexceptions import HTTPFound
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import (
+    HTTPFound,
+    HTTPBadRequest
+)
 
 from pyramid_zodbconn import get_connection
 
 from persistent.list import PersistentList
 
 from working_memory_games.datatypes import (
+    Catalog,
     Players,
     Player
 )
@@ -69,13 +73,19 @@ class Application(object):
         # Prepare database
         if not hasattr(self.data, "players"):
             self.data.players = Players()
+        if not hasattr(self.data, "catalog"):
+            self.data.catalog = Catalog()
+            self.data.catalog["type"] = FieldIndex()
+            self.data.catalog["created"] = FieldIndex()
+            self.data.catalog["player_id"] = FieldIndex()
+            self.data.catalog["keywords"] = KeywordIndex()
 
         # Migrate data over possible schema changes
         migrate(self.data)
 
         # Set registered games (available games could be filtered here)
         self.games = dict(self.request.registry.getAdapters((self,), IGame))
-        #self.games = {"numbers": self.games["numbers"]}
+        # E.g. self.games = {"numbers": self.games["numbers"]}
 
     def get_current_player(self, player_id=''):
         """Return the current player according to the available cookie data
@@ -118,6 +128,7 @@ class Application(object):
                         "assisted": self.get_next_assistance_flag()
                     }
                 )
+            self.data.catalog.index_player(player_id, player)
 
         return player
 
@@ -128,7 +139,10 @@ class Application(object):
         """
         player = self.get_current_player(player_id)
         if player is not None:
-            return player.session(self.games)
+            session = player.session(self.games)
+            if len(session) == 0:
+                self.data.catalog.index_session(player_id, session)
+            return session
         else:
             return None
 
@@ -164,7 +178,10 @@ class Application(object):
         }
         details.update(self.request.params)
 
-        return self.data.players.create_player(name, details)
+        data = self.data.players.create_player(name, details)
+        player = self.data.players[data["id"]]
+        self.data.catalog.index_player(data["id"], player)
+        return data
 
     @view_config(name="pelinappulat", renderer="json",
                  request_method="POST", http_cache=0)
@@ -206,7 +223,10 @@ class Application(object):
         }
         details.update(self.request.params)
 
-        return self.data.players.create_player(name, details)
+        data = self.data.players.create_player(name, details)
+        player = self.data.players[data["id"]]
+        self.data.catalog.index_player(data["id"], player)
+        return data
 
     @view_config(name="next_game", renderer="json", http_cache=0)
     def get_next_game(self):

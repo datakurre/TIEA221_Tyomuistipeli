@@ -3,19 +3,21 @@ import datetime
 import logging
 import random
 import uuid
+import math
 
 from BTrees.Length import Length as LengthBase
+from BTrees.IFBTree import intersection
+from BTrees.IOBTree import IOBTree
 from BTrees.OOBTree import OOBTree as OOBTreeBase
-import math
+from zope.interface import implements
 from persistent.mapping import PersistentMapping
 from persistent.list import PersistentList
-from working_memory_games.interfaces import (
-    IPlayers,
-    IPlayer,
-    ISession,
-    IGameSession
+from ZODB.utils import (
+    u64,
+    p64
 )
-from zope.interface import implements
+
+from working_memory_games import interfaces
 
 
 logger = logging.getLogger("working_memory_games")
@@ -40,7 +42,7 @@ class OOBTree(OOBTreeBase):
         tree_state = super(OOBTree, self).__getstate__()
         attr_state = [(k, v) for k, v in self.__dict__.items()
                       if not (k.startswith('_v_') or k.startswith('__'))]
-        return (tree_state, attr_state)
+        return tree_state, attr_state
 
     def __setstate__(self, v):
         tree_state = v[0]
@@ -63,11 +65,117 @@ class Length(LengthBase):
         return self()
 
 
+class ResultSet(object):
+    """Iterable, which lazily maps catalog ids into real objects
+    """
+
+    def __init__(self, catalog, results):
+        self.catalog = catalog
+        self.results = results
+
+    def __len__(self):
+        return len(self.results)
+
+    def __getitem__(self, item):
+        if self._p_jar is None:
+            self.catalog._v_jar.get(p64(self.results[item] + (2 ** 31)))
+        else:
+            self.catalog._p_jar.get(p64(self.results[item] + (2 ** 32)))
+
+
+class Catalog(OOBTree):
+
+    implements(interfaces.ICatalog)
+
+    def index(self, obj, **kwargs):
+        # When no ZODB, use volatile oids
+        if self._p_jar is None:
+            oid = obj._v_oid = getattr(obj, "_v_oid", None) \
+                or p64(random.randint(0, 2 ** 31 - 1))
+            self._v_jar = getattr(self, "_v_jar", None) or {}
+            self._v_jar[obj._v_oid] = obj
+        # Otherwise, use ZODB oids
+        else:
+            if obj._p_oid is None:
+                self._p_jar.add(obj)
+            oid = obj._p_oid
+        # Index given values
+        for key, value in kwargs.items():
+            index = self.get(key, None)
+            if index:
+                # zope.index has limit of signed 32bit doc ids; to use the
+                # full 32bit doc_id space, we start from (2 ** 31) * -1
+                index.index_doc(u64(oid) - (2 ** 31), value)
+
+    def query(self, **kwargs):
+        indexes = filter(self.__contains__, kwargs.keys())
+        results = (self[key].apply(value) for key, value in kwargs.items())
+        return ResultSet(self, reduce(
+            lambda x, y: intersection(x, y) if x and y else (), results))
+
+    # Object class specific helpers:
+
+    def index_player(self, player_id, player_obj):
+        created = datetime.datetime.utcnow()  # default
+
+        if len(player_obj) > 0:  # heuristic lookup or the creation datetime
+            first_session = player_obj[sorted(player_obj.keys())[0]]
+            for game in first_session.values():
+                for play in game.values():
+                    if (play.get("start") or created) < created:
+                        created = play.get("start")
+
+        self.index(player_obj, **{
+            "type": player_obj.__class__.__name__,
+            "created": created,
+            "player_obj_id": player_id,
+            "keywords": filter(
+                bool, [player_obj.details.get("assisted") and "assisted",
+                       player_obj.details.get("registered") and "registered"]
+            )
+        })
+
+        for session_obj in player_obj.values():
+            self.index_session(player_id, session_obj)
+
+    def index_session(self, player_id, session_obj):
+        created = datetime.datetime.utcnow()  # default
+
+        if len(session_obj) > 0:  # heuristic lookup or the creation datetime
+            for game in session_obj.values():
+                for play in game.values():
+                    if (play.get("start") or created) < created:
+                        created = play.get("start")
+
+        self.index(session_obj, **{
+            "type": session_obj.__class__.__name__,
+            "created": created,
+            "player_id": player_id
+        })
+
+        for game_session_obj in session_obj.values():
+            self.index_game_session(player_id, game_session_obj)
+
+    def index_game_session(self, player_id, game_session_obj):
+        created = datetime.datetime.utcnow()  # default
+
+        if len(game_session_obj) > 0:  # heuristic lookup or the creation datetime
+            for play in game_session_obj.values():
+                if (play.get("start") or created) < created:
+                    created = play.get("start")
+
+        self.index(game_session_obj, **{
+            "type": game_session_obj.__class__.__name__,
+            "created": created,
+            "player_id": player_id,
+        })
+
+
 class Players(OOBTree):
     """Players container, which contains individual player data objects
     """
 
-    implements(IPlayers)
+    implements(interfaces.IPlayers)
 
     def get_player(self, player_id):
         """Return player or None if player is not not found
@@ -89,7 +197,7 @@ class Player(OOBTree):
     player
 
     """
-    implements(IPlayer)
+    implements(interfaces.IPlayer)
 
     def __init__(self, name, details={}):
         super(Player, self).__init__()
@@ -128,7 +236,7 @@ class Session(OOBTree):
     a single day
 
     """
-    implements(ISession)
+    implements(interfaces.ISession)
 
     def __init__(self, games, assisted_cut=0):
         super(Session, self).__init__()
@@ -191,7 +299,7 @@ class GameSession(OOBTree):
     player in a single game (for a single day)
 
     """
-    implements(IGameSession)
+    implements(interfaces.IGameSession)
 
     def __init__(self):
         super(GameSession, self).__init__()

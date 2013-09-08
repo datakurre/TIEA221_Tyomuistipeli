@@ -65,6 +65,9 @@ class Game(object):
             raise HTTPNotFound
 
         game_session = player_session.get_game(self.name)
+        if len(game_session) == 0:
+            self.app.data.catalog.index_game_session(
+                self.app.request.cookies.get("active_player"), game_session)
 
         if not hasattr(game_session, "duration"):
             game_session.duration = datetime.timedelta(0)
