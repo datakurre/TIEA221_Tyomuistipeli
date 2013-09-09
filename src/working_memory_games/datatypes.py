@@ -78,9 +78,9 @@ class ResultSet(object):
 
     def __getitem__(self, item):
         if self.catalog._p_jar is None:
-            self.catalog._v_jar.get(p64(self.results[item] + (2 ** 31)))
+            return self.catalog._v_jar.get(p64(self.results[item] + (2 ** 31)))
         else:
-            self.catalog._p_jar.get(p64(self.results[item] + (2 ** 31)))
+            return self.catalog._p_jar.get(p64(self.results[item] + (2 ** 31)))
 
 
 class Catalog(OOBTree):
