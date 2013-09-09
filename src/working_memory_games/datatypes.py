@@ -130,7 +130,7 @@ class Catalog(OOBTree):
             "type": player_obj.__class__.__name__,
             "size": len(player_obj),
             "created": created,
-            "player_obj_id": player_id,
+            "player_id": player_id,
             "keywords": filter(
                 bool, [player_obj.details.get("assisted") and "assisted",
                        player_obj.details.get("registered") and "registered"]
