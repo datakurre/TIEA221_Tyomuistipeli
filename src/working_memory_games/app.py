@@ -76,6 +76,7 @@ class Application(object):
         if not hasattr(self.data, "catalog"):
             self.data.catalog = Catalog()
             self.data.catalog["type"] = FieldIndex()
+            self.data.catalog["size"] = FieldIndex()
             self.data.catalog["created"] = FieldIndex()
             self.data.catalog["player_id"] = FieldIndex()
             self.data.catalog["keywords"] = KeywordIndex()

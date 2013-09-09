@@ -116,9 +116,10 @@ class Catalog(OOBTree):
     # Object class specific helpers:
 
     def index_player(self, player_id, player_obj):
-        created = datetime.datetime.utcnow()  # default
+        created = datetime.datetime.utcnow()  # just a default
 
-        if len(player_obj) > 0:  # heuristic lookup or the creation datetime
+        # Do a heuristic lookup for the creation datetime:
+        if len(player_obj) > 0:
             first_session = player_obj[sorted(player_obj.keys())[0]]
             for game in first_session.values():
                 for play in game.values():
@@ -127,6 +128,7 @@ class Catalog(OOBTree):
 
         self.index(player_obj, **{
             "type": player_obj.__class__.__name__,
+            "size": len(player_obj),
             "created": created,
             "player_obj_id": player_id,
             "keywords": filter(
@@ -139,9 +141,10 @@ class Catalog(OOBTree):
             self.index_session(player_id, session_obj)
 
     def index_session(self, player_id, session_obj):
-        created = datetime.datetime.utcnow()  # default
+        created = datetime.datetime.utcnow()  # just a default
 
-        if len(session_obj) > 0:  # heuristic lookup or the creation datetime
+        # Do a heuristic lookup for the creation datetime:
+        if len(session_obj) > 0:
             for game in session_obj.values():
                 for play in game.values():
                     if (play.get("start") or created) < created:
@@ -149,6 +152,7 @@ class Catalog(OOBTree):
 
         self.index(session_obj, **{
             "type": session_obj.__class__.__name__,
+            "size": len(session_obj),
             "created": created,
             "player_id": player_id
         })
@@ -157,15 +161,17 @@ class Catalog(OOBTree):
             self.index_game_session(player_id, game_session_obj)
 
     def index_game_session(self, player_id, game_session_obj):
-        created = datetime.datetime.utcnow()  # default
+        created = datetime.datetime.utcnow()  # just a default
 
-        if len(game_session_obj) > 0:  # heuristic lookup or the creation datetime
+        # Do a heuristic lookup for the creation datetime:
+        if len(game_session_obj) > 0:
             for play in game_session_obj.values():
                 if (play.get("start") or created) < created:
                     created = play.get("start")
 
         self.index(game_session_obj, **{
             "type": game_session_obj.__class__.__name__,
+            "size": len(game_session_obj),
             "created": created,
             "player_id": player_id,
         })
