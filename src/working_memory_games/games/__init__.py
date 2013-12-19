@@ -221,6 +221,13 @@ class Game(object):
     @view_config(name="pass", renderer="../templates/save_pass.html")
     def save_pass(self):
         """ Saves successful game """
+        player_session = self.app.get_current_session()
+        if (len(player_session.order) > 0
+                and player_session.order[0]["game"] == self.name):
+            assisted = player_session.order[0]["assisted"]
+        else:
+            assisted = None
+
         items = self.app.request.json_body
         duration = datetime.datetime.utcnow() - self.session.last_start
         self.session.duration += duration
@@ -229,9 +236,9 @@ class Game(object):
             "pass": True,
             "items": items,
             "start": self.session.last_start,
-            "duration": duration
+            "duration": duration,
+            "assisted": assisted
         })
-        player_session = self.app.get_current_session()
 
         if (len(player_session.order) > 0
                 and player_session.order[0]["game"] == self.name):
@@ -249,6 +256,12 @@ class Game(object):
     @view_config(name="fail", renderer="../templates/save_fail.html")
     def save_fail(self):
         """ Saves failed game """
+        player_session = self.app.get_current_session()
+        if (len(player_session.order) > 0
+                and player_session.order[0]["game"] == self.name):
+            assisted = player_session.order[0]["assisted"]
+        else:
+            assisted = None
 
         items = self.app.request.json_body
         duration = datetime.datetime.utcnow() - self.session.last_start
@@ -258,9 +271,9 @@ class Game(object):
             "pass": False,
             "items": items,
             "start": self.session.last_start,
-            "duration": duration
+            "duration": duration,
+            "assisted": assisted
         })
-        player_session = self.app.get_current_session()
 
         if (len(player_session.order) > 0
                 and player_session.order[0]["game"] == self.name):
