@@ -23,7 +23,7 @@ class TestAlgorithm(unittest.TestCase):
     def setUp(self):
         self.request = testing.DummyRequest()
         self.app = Application(self.request, PersistentMapping())
-        self.app.games = dict((self.app.games.items()[0],))
+        self.app.games = {u'numbers': self.app.games[u'numbers']}
 
     def test_passes_increase_level(self):
         """
@@ -70,6 +70,7 @@ class TestAlgorithm(unittest.TestCase):
 def play_one_try(app, player_id, expected_level, save_pass=True):
     app.request.cookies["active_player"] = player_id
     session = app.get_current_session(player_id)
+    session.order = [{'game': u'numbers', 'assisted': False} for i in range(2)]
 
     game = app.games.items()[0][1]
     method_name = get_view_attr_name(game, "new", app.request)
@@ -86,5 +87,3 @@ def play_one_try(app, player_id, expected_level, save_pass=True):
         game.save_fail()
 
     return app.get_current_player(player_id)
-
-            
