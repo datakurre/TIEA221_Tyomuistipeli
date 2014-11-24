@@ -1,7 +1,6 @@
-
 $(document).ready(function(){
   $.preload('clip',
-            global.base_ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine_clip_10s.[ogg,mp3]');
+            global.base_ctx + '/snd/right1.[ogg,mp3]');
   $.preload('kuulet_numeroita',
             global.ctx + '/snd/kuulet_numeroita.[ogg,mp3]');
   $.preload('toista',

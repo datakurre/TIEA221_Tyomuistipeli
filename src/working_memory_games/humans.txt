@@ -5,7 +5,7 @@
 	Matti Katila
 	matti.katila@gmail.com
 
-	Hauskanpito, ideointi, refaktorointi&abstrahointi, toteutus
+	Hauskanpito, ideointi, refaktorointi & abstrahointi, toteutus
 	Asko Soukka
 	asko.soukka@iki.fi
 
@@ -20,41 +20,41 @@
 
 	Numerot-kentän äänet: Sveins Petteri
 
-        Plätän sponssaus: Ixonos Oyj
+    Plätän sponssaus: Ixonos Oyj
 
-        Kenttäideoita: Auli Hannula
+    Kenttäideoita: Auli Hannula
 
-        Silminnäkijä-kentän auton käynnistysääni, muokattu,
-          Creative Commons Attribution 3.0 lisenssi
-          http://www.freesound.org/people/cmusounddesign/sounds/84625/
+    Silminnäkijä-kentän auton käynnistysääni, muokattu,
+      Creative Commons Attribution 3.0 lisenssi
+      http://www.freesound.org/people/cmusounddesign/sounds/84625/
 
-        Pelimusiikki: "Pelit ja Pensselit" Ahti Laine
+    Pelimusiikki: "Pelit ja Pensselit" Ahti Laine
 
-        Silminnäkijä-kentän ääni: Marko Mäkinen
+    Silminnäkijä-kentän ääni: Marko Mäkinen
 
-        Matkalle-kentän ääni: Erkki Häkkinen
+    Matkalle-kentän ääni: Erkki Häkkinen
 
-        Alku/loppu/autot/koneet/ostoslista äänet: Telle-Tiia Pitkänen
+    Alku/loppu/autot/koneet/ostoslista äänet: Telle-Tiia Pitkänen
 
-        Työkalut-kentän ääni: anonyymi
+    Työkalut-kentän ääni: anonyymi
 
-        Numerot-kentän ääni: Anu Parviainen
+    Numerot-kentän ääni: Anu Parviainen
 
-        Matkalle-kentän ääni: Lasse Lähteenmäki
+    Matkalle-kentän ääni: Lasse Lähteenmäki
 
-        Takaperoiset numerot -kentän ääni ja hugoismit: Telle-Tiia Pitkänen
+    Takaperoiset numerot -kentän ääni ja hugoismit: Telle-Tiia Pitkänen
 
-        DNS ja SMTP-relay: Pasi Sjöholm
+    DNS ja SMTP-relay: Pasi Sjöholm
 
-        Pilottitestaus: 
+    Pilottitestaus:
 
-           - Jenni ja Sanni Jääskeläinen
+       - Jenni ja Sanni Jääskeläinen
 
-           - Toni ja Marjo Orava
+       - Toni ja Marjo Orava
 
-           - Pihla, Neea, Veera ja Sanni
+       - Pihla, Neea, Veera ja Sanni
 
-        Pirkka -tuotemerkin käyttöoikeus ja tuotekuvat: Ruokakesko Oy
-        
-        Prinsessa-kentän äänet: Marita Uusitalo
+    Pirkka -tuotemerkin käyttöoikeus ja tuotekuvat: Ruokakesko Oy
+
+    Prinsessa-kentän äänet: Marita Uusitalo
 

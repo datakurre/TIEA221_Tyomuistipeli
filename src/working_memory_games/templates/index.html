@@ -9,8 +9,7 @@
 
     <link rel="icon" type="image/ico" href="${base_url}/favicon.ico"/>
     <link rel="author" href="${base_url}/humans.txt" />
-    <link rel="" href=""
-          metal:use-macro="base_template.macros['styles']" />
+    <link rel="" href="" metal:use-macro="base_template.macros['styles']" />
     <link rel="stylesheet" href="${base_url}/css/mainpage.css" />
 
     <script metal:use-macro="base_template.macros['scripts']"></script>
@@ -22,11 +21,9 @@
 
       <div id="ovalEdge">
         <div id="oval">
-          <img id="harakka" src="img/etukuva/harakka2001.png" />
           <span id="pupuName">Lupun</span>
           <span id="nameAmp">&amp;</span>
           <span id="harakkaName">Lassen</span>
-          <img id="pupu" src="img/etukuva/pupu001.png" />
         </div>
       </div>
 
@@ -34,6 +31,7 @@
         <h1>Työmuistipeli</h1>
       </div>
 
+      <!-- Register -->
       <div id="liity" style="display:none; width: 30em;
                              margin-left: auto; margin-right: auto;">
         <form id="joinData" class="pure-form pure-form-aligned validate"
@@ -45,84 +43,11 @@
                      required="required" />
             </div>
             <div class="pure-control-group">
-              <label for="age">Ikä</label>
-              <input type="number" name="age" id="age" placeholder="6" />
-            </div>
-            <div class="pure-control-group">
-              <label>Sukupuoli</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="gender" value="f" />
-                Tyttö
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="gender" value="m" />
-                Poika
-              </label>
-            </div>
-            <p>Diagnoosi tai epäillään:</p>
-            <div class="pure-control-group">
-              <label>ADHD</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="adhd" value="true" />
-                kyllä
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="adhd" value="false" />
-                ei
-              </label>
-            </div>
-            <div class="pure-control-group">
-              <label>Asperger</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="asperger" value="true" />
-                kyllä
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="asperger" value="false" />
-                ei
-              </label>
-            </div>
-            <div class="pure-control-group">
-              <label>Kehitysviive</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="delayed_development" value="true" />
-                kyllä
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="delayed_development" value="false" />
-                ei
-              </label>
-            </div>
-            <div class="pure-control-group">
-              <label>Kapea työmuisti</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="narrow_wm" value="true" />
-                kyllä
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="narrow_wm" value="false" />
-                 ei
-              </label>
-            </div>
-            <div class="pure-control-group">
-              <label>Keskittymisvaikeus</label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="concentration_difficulties" value="true" />
-                kyllä
-              </label>
-              <label class="pure-radio" style="width: auto;">
-                <input type="radio" name="concentration_difficulties" value="false" />
-                ei
-              </label>
-            </div>
-            <div class="pure-control-group">
               <label for="email">Sähköposti</label>
               <input type="email" name="email" id="email" />
             </div>
-            <p>Antamianne tietoja käytetään ainoastaan
-              <a target="_blank" href="tutkimussuunnitelma.pdf">tutkimustarkoitukseen</a>
-              henkilötietolain mukaisesti
-              (<a href="#rekisteriseloste" data-toggle="modal">rekisteriseloste</a>).
+            <p style="text-align: center">
+              <a href="#rekisteriseloste" data-toggle="modal">rekisteriseloste</a>
             </p>
           </fieldset>
           <input type="submit" name="submit" hidden="hidden"
@@ -136,6 +61,7 @@
         </form>
       </div>
 
+      <!-- Restore previous registration -->
       <div id="olenJoLiittynyt" style="display:none; width: 30em;
                              margin-left: auto; margin-right: auto;">
         <form id="alreadyJoinedData" class="pure-form pure-form-aligned validate"
@@ -157,7 +83,7 @@
         </form>
       </div>
 
-
+      <!-- Players -->
       <div id="mainView" class="center">
         <a class="gameBtn" href="#liity">
           <div class="middle">Liity<br/>pelaajaksi</div>
@@ -174,36 +100,24 @@
           </a>
         </div>
       </div>
+
+      <!-- Footer -->
       <a href="${base_url}/humans.txt">
         <img id="humans" src="${base_url}/img/humanstxt-transparent-color.png" />
       </a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${current_url_encoded}"
          target="_blank" id="facebook">Jaa Facebookissa</a>
+
     </div>
 
     <div id="rekisteriseloste" class="hidden" style="height: 22em;">
       <h2>Tietosuoja- ja rekisteriseloste</h2>
       <p>
-      Henkilötietolaki sallii arkaluonteisten tietojen, kuten
-      henkilön terveydentilaa, sairautta tai vammaisuutta
-      koskevien tietojen keräämisen tutkimustarkoituksiin.
-      Tässä tutkimuksessa näitä tietoja hyödynnetään
-      mahdollisesti tulosten analysoinnissa. Tietojen
-      luovuttaminen tutkimuskäyttöön on vapaaehtoista.
-      </p><p>
       Sivustolla käytetään evästeitä, joilla mahdollistetaan
       pelin pelaaminen ilman kirjautumista sekä ylläpidetään
       pelaajan tasoa.
       </p><p>
-      Tietoja edelleenluovutetaan ainoastaan tieteellisiin
-      tutkimuksiin, kuten tutkimustulosten tarkistamista
-      varten tai toisen tutkimuksen osaksi.
-      </p><p>
-      Tiedot on varastoitu koneelle, johon pääsy on rajoitettu
-      muutamaan henkilöön ja kirjautuminen varmennetaan
-      vahvalla salauksella. Mahdolliset yhteydenotot
-      rekisterinpitäjään:
-      matti.katila@gmail.com, +358400637289.
+      ...
       </p>
       <p style="text-align: right;">
          <a class="pure-button pure-button-primary" href="#">Sulje</a>

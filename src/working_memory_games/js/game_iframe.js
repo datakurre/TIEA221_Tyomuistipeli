@@ -1,7 +1,17 @@
+/*
+
+  Browser frame manager and game loader
+
+  Creates game frames so that the game levels can be loaded into iframe and
+  they can share the same main frame (which allows to re-use the main frames
+  permission for playing audio on mobile devices with lib/jquery.snd.js).
+
+*/
 jQuery(function($) {
     var checkWindowHeight, createGameFrame, updateViewport,
         timeout = null, dialog = null;
 
+    // Check window height and warn if too small
     checkWindowHeight = function() {
         var windowHeight = $(window).height(),
             platform = {
@@ -34,6 +44,7 @@ jQuery(function($) {
         }
     };
 
+    // Create game iframe and load the next level in the game sessions
     createGameFrame = function () {
         var base_url = $('meta[name=base]').attr('content');
         $.ajax({
@@ -58,16 +69,19 @@ jQuery(function($) {
         });
     };
 
+    // Update viewport tag for mobile devices
     updateViewport = function() {
-        $('head meta[name="viewport"]').remove();
+        var $head = $('head');
+        $head.find('meta[name="viewport"]').remove();
+        //noinspection JSUnresolvedVariable
         switch(window.orientation) {
             case -90:
             case 90:
             case 180: // Landscape:
-                $('head').append($('<meta name="viewport" content="height=768, width=device-width, initial-scale=0.9, user-scalable=no">'));
+                $head.append($('<meta name="viewport" content="height=768, width=device-width, initial-scale=0.9, user-scalable=no">'));
                 break;
             default: // Portrait:
-                $('head').append($('<meta name="viewport" content="height=device-height, width=768, initial-scale=1.0, user-scalable=no">'));
+                $head.append($('<meta name="viewport" content="height=device-height, width=768, initial-scale=1.0, user-scalable=no">'));
                 break;
         }
     };
@@ -90,10 +104,13 @@ jQuery(function($) {
             .one('touchstart', function() {
                 if ($._preload !== undefined && $._preload.requireTouchStart) {
                     if ($._preload.context) {
+                        //noinspection JSUnresolvedFunction
                         $._preload.source =
                             $._preload.context.createBufferSource();
+                        //noinspection JSUnresolvedFunction,JSUnresolvedVariable
                         $._preload.source.connect(
                             $._preload.context.destination);
+                        //noinspection JSUnresolvedFunction
                         $._preload.source.noteOn(0);
                     } else {
                         $._preload.audio.play();

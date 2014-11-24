@@ -1,3 +1,9 @@
+/*
+
+ Main menu
+
+*/
+
 var global = global || {};
 
 
@@ -9,15 +15,11 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 function startMusic() {
-    var mois = 'hei heippa moikka moi morjens'.split(' ');
-    var moi = mois[Math.floor(Math.random()*mois.length)];
-    $.preload('moi',
-          global.ctx + '/snd/'+moi+'.[mp3,ogg]');
-    $.preload('sudit',
-          global.ctx + '/snd/Pelit_ja_Pensselit_by_Ahti_Laine.[mp3,ogg]');
-    $('body').on('preloaded', function(){
-	console.log($('<div></div>').snd('moi'));
-	$('<div></div>').play('moi').play('sudit');
+    var mois = 'heippa moikka'.split(' '),
+        moi = mois[Math.floor(Math.random() * mois.length)];
+    $.preload('moi', global.ctx + '/snd/'+moi+'.[mp3,ogg]');
+    $('body').on('preloaded', function() {
+        $('<div></div>').play('moi');
     });
 }
 
