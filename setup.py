@@ -21,7 +21,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "numpy",
+        "setuptools",
 
         "zope.interface",
         "venusian",
@@ -30,6 +30,8 @@ setup(
 
         "pyramid_tm",  # (transaction manager)
         "zope.index",  # (index)
+
+        "numpy",
     ],
     extras_require={'test': [
         'plone.testing',

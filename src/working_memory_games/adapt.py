@@ -1,4 +1,32 @@
 # -*- coding: utf-8 -*-
+"""
+Pelin vaikeustason johtaminen pelaajakohtaisesta pelihistoriasta
+bayesilaisella algoritmilla
+
+(c) Janne V. Kujala
+
+Janne V. Kujala: Obtaining the Best Value for Money in Adaptive Sequential
+Estimation. Journal of Mathematical Psychology, Vol. 54, Issue 6, pp. 475-480,
+December 2010.
+
+Janne V. Kujala, Ulla Richardson, and Heikki Lyytinen: A Bayesian-Optimal
+Principle for Learner-Friendly Adaptation in Learning Games. Journal of
+Mathematical Psychology, Vol. 54, Issue 2, pp. 247-255, April 2010.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""
 from __future__ import division
 from numpy import *
 from numpy.random import random
@@ -52,7 +80,7 @@ def expected_gain(p, n, child_friendly=False):
 
     # väärän vastauksen estimoitu todennäköisyys
     p_fail = 1 - p_succ
-    
+
     # entropian odotusarvo vastauksen jälkeen
     expected_entropy = (  p_succ * entropy(update(p,n,1))
                           + p_fail * entropy(update(p,n,0)))
@@ -81,7 +109,7 @@ child_friendly = True
 if 0:
     p = p0
     for i in range(20):
-        print 
+        print
         print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
         gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
 
@@ -110,7 +138,7 @@ else:
         n = 3
         for i in range(len(s)+1):
             current = n
-            #print 
+            #print
             #print 'p_%d = [%s]' % (i, ' '.join('%.2f' % prob for prob in p))
             gains = [expected_gain(p,n,child_friendly=child_friendly) for n in nvals]
 
